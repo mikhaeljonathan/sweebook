@@ -1,0 +1,70 @@
+GUI
+
+bikin form di LoginForm
+- input username
+- input password
+- tombol login
+- tombol create membership
+
+saat habis login dia detect usernya:
+- membership
+  - Borrow Book Menu
+  - Book View Menu
+  - Borrow View Menu
+  - Borrow History Menu
+- purchasing
+  - Manage Genre Menu
+  - Manage Book Menu
+  - Book View Menu
+- administrator
+  - Book View Menu
+  - Borrow View Menu
+  - Borrow History Menu
+  - Membership View Menu
+- human capital
+  - Manage Employee Menu
+- manager
+  - Borrow History Menu
+  - Membership View Menu
+  - Manage Employee Menu
+
+bikin form di CreateMembershipForm
+- input name
+- input gender
+- input address
+- input username
+- input password
+- input role
+- tombol create membership
+
+bikin form di BorrowBookForm
+- list buku2 available
+- tombol cart
+- list buku2 di cart
+- ketika salah satu buku diteken, ada pilihan add to cart
+- salah satu buku di cart diteken, ada tombol remove cart, kalo di klik ada confirmation dialog nya
+- kalo confirm
+- muncul tombol borrow kalo sudah liat cart
+
+bikin form di ViewBookForm
+- list buku2 yang ada di perpus termasuk yg unavailable
+
+bikin form di ViewBorrowForm
+- list borrow2 yang masih pending, kalau skrg rolenya membership cuma nampilin borrow2nya si member aja
+  kalau skrg rolenya administrator, list semua borrow2 yang pending oleh semua membership
+- kalau salah 1 item borrow di klik dia nampilin semua borrowitem
+
+bikin form di BorrowHistoryForm
+- spinner month dan year
+- list2 borow2 yang sudah accepted, kalau skrg roleny membership cm nampilin borrow2nya si member aja
+  kalau skrg rolenya administrator, list semua borrow2 yang accepted oleh semua membership
+- kalau salah 1 item borrow di klik dia nampilin semua borrowitem
+- kalau salah 1 borrowitem di klik akan muncul tombol return kalau role skrg membership
+- kalau klik return kalau bukunya sdh direturn nampilin error, else kalau ada denda show dendanyaa brp, kalu gaada lgsg success message
+- kalau ada dendany kita input jumlah uang denda, terus tammpilin kembaliannya terus lgsg success message
+
+
+
+
+
+

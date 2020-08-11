@@ -5,8 +5,10 @@ import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
+import javax.swing.JPanel;
 
 import model.Member;
+import view.CreateMembershipForm;
 
 public class MemberHandler {
 
@@ -14,9 +16,8 @@ public class MemberHandler {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public JFrame showCreateMembership() {
-		JFrame JF = new JFrame();
-		return JF;
+	public JFrame showCreateMembershipForm() {
+		return new CreateMembershipForm();
 	}
 	
 	public JInternalFrame showViewMembershipForm() {
@@ -24,7 +25,7 @@ public class MemberHandler {
 		return JIF;
 	}
 	
-	public List<Member> getAll(){
+	public List<Member> getAll(){ 
 		return new ArrayList<Member>();
 	}
 	
