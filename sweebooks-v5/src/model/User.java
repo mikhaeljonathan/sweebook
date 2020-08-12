@@ -10,12 +10,28 @@ public class User {
 	private String gender;
 	
 	public User() {
-		// TODO Auto-generated constructor stub
+		
+	}
+	
+	public User(String id, String roleId, String name, String username, String password, String gender) {
+		
+		this.id = id;
+		this.roleId = roleId;
+		this.name = name;
+		this.username = username;
+		this.password = password;
+		this.gender = gender;
+		
 	}
 	
 	public User insert() {
-		return new User();
-	}
+		
+		// TODO
+		// insert to database
+		// if success return user, else return null
+		return this;
+		
+	}	
 	
 	public String getByUsername(String username) {
 		return "tes";

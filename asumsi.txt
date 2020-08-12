@@ -1,0 +1,6 @@
+List Asumsi
+Password : 
+Criteria:
+- minimum length 8
+- contains alphanumeric
+- contains upper and lower case

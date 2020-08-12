@@ -15,7 +15,11 @@ public class RoleHandler {
 	}
 	
 	public Role getByName(String name) {
-		return new Role();
+		
+		Role r = new Role();
+		r.getByName(name);
+		return r;
+		
 	}
 
 }

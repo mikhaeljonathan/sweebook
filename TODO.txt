@@ -1,0 +1,10 @@
+TODO
+Create Membership:
+- LoginForm: habis tekan tombol create membership run method di bawahnya
+- LoginForm showMemberInGUI
+- CheckInput checkUsername exist in GUI
+- LoginForm handleCreateMembershipInput inputs.put()
+- Role getByName retrieve dari database
+- Member insert insert ke database
+- User insert insert ke database
+

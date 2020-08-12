@@ -16,6 +16,15 @@ public class Role {
 	}
 
 	public Role getByName(String name) {
-		return new Role();
+		
+		// TODO
+		// ambil data2 role dr database berdasarkan nama rolenya dan masukin ke constructor
+		// this.id = id <- variabel yg didapat dari mySQL
+		
+		return this;
+	}
+	
+	public String getId() {
+		return id;
 	}
 }
