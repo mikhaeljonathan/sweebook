@@ -7,4 +7,14 @@ Create Membership:
 - Role getByName retrieve dari database
 - Member insert insert ke database
 - User insert insert ke database
+- create UI createMembershipFOrm
 
+Borrow Book:
+- create UI BorrowBOokForm
+- MembershipMainForm banyak UInya
+- BorrowBookHandler addToCart validate apa??
+- BorrowBookHandler updateQuantity buat apa?
+- Book find
+- Book update gatau suruh ngapain
+- Borrow inset
+- BorrowItem insert

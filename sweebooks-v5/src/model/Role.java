@@ -24,7 +24,11 @@ public class Role {
 		return this;
 	}
 	
+	// Getter and Setter
+	
 	public String getId() {
+		
 		return id;
+		
 	}
 }

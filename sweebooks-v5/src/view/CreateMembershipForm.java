@@ -8,6 +8,8 @@ import controller.MemberHandler;
 public class CreateMembershipForm extends JFrame{
 	
 	public CreateMembershipForm() {
+		
+		//TODO : create UI
 		setTitle("Create Membership");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(500, 500);

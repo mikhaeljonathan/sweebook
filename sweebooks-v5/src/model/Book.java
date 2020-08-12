@@ -19,7 +19,11 @@ public class Book {
 	}
 	
 	public Book find(String id) {
-		return new Book();
+		
+		// TODO: retrieve data buku berdasarkan id di database trs return booknya dan masukin ke atribut
+		// this.id = id <- example
+		return this;
+		
 	}
 
 	public Book insert() {
@@ -27,7 +31,10 @@ public class Book {
 	}
 	
 	public Book update() {
-		return new Book();
+		
+		// TODO: gaatau suruh update apaan
+		return this;
+		
 	}
 	
 	public boolean delete() {
@@ -39,7 +46,17 @@ public class Book {
 	}
 	
 	public List<Book> getBookByQuantityMoreThanZero() {
+		
+		// TODO: minta ke database list buku2 yang quantity nya lbh besar dr 0 terus return
 		return new ArrayList<Book>();
+	}
+	
+	// Getter and Setter
+	
+	public String getId() {
+		
+		return id;
+		
 	}
 	
 }

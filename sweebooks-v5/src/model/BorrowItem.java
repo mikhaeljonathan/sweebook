@@ -9,11 +9,21 @@ public class BorrowItem {
 	private String returnTimestamp;
 	
 	public BorrowItem() {
-		// TODO Auto-generated constructor stub
+		
+	}
+	
+	public BorrowItem(String id, String bookId) {
+		
+		this.id = id;
+		this.bookId = id;
+		
 	}
 	
 	public BorrowItem insert() {
-		return new BorrowItem();
+		
+		// TODO: insert to database
+		return this;
+		
 	}
 	
 	public BorrowItem update() {

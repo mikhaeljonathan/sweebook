@@ -19,7 +19,12 @@ public class Borrow {
 	}
 	
 	public Borrow insert() {
-		return new Borrow();
+		
+		// TODO: insert ke database
+		
+		
+		return this;
+		
 	}
 	
 	public Borrow update() {
@@ -40,6 +45,14 @@ public class Borrow {
 	
 	public List<Borrow> getAcceptStatus(Date date, boolean isOnlyCurrentMember){
 		return new ArrayList<Borrow>();
+	}
+	
+	// Getter and Setter
+	
+	public String getId() {
+		
+		return id;
+		
 	}
 
 }

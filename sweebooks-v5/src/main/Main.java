@@ -1,7 +1,5 @@
 package main;
 
-import view.LoginForm;
-
 public class Main {
 
 	public Main() {

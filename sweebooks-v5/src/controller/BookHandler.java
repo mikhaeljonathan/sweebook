@@ -28,7 +28,10 @@ public class BookHandler {
 	}
 	
 	public Book getById(String id) {
-		return new Book();
+		
+		Book b = new Book();
+		return b.find(id);
+		
 	}
 	
 	public Book getByIsbn(String isbn) {
@@ -36,7 +39,10 @@ public class BookHandler {
 	}
 	
 	public List<Book> getBookByQuantityMoreThanZero(){
-		return new ArrayList<Book>();
+		
+		Book b = new Book();
+		return b.getBookByQuantityMoreThanZero();
+		
 	}
 	
 	public Book insert(HashMap<String, String> inputs) {
@@ -44,7 +50,10 @@ public class BookHandler {
 	}
 	
 	public Book update(HashMap<String, String> inputs) {
-		return new Book();
+		
+		Book b = new Book();
+		return b.update();
+		
 	}
 	
 	public Book restockBook(String isbn) {
