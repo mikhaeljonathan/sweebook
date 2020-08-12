@@ -51,7 +51,7 @@ bikin form di ViewBookForm
 
 bikin form di ViewBorrowForm
 - list borrow2 yang masih pending, kalau skrg rolenya membership cuma nampilin borrow2nya si member aja
-  kalau skrg rolenya administrator, list semua borrow2 yang pending oleh semua membership
+  kalau skrg rolenya administrator, list semua borrow2 yang pending oleh semua membership kalau salah satu borrow diklik akan muncul tombol accept
 - kalau salah 1 item borrow di klik dia nampilin semua borrowitem
 
 bikin form di BorrowHistoryForm
@@ -63,8 +63,32 @@ bikin form di BorrowHistoryForm
 - kalau klik return kalau bukunya sdh direturn nampilin error, else kalau ada denda show dendanyaa brp, kalu gaada lgsg success message
 - kalau ada dendany kita input jumlah uang denda, terus tammpilin kembaliannya terus lgsg success message
 
+bikin form di ManageGenreForm
+- list semua genre2
+- input field buat masukin nama genre
+- tombol create genre
+- kalo input genrenya udah ada genre yang sama show error
 
+bikin form di ManageBookForm
+- list semua genre
+- list semua book
+- input field buat masukin isbn
+- tombol restock book
+- kalau book diteken, keluar tombol delete
+- kalau tekan delete ada confirmation dialognya
 
+bikin form di ViewMembershipForm
+- list semua membership
 
+bikin form di ManageEmployeeForm
+- list semua role
+- list semua employee
+- textfield name, username, passwrod, gender, salary, status, role
+- tombol add new employee
+- kalo rolenya manager langsung statusnya active, else pending
+- kalo rolenya manager dan neken salah satu employee nya keluar tombol fired employee trs keluar confirmation dialog
+- kalo udh fired muncul tulisan error
+- kalo rolenya manager dan neken salah satu employee nya keluar tombol accept employee trs keluar confirmation dialog
+- kalo udh accepted muncul tulisan error
 
 
