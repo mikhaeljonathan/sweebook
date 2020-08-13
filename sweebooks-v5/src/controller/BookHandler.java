@@ -51,7 +51,15 @@ public class BookHandler {
 	
 	public Book update(HashMap<String, String> inputs) {
 		
-		Book b = new Book();
+		// Retrieve the attributes
+		String id = inputs.get("id");
+		String name = inputs.get("name");
+		String genreId = inputs.get("genreId");
+		String isbn = inputs.get("isbn");
+		String quantity = inputs.get("quantity");
+		
+		Book b = new Book(id, name, genreId, isbn, Integer.parseInt(quantity));
+		
 		return b.update();
 		
 	}

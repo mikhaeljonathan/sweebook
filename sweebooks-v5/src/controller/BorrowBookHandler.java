@@ -42,7 +42,7 @@ public class BorrowBookHandler {
 	
 	public boolean addToCart(Book book) {
 		
-		if (validate()) { //TODO: validate apa ni?
+		if (validate()) { //TODO: validate apakah user pernah pinjam buku ini
 			
 			// Add the book to the cart storage
 			CartStorage cs = CartStorage.getInstance();
@@ -51,15 +51,14 @@ public class BorrowBookHandler {
 			BookHandler bh = new BookHandler();
 			Book b = bh.getById(book.getId());
 			
-			updateQuantity(); //TODO: gatau suruh ngapain
-			
-			HashMap<String, String> inputs = new HashMap<String, String>();
-			bh.update(inputs);
+			updateQuantity(bh, b);
 			
 			return true;
 			
 		} else {
+			
 			return false;
+			
 		}
 		
 	}
@@ -70,7 +69,7 @@ public class BorrowBookHandler {
 	
 	public boolean borrowBook() {
 		
-		if (validate()) {
+		if (validate()) { // validate user udh pinjem 10 buku ga
 			
 			Borrow b = new Borrow();
 			Borrow bNew = new Borrow();
@@ -100,7 +99,16 @@ public class BorrowBookHandler {
 		return true;
 	}
 	
-	private void updateQuantity() {
+	private void updateQuantity(BookHandler bh, Book b) {
+		
+		HashMap<String, String> inputs = new HashMap<String, String>();
+		inputs.put("id", b.getId());
+		inputs.put("name", b.getName());
+		inputs.put("genreId", b.getGenreId());
+		inputs.put("isbn", b.getIsbn());
+		inputs.put("quantity", Integer.toString(b.getQuantity() - 1));
+		
+		bh.update(inputs);
 		
 	}
 
