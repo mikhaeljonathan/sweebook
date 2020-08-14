@@ -19,52 +19,67 @@ import javax.swing.JPasswordField;
 public class LoginForm extends JFrame{
 	private JTextField textField_Username;
 	private JPasswordField passwordField;
+	private JFrame frame;
 
 	public LoginForm() {
 		
 		//Create UI
-		setTitle("Login");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(500, 500);
+		frame = new JFrame();
+		frame.setTitle("Login");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setSize(500, 500);
 		
-		setLocationRelativeTo(null);
-		getContentPane().setLayout(null);
+		frame.setLocationRelativeTo(null);
+		frame.getContentPane().setLayout(null);
 		
 		textField_Username = new JTextField();
 		textField_Username.setBounds(123, 94, 248, 20);
-		getContentPane().add(textField_Username);
+		frame.getContentPane().add(textField_Username);
 		textField_Username.setColumns(10);
 		
 		JLabel lblUsername = new JLabel("Username");
 		lblUsername.setBounds(49, 97, 64, 14);
-		getContentPane().add(lblUsername);
+		frame.getContentPane().add(lblUsername);
 		
 		JLabel lblPassword = new JLabel("Password");
 		lblPassword.setBounds(49, 128, 64, 14);
-		getContentPane().add(lblPassword);
+		frame.getContentPane().add(lblPassword);
 		
 		JButton btnLogin = new JButton("Login");
 		btnLogin.setBounds(119, 172, 181, 23);
-		getContentPane().add(btnLogin);
+		frame.getContentPane().add(btnLogin);
 		
 		JButton btnCreate = new JButton("Create Membership");
 		btnCreate.setBounds(119, 209, 181, 23);
-		getContentPane().add(btnCreate);
+		frame.getContentPane().add(btnCreate);
 		
 		passwordField = new JPasswordField();
 		passwordField.setBounds(123, 125, 248, 20);
-		getContentPane().add(passwordField);
+		frame.getContentPane().add(passwordField);
 		
 		btnCreate.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+				//open Create membership form
+				frame.dispose();
 				new CreateMembershipForm();
 			}
 		});
 		
-		setVisible(true);
+		btnLogin.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				//input username, pass
+				String User     = textField_Username.getText();
+				String Password = passwordField.getText();
+				System.out.println("Username: " + User );
+				System.out.println("Password: " + Password);
+			}
+		});
+		
+		frame.setVisible(true);
 		
 		
 //		// TODO: after the create membership button pressed, then do below
