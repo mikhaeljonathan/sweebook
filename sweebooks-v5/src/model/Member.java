@@ -2,6 +2,8 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+import main.MySQLAccess;
+
 public class Member {
 
 	private String id;
@@ -26,10 +28,22 @@ public class Member {
 	
 	public Member insert() {
 		
-		// TODO
-		// insert to database
-		// if success return member, else return null
-		return new Member();
+		// Insert member into DAO
+		String insertToMember = "INSERT INTO members "
+				+ "VALUE('%s', '%s', '%s')";
+		insertToMember = String.format(insertToMember, id, address, memberSince);
+		
+		try {
+			
+			MySQLAccess.stmt.execute(insertToMember);
+			return this;
+			
+		} catch (Exception e) {
+			
+			// Fail to insert to DAO
+			return null;
+			
+		}
 		
 	}
 

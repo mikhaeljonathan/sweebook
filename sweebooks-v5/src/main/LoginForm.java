@@ -1,54 +1,124 @@
 package main;
 
-import java.util.HashMap;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import controller.MemberHandler;
-import model.Member;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 
-public class LoginForm {
+import Helper.SQLGetQuery;
+import Helper.Validation;
+import view.CreateMembershipForm;
+
+public class LoginForm extends JFrame{
+
+	private static final long serialVersionUID = 1L;
+	
+	private JTextField usernameField;
+	private JPasswordField passwordField;
+	private JFrame frame;
 
 	public LoginForm() {
 		
-		// TODO: after the create membership button pressed, then do below
+		frame = new JFrame();
+		frame.setTitle("Login or Create Member");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setSize(500, 500);
 		
-		// Show the form
-		MemberHandler mh = new MemberHandler();
-		mh.showCreateMembershipForm();
+		frame.setLocationRelativeTo(null);
+		frame.getContentPane().setLayout(null);
 		
-		// Handle the input field
-		handleCreateMembershipInput(mh);
+		usernameField = new JTextField();
+		usernameField.setBounds(123, 94, 248, 20);
+		frame.getContentPane().add(usernameField);
+		usernameField.setColumns(10);
 		
-	}
-	
-	private void handleCreateMembershipInput(MemberHandler mh) {
+		JLabel lblUsername = new JLabel("Username");
+		lblUsername.setBounds(49, 97, 64, 14);
+		frame.getContentPane().add(lblUsername);
 		
-		HashMap<String, String> inputs = new HashMap<String, String>();
+		JLabel lblPassword = new JLabel("Password");
+		lblPassword.setBounds(49, 128, 64, 14);
+		frame.getContentPane().add(lblPassword);
 		
-		// Put all the text in input field to the HashMap
-		inputs.put("name", "input1");
-		inputs.put("gender", "input1");
-		inputs.put("address", "input1");
-		inputs.put("username", "input1");
-		inputs.put("password", "input1");
-		// Actor who handle create membership use case always "membership"
-		inputs.put("role", "membership"); 
+		JButton btnLogin = new JButton("Login");
+		btnLogin.setBounds(119, 172, 181, 23);
+		frame.getContentPane().add(btnLogin);
 		
-		// Create new Member entity
-		Member m = mh.createMembership(inputs);
+		JButton btnCreate = new JButton("Create Membership");
+		btnCreate.setBounds(119, 209, 181, 23);
+		frame.getContentPane().add(btnCreate);
 		
-		// Show Member entity in UI
-		showMemberInGUI(m);
+		passwordField = new JPasswordField();
+		passwordField.setBounds(123, 125, 248, 20);
+		frame.getContentPane().add(passwordField);
 		
-	}
-	
-	private void showMemberInGUI(Member m) {
+		frame.setVisible(true);
 		
-		// TODO: tampilin m di UI
-		if (m != null) {
+		// For Login Button
+		btnLogin.addActionListener(new ActionListener() {
 			
-		} else {
-			//show error message
-		}
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				// Retrieve user name and password from text field
+				String username = usernameField.getText();
+				char[] passwordTemp = passwordField.getPassword();
+				String password = new String(passwordTemp);
+				
+				if (Validation.validateLogin(username, password)) {
+					
+					frame.dispose();
+					
+					String role = SQLGetQuery.getRoleFromUsername(username);
+					Main.user_id = SQLGetQuery.getIdFromUsername(username);
+					
+					if (role.equals("Administrator")) {
+						
+						new AdministratorMainForm();
+						
+					} else if (role.equals("Human Capital")) {
+						
+						new HumanCapitalMainForm();
+						
+					} else if (role.equals("Manager")) {
+						
+						new ManagerMainForm();
+						
+					} else if (role.equals("Membership")) {
+						
+						new MembershipMainForm();
+						
+					} else { // Purchasing
+						
+						new PurchasingMainForm();
+						
+					}
+					
+				} else {
+					
+					// TODO : kasih error message
+					
+				}
+				
+			}
+		});
+		
+		// For Create Membership Button
+		btnCreate.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				frame.dispose();
+				new CreateMembershipForm();
+				
+			}
+			
+		});
 		
 	}
 	

@@ -3,6 +3,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import main.MySQLAccess;
+
 public class Borrow {
 	
 	private String id;
@@ -11,7 +13,16 @@ public class Borrow {
 	private String borrowTimestamp;
 
 	public Borrow() {
-		// TODO Auto-generated constructor stub
+		
+	}
+	
+	public Borrow(String id, String memberId, String status, String borrowTimestamp) {
+	
+		this.id = id;
+		this.memberId = memberId;
+		this.status = status;
+		this.borrowTimestamp = borrowTimestamp;
+		
 	}
 	
 	public Borrow find(String id) {
@@ -20,11 +31,23 @@ public class Borrow {
 	
 	public Borrow insert() {
 		
-		// TODO: insert ke database
+		// Insert borrow into DAO
+		String insertToBorrow = "INSERT INTO borrows "
+				+ "VALUE('%s', '%s', '%s', '%s')";
+		insertToBorrow = String.format(insertToBorrow, id, memberId, status, borrowTimestamp);
 		
-		
-		return this;
-		
+		try {
+			
+			MySQLAccess.stmt.execute(insertToBorrow);
+			return this;
+			
+		} catch (Exception e) {
+			
+			// Fail to insert to DAO
+			return null;
+			
+		}
+				
 	}
 	
 	public Borrow update() {

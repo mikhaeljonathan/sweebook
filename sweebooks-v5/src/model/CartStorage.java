@@ -28,14 +28,14 @@ public class CartStorage {
 	
 	public Collection<Book> getCart(){
 		
-		Collection<Book> c = new ArrayList<Book>();
+		Collection<Book> cb = new ArrayList<Book>();
 		
 		// Iterate through HashMap and add the books into the collection
 		for (Map.Entry<String, Book> me : carts.entrySet()) {
-			c.add(me.getValue());
+			cb.add(me.getValue());
 		}
 		
-		return c;		
+		return cb;		
 	}
 	
 	public void addCart(Book book) {
@@ -46,7 +46,8 @@ public class CartStorage {
 	
 	public void removeCart(Book book) {
 		
+		carts.remove(book.getId());
+		
 	}
-	
 
 }
