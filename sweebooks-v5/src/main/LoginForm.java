@@ -10,8 +10,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import helper.SQLGetQuery;
-import helper.Validation;
+import Helper.SQLGetQuery;
+import Helper.Validation;
 import view.CreateMembershipForm;
 
 public class LoginForm extends JFrame{

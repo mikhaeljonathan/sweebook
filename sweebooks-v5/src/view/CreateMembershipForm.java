@@ -32,7 +32,6 @@ public class CreateMembershipForm extends JFrame{
 	private JPasswordField passwordField;
 	private JComboBox comboBox;
 	private JTextArea addressField;
-	private JFrame frame;
 	
 	public CreateMembershipForm() {
 		
@@ -57,6 +56,7 @@ public class CreateMembershipForm extends JFrame{
 		lblGender.setBounds(29, 88, 49, 20);
 		frame.getContentPane().add(lblGender);
 
+		comboBox = new JComboBox();
 		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Male", "Female"}));
 		comboBox.setBounds(111, 88, 242, 20);
 		frame.getContentPane().add(comboBox);

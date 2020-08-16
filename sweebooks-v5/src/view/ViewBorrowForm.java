@@ -5,7 +5,7 @@ import java.util.List;
 import javax.swing.JInternalFrame;
 
 import controller.BorrowTransactionHandler;
-import helper.SQLGetQuery;
+import Helper.SQLGetQuery;
 import main.Main;
 import model.Borrow;
 import model.BorrowItem;
