@@ -1,5 +1,7 @@
 package main;
 
+import view.ViewBorrowHistoryForm;
+
 public class Main {
 
 	// Store user name every time

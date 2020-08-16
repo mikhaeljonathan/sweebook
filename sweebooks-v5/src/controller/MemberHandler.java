@@ -1,7 +1,6 @@
 package controller;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -14,7 +13,6 @@ import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 
-import helper.CheckInput;
 import helper.Validation;
 import model.Member;
 import model.Role;
@@ -24,8 +22,6 @@ import view.CreateMembershipForm;
 public class MemberHandler {
 
 	public MemberHandler() {
-		
-		// Empty constructor
 		
 	}
 	

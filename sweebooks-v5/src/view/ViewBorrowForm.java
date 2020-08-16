@@ -3,6 +3,7 @@ package view;
 import java.util.List;
 
 import javax.swing.JInternalFrame;
+import javax.swing.JOptionPane;
 
 import controller.BorrowTransactionHandler;
 import helper.SQLGetQuery;
@@ -11,6 +12,8 @@ import model.Borrow;
 import model.BorrowItem;
 
 public class ViewBorrowForm extends JInternalFrame{
+
+	private static final long serialVersionUID = 1L;
 
 	public ViewBorrowForm() {
 	
@@ -26,6 +29,15 @@ public class ViewBorrowForm extends JInternalFrame{
 		List<BorrowItem> lbi = bth.getBookItem(b.getId());
 		
 		// TODO: show lbi here
+		
+		
+		// TODO: kalau tombol accept diteken keluar ini:
+		if (bth.acceptBorrowRequest(b.getId())) {
+			
+			JOptionPane.showMessageDialog(null, "It's successfully accepted");
+			
+		}
+		
 		
 	}
 	

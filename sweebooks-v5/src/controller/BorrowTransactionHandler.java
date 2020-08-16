@@ -5,7 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.JInternalFrame;
+import javax.swing.JOptionPane;
 
+import helper.SQLGetQuery;
+import main.Main;
 import model.Borrow;
 import model.BorrowItem;
 
@@ -32,7 +35,9 @@ public class BorrowTransactionHandler {
 	}
 	
 	public List<Borrow> getAcceptStatus(Date date){
-		return new ArrayList<Borrow>();
+		
+		return new Borrow().getAcceptStatus(date, SQLGetQuery.getRoleFromUserId(Main.user_id) == "Membership");
+		
 	}
 	
 	public List<BorrowItem> getBookItem(String id){
@@ -42,7 +47,30 @@ public class BorrowTransactionHandler {
 	}
 	
 	public boolean acceptBorrowRequest(String id) {
-		return true;
+		
+		Borrow b = new Borrow().find(id);
+		
+		if (b.getStatus().equals("Accepted")) {
+			
+			JOptionPane.showMessageDialog(null, "It's already accepted");
+			return false;
+			
+		} else {
+			
+			b.setStatus("Accepted");
+			
+			if (b.update() != null) {
+				
+				return true;
+				
+			} else {
+				
+				return false;
+				
+			}
+			
+		}
+		
 	}
 	
 	public BorrowItem returnBook(HashMap<String, String> inputs) {
