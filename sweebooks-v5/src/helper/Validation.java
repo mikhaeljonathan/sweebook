@@ -1,4 +1,4 @@
-package Helper;
+package helper;
 
 import java.util.HashMap;
 
@@ -55,13 +55,12 @@ public static boolean validateLogin(String username, String password) {
 		String password = inputs.get("password");
 		
 		// Check the constraint
-		if (!CheckInput.validateName(name)) return false;
-		if (!CheckInput.validateGender(gender)) return false;
-		if (!CheckInput.validateAddress(address)) return false;
-		if (!CheckInput.validateUsername(username)) return false;
-		if (!CheckInput.validatePassword(password)) return false;
 		
-		return true;
+		return (CheckInput.validateName(name) &&
+				CheckInput.validateGender(gender) &&
+				CheckInput.validateAddress(address) &&
+				CheckInput.validateUsername(username) &&
+				CheckInput.validatePassword(password));
 		
 	}
 	

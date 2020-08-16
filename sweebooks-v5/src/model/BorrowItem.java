@@ -2,6 +2,8 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import main.MySQLAccess;
 
 public class BorrowItem {
@@ -51,7 +53,36 @@ public class BorrowItem {
 	}
 	
 	public List<BorrowItem> getBookItem(String id){
-		return new ArrayList<BorrowItem>();
+		
+		List<BorrowItem> lbi = new ArrayList<BorrowItem>();
+		
+		// Retrieve book item of single borrow from DAO
+		String getBookItems = "SELECT borrow_items.borrow_id, borrow_items.book_id, borrow_items.return_timestamp FROM borrow_items " + 
+				"INNER JOIN borrows " + 
+				"ON borrows.id = borrow_items.borrow_id";
+		
+		try {
+			
+			MySQLAccess.rs = MySQLAccess.stmt.executeQuery(getBookItems);
+			
+			while (MySQLAccess.rs.next()) {
+				
+				lbi.add(new BorrowItem(MySQLAccess.rs.getString("borrow_items.borrow_id"),
+						MySQLAccess.rs.getString("borrow_items.book_id"),
+						MySQLAccess.rs.getString("borrow_items.return_timestamp")));
+				
+			}
+			
+			return lbi;
+			
+		} catch (Exception e) {
+			
+			// Fail to retrieve from DAO
+			JOptionPane.showMessageDialog(null, "Database error");
+			return null;
+			
+		}
+		
 	}
-
+	
 }

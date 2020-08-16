@@ -2,6 +2,8 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import main.MySQLAccess;
 
 public class Role {
@@ -19,6 +21,7 @@ public class Role {
 
 	public Role getByName(String name) {
 		
+		// Get role entity by its name from DAO
 		String getRoleObjectByName = "SELECT id FROM roles " + 
 				"WHERE name = '%s'";
 		getRoleObjectByName = String.format(getRoleObjectByName, name);
@@ -42,6 +45,8 @@ public class Role {
 			
 		} catch (Exception e) {
 			
+			// Fail to retrieve from DAO
+			JOptionPane.showMessageDialog(null, "Database error");
 			return null;
 			
 		}

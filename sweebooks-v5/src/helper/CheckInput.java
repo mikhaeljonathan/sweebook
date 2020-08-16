@@ -1,4 +1,6 @@
-package Helper;
+package helper;
+
+import javax.swing.JOptionPane;
 
 import main.MySQLAccess;
 
@@ -7,7 +9,13 @@ public class CheckInput {
 	// Name constraint
 	public static boolean validateName(String name) {
 		
-		if (name.isEmpty()) return false;
+		if (name.isEmpty()) {
+			
+			JOptionPane.showMessageDialog(null, "Name can't be empty");
+			return false;
+			
+		}
+		
 		return true;
 		
 	}
@@ -24,7 +32,12 @@ public class CheckInput {
 	// Address constraint
 	public static boolean validateAddress(String address) {
 		
-		if (address.isEmpty()) return false;
+		if (address.isEmpty()) {
+			
+			JOptionPane.showMessageDialog(null, "address can't be empty");
+			return false;
+			
+		}
 		return true;
 		
 	}
@@ -32,7 +45,12 @@ public class CheckInput {
 	// User name constraint
 	public static boolean validateUsername(String username) {
 		
-		if (username.isEmpty()) return false;
+		if (username.isEmpty()) {
+			
+			JOptionPane.showMessageDialog(null, "Username can't be empty");
+			return false;
+			
+		}
 		
 		String retrieveUsername = "SELECT username FROM users "
 				+ "WHERE username = '%s'";
@@ -55,6 +73,7 @@ public class CheckInput {
 				
 			} else {
 				
+				JOptionPane.showMessageDialog(null, "Username already exists");
 				return false;
 				
 			}
@@ -76,7 +95,12 @@ public class CheckInput {
 		 * - contains upper and lower case
 		 */
 		
-		if (password.length() < 8) return false;
+		if (password.length() < 8) {
+			
+			JOptionPane.showMessageDialog(null, "Password have to contain at least 8 characters");
+			return false;
+			
+		}
 		
 		boolean numeric = false;
 		boolean alphabet = false;
@@ -92,7 +116,35 @@ public class CheckInput {
 			
 		}
 		
-		return (numeric && alphabet && upperCase && lowerCase);
+		if (!numeric) {
+			
+			JOptionPane.showMessageDialog(null, "Password has to contain at least 1 number");
+			return false;
+			
+		}
+
+		if (!alphabet) {
+			
+			JOptionPane.showMessageDialog(null, "Password has to contain at least 1 letter");
+			return false;
+			
+		}
+		
+		if (!upperCase) {
+			
+			JOptionPane.showMessageDialog(null, "Password has to contain at least 1 upper case letter");
+			return false;
+			
+		}
+
+		if (!lowerCase) {
+	
+			JOptionPane.showMessageDialog(null, "Password has to contain at least 1 lower case letter");
+			return false;
+			
+		}
+		
+		return true;
 		
 	}
 	

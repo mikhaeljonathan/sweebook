@@ -12,9 +12,10 @@ import java.util.UUID;
 
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
+import javax.swing.JOptionPane;
 
-import Helper.CheckInput;
-import Helper.Validation;
+import helper.CheckInput;
+import helper.Validation;
 import model.Member;
 import model.Role;
 import model.User;
@@ -83,18 +84,14 @@ public class MemberHandler {
 		User u = new User(uuid, r.getId(), name, username, password, gender);
 		
 		// Insert User object into database
-		if (u.insert() != null) {
-			
-			// Show success message
-			
-		} else {
+		if (u.insert() == null) {
 			
 			// Show error message
-			
+			JOptionPane.showMessageDialog(null, "Fail created user");
 		}
-		
+			
 	}
-	
+
 	private Member createMemberEntities(String uuid, HashMap<String, String> inputs) {
 		
 		// Retrieve the attributes
@@ -102,16 +99,14 @@ public class MemberHandler {
 		
 		// Create date
 		Date date = Calendar.getInstance().getTime();  
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");  
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");  
         String strDate = dateFormat.format(date);
 		
 		// Create Member object with corresponding attributes
 		Member m = new Member(uuid, address, strDate);
 		
-		// Insert Member object into database
-		m.insert();
+		// Insert Member object into database and return it
+		return m.insert();
 		
-		// Return the object
-		return m;
 	}
 }

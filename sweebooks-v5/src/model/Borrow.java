@@ -3,6 +3,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
+import main.Main;
 import main.MySQLAccess;
 
 public class Borrow {
@@ -63,7 +66,76 @@ public class Borrow {
 	}
 	
 	public List<Borrow> getPendingStatus(boolean isOnlyCurrentMember){
-		return new ArrayList<Borrow>();
+		
+		List<Borrow> lb = new ArrayList<Borrow>();
+		
+		// Retrieve pending borrow list from DAO
+		if (isOnlyCurrentMember) {
+			
+			// Only retrieve current member's borrow list
+			String retrieveCurrentBorrowList = "SELECT * FROM borrows " + 
+					"INNER JOIN members " + 
+					"ON members.user_id = borrows.member_id " + 
+					"WHERE members.user_id = '%s' AND borrows.status = 'Pending'";
+			retrieveCurrentBorrowList = String.format(retrieveCurrentBorrowList, Main.user_id);
+			
+			try {
+				
+				MySQLAccess.rs = MySQLAccess.stmt.executeQuery(retrieveCurrentBorrowList);
+				
+				while (MySQLAccess.rs.next()) {
+					
+					lb.add(new Borrow(MySQLAccess.rs.getString("id"),
+							MySQLAccess.rs.getString("member_id"),
+							MySQLAccess.rs.getString("status"),
+							MySQLAccess.rs.getString("borrow_timestamp")));
+					
+				}
+				
+				return lb;
+				
+			} catch (Exception e) {
+				
+				// Fail to retrieve from DAO
+				JOptionPane.showMessageDialog(null, "Database Error");
+				return null;
+				
+			}
+			
+		} else {
+			
+			// Administrator : retrieve all borrow list
+			String retrieveAllBorrowList = "SELECT * FROM borrows " + 
+					"INNER JOIN members " + 
+					"ON members.user_id = borrows.member_id " + 
+					"WHERE borrows.status = 'Pending'";
+			retrieveAllBorrowList = String.format(retrieveAllBorrowList, Main.user_id);
+			
+			try {
+				
+				MySQLAccess.rs = MySQLAccess.stmt.executeQuery(retrieveAllBorrowList);
+				
+				while (MySQLAccess.rs.next()) {
+					
+					lb.add(new Borrow(MySQLAccess.rs.getString("id"),
+							MySQLAccess.rs.getString("member_id"),
+							MySQLAccess.rs.getString("status"),
+							MySQLAccess.rs.getString("borrow_timestamp")));
+					
+				}
+				
+				return lb;
+				
+			} catch (Exception e) {
+				
+				// Fail to retrieve from DAO
+				JOptionPane.showMessageDialog(null, "Database Error");
+				return null;
+				
+			}
+			
+		}
+		
 	}
 	
 	public List<Borrow> getAcceptStatus(Date date, boolean isOnlyCurrentMember){

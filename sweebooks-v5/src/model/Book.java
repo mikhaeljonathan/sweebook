@@ -2,6 +2,8 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import main.MySQLAccess;
 
 public class Book {
@@ -28,7 +30,37 @@ public class Book {
 	}
 
 	public List<Book> all() {
-		return new ArrayList<Book>();
+		
+		List<Book> lb = new ArrayList<Book>();
+		
+		// Retrieve all book data from DAO
+		String findAllBook = "SELECT * FROM books";
+		
+		try {
+			
+			MySQLAccess.rs = MySQLAccess.stmt.executeQuery(findAllBook);
+			
+			while (MySQLAccess.rs.next()) {
+				
+				// Add Book object into List<Book>
+				lb.add(new Book(MySQLAccess.rs.getString("id"), 
+						MySQLAccess.rs.getString("genre_id"),
+						MySQLAccess.rs.getString("title"),
+						MySQLAccess.rs.getString("isbn"),
+						MySQLAccess.rs.getInt("quantity")));
+				
+			}
+			
+			return lb;
+			
+		} catch (Exception e) {
+			
+			// Fail to retrieve from DAO
+			JOptionPane.showMessageDialog(null, "Database error");
+			return null;
+			
+		}
+		
 	}
 	
 	public Book find(String id) {
@@ -119,16 +151,12 @@ public class Book {
 			
 			while (MySQLAccess.rs.next()) {
 				
-				// Retrieve each attribute
-				String id = MySQLAccess.rs.getString("id");
-				String genre_id = MySQLAccess.rs.getString("genre_id");
-				String title = MySQLAccess.rs.getString("title");
-				String isbn = MySQLAccess.rs.getString("isbn");
-				int quantity = MySQLAccess.rs.getInt("quantity");
-				
 				// Add Book object into List<Book>
-				Book b = new Book(id, genre_id, title, isbn, quantity);
-				availableBooks.add(b);
+				availableBooks.add(new Book(MySQLAccess.rs.getString("id"), 
+						MySQLAccess.rs.getString("genre_id"),
+						MySQLAccess.rs.getString("title"),
+						MySQLAccess.rs.getString("isbn"),
+						MySQLAccess.rs.getInt("quantity")));
 				
 			}
 			
