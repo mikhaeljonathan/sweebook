@@ -6,7 +6,7 @@ import java.util.List;
 import controller.BorrowBookHandler;
 import controller.MemberHandler;
 import model.Book;
-
+import view.ViewBookForm;
 import view.ViewBorrowForm;
 import javax.swing.*;
 import java.awt.*;
@@ -14,7 +14,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class MembershipMainForm extends JFrame{
- 
+	
 	 public MembershipMainForm() {
 		 setTitle("Membership Main Form");
 		 getContentPane().setLayout(null);
@@ -42,7 +42,13 @@ public class MembershipMainForm extends JFrame{
 		 btnBookView.addMouseListener(new MouseAdapter() {
 		 @Override
 		  public void mouseClicked(MouseEvent e) {
-		    
+			 ViewBookForm viewBookForm = new ViewBookForm();
+			 viewBookForm.remove(0);
+			 viewBookForm.setResizable(false);
+			 viewBookForm.setLocation(174, 11);
+		     getContentPane().add(viewBookForm);
+		     viewBookForm.getContentPane().setLayout(null);
+		     viewBookForm.setVisible(true);
 		   }
 		  });
 		 btnBookView.setBounds(10, 79, 140, 35);
