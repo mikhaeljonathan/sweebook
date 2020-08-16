@@ -1,6 +1,6 @@
 package main;
 
-import view.ViewBorrowHistoryForm;
+import view.ViewBookForm;
 
 public class Main {
 
@@ -14,7 +14,7 @@ public class Main {
 		msa.emptyMethodToPreventWarning();
 		
 		// Go to the LoginForm
-		new LoginForm();
+		new MembershipMainForm();
 		
 	}
 	

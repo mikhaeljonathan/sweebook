@@ -10,6 +10,7 @@ import java.util.UUID;
 
 import javax.swing.JInternalFrame;
 
+import helper.SQLGetQuery;
 import helper.Validation;
 import main.Main;
 import model.Book;
@@ -56,10 +57,8 @@ public class BorrowBookHandler {
 			CartStorage cs = CartStorage.getInstance();
 			cs.addCart(book);
 			
-			BookHandler bh = new BookHandler();
-			Book b = bh.getById(book.getId());
-			
-			updateQuantity(bh, b);
+			Book b = new BookHandler().getById(book.getId());
+			updateQuantity(b);
 			
 			return true;
 			
@@ -93,7 +92,7 @@ public class BorrowBookHandler {
 			
 			// Create date
 			Date date = Calendar.getInstance().getTime();  
-	        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");  
+	        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");  
 	        String strDate = dateFormat.format(date);
 	        
 	        // Create borrow object
@@ -106,15 +105,7 @@ public class BorrowBookHandler {
 			
 			for (Book book : lb) {
 				
-				// Create return date
-				long millisecond = date.getTime();
-				millisecond = 1209600000 + millisecond; // Two weeks
-				
-				Calendar returnDate = Calendar.getInstance();
-				returnDate.setTimeInMillis(millisecond);
-				String ret = dateFormat.format(returnDate);
-				
-				BorrowItem bi = new BorrowItem(bNew.getId(), book.getId(), ret);
+				BorrowItem bi = new BorrowItem(bNew.getId(), book.getId(), Validation.dummyTimestamp);
 				bi.insert();
 				
 			}
@@ -130,7 +121,7 @@ public class BorrowBookHandler {
 	}
 	
 	// Decrement Book quantity
-	private void updateQuantity(BookHandler bh, Book b) {
+	private void updateQuantity(Book b) {
 		
 		HashMap<String, String> inputs = new HashMap<String, String>();
 		
@@ -140,7 +131,7 @@ public class BorrowBookHandler {
 		inputs.put("isbn", b.getIsbn());
 		inputs.put("quantity", Integer.toString(b.getQuantity() - 1));
 		
-		bh.update(inputs);
+		new BookHandler().update(inputs);
 		
 	}
 	

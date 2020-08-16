@@ -310,12 +310,42 @@ public class Borrow {
 		
 	}
 	
+	public String getMemberId() {
+		
+		return memberId;
+		
+	}
+	
+	public String getBorrowTimestamp() {
+		
+		return borrowTimestamp;
+		
+	}
+	
 	public String getStatus() {
 		
 		return status;
 		
 	}
-	
+
+	public void setMemberId(String memberId) {
+		
+		this.memberId = memberId;
+		
+	}
+
+	public void setBorrowTimestamp(String borrowTimestamp) {
+		
+		this.borrowTimestamp = borrowTimestamp;
+		
+	}
+
+	public void setId(String id) {
+		
+		this.id = id;
+		
+	}
+
 	public void setStatus(String status) {
 		
 		this.status = status;

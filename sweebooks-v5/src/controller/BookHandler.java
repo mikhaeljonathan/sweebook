@@ -5,6 +5,7 @@ import java.util.List;
 import javax.swing.JInternalFrame;
 
 import model.Book;
+import view.ViewBookForm;
 
 public class BookHandler {
 	
@@ -13,8 +14,9 @@ public class BookHandler {
 	}
 
 	public JInternalFrame showViewBookForm() {
-		JInternalFrame JIF = new JInternalFrame();
-		return JIF;
+		
+		return new ViewBookForm();
+		
 	}
 	
 	public JInternalFrame showManageBookForm() {

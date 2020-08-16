@@ -2,12 +2,13 @@ package view;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.JInternalFrame;
+import javax.swing.JOptionPane;
 
 import controller.BorrowTransactionHandler;
 import model.Borrow;
@@ -43,6 +44,26 @@ public class ViewBorrowHistoryForm extends JInternalFrame{
 		Borrow b = new Borrow();
 		List<BorrowItem> lbi = bth.getBookItem(b.getId());
 		
+		// TODO: show lbi di sini
+		
+		// TODO: kalau salah satu lbi di klik return keluar ini
+		BorrowItem bi = new BorrowItem();
+		
+		// Create date
+		Date dateNow = Calendar.getInstance().getTime();  
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");  
+        String strDate = dateFormat.format(dateNow);
+		
+		HashMap<String, String> inputs = new HashMap<String, String>();
+		inputs.put("id", bi.getId());
+		inputs.put("bookId", bi.getBookId());
+		inputs.put("returnTimestamp", strDate);
+		
+		if (bth.returnBook(inputs) != null) {
+			
+			JOptionPane.showMessageDialog(null, "Book is successfully returned");
+			
+		}
 		
 	}
 

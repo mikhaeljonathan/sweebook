@@ -9,7 +9,10 @@ import model.CartStorage;
 
 public class Validation {
 
-public static boolean validateLogin(String username, String password) {
+	public static String dummyTimestamp = "1990-01-01 12:00:00";
+	public static long twoWeeksInMillisecond = 1209600000;
+	
+	public static boolean validateLogin(String username, String password) {
 		
 		String validateLogin = "SELECT username FROm users " + 
 				"WHERE username = '%s' AND password = '%s'";
