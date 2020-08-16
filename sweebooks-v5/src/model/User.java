@@ -1,5 +1,7 @@
 package model;
 
+import main.MySQLAccess;
+
 public class User {
 
 	private String id;
@@ -26,10 +28,22 @@ public class User {
 	
 	public User insert() {
 		
-		// TODO
-		// insert to database
-		// if success return user, else return null
-		return this;
+		// Insert user into DAO
+		String insertToUser = "INSERT INTO users "
+				+ "VALUE('%s', '%s', '%s', '%s', '%s', '%s')";
+		insertToUser = String.format(insertToUser, id, roleId, name, username, password, gender);
+		
+		try {
+			
+			MySQLAccess.stmt.execute(insertToUser);
+			return this;
+			
+		} catch (Exception e) {
+			
+			// Fail to insert to DAO
+			return null;
+			
+		}
 		
 	}	
 	

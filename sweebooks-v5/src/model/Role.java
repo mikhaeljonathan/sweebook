@@ -2,13 +2,15 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+import main.MySQLAccess;
+
 public class Role {
 
 	private String id;
 	private String name;
 	
 	public Role() {
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	public List<Role> all(){
@@ -17,11 +19,33 @@ public class Role {
 
 	public Role getByName(String name) {
 		
-		// TODO
-		// ambil data2 role dr database berdasarkan nama rolenya dan masukin ke constructor
-		// this.id = id <- variabel yg didapat dari mySQL
+		String getRoleObjectByName = "SELECT id FROM roles " + 
+				"WHERE name = '%s'";
+		getRoleObjectByName = String.format(getRoleObjectByName, name);
 		
-		return this;
+		try {
+			
+			MySQLAccess.rs = MySQLAccess.stmt.executeQuery(getRoleObjectByName);
+			
+			String id = "";
+			
+			while(MySQLAccess.rs.next()) {
+				
+				id = MySQLAccess.rs.getString("id");
+				
+			}
+			
+			this.id = id;
+			this.name = name;
+			
+			return this;
+			
+		} catch (Exception e) {
+			
+			return null;
+			
+		}
+
 	}
 	
 	// Getter and Setter

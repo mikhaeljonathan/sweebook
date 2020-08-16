@@ -1,41 +1,41 @@
 package main;
 
-import javax.swing.JFrame;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
 
-import controller.MemberHandler;
-import model.Member;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+
+import Helper.SQLGetQuery;
+import Helper.Validation;
 import view.CreateMembershipForm;
 
-import javax.swing.JTextField;
-import javax.swing.JTextPane;
-import javax.swing.JLabel;
-import javax.swing.JButton;
-import javax.swing.JPasswordField;
-
 public class LoginForm extends JFrame{
-	private JTextField textField_Username;
+
+	private static final long serialVersionUID = 1L;
+	
+	private JTextField usernameField;
 	private JPasswordField passwordField;
 	private JFrame frame;
 
 	public LoginForm() {
 		
-		//Create UI
 		frame = new JFrame();
-		frame.setTitle("Login");
+		frame.setTitle("Login or Create Member");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(500, 500);
 		
 		frame.setLocationRelativeTo(null);
 		frame.getContentPane().setLayout(null);
 		
-		textField_Username = new JTextField();
-		textField_Username.setBounds(123, 94, 248, 20);
-		frame.getContentPane().add(textField_Username);
-		textField_Username.setColumns(10);
+		usernameField = new JTextField();
+		usernameField.setBounds(123, 94, 248, 20);
+		frame.getContentPane().add(usernameField);
+		usernameField.setColumns(10);
+		usernameField.setColumns(10);
 		
 		JLabel lblUsername = new JLabel("Username");
 		lblUsername.setBounds(49, 97, 64, 14);
@@ -57,71 +57,69 @@ public class LoginForm extends JFrame{
 		passwordField.setBounds(123, 125, 248, 20);
 		frame.getContentPane().add(passwordField);
 		
-		btnCreate.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				//open Create membership form
-				frame.dispose();
-				new CreateMembershipForm();
-			}
-		});
+		frame.setVisible(true);
 		
+		// For Login Button
 		btnLogin.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				//input username, pass
-				String User     = textField_Username.getText();
-				String Password = passwordField.getText();
-				System.out.println("Username: " + User );
-				System.out.println("Password: " + Password);
+				
+				// Retrieve user name and password from text field
+				String username = usernameField.getText();
+				char[] passwordTemp = passwordField.getPassword();
+				String password = new String(passwordTemp);
+				
+				if (Validation.validateLogin(username, password)) {
+					
+					frame.dispose();
+					
+					String role = SQLGetQuery.getRoleFromUsername(username);
+					Main.user_id = SQLGetQuery.getIdFromUsername(username);
+					
+					if (role.equals("Administrator")) {
+						
+						new AdministratorMainForm();
+						
+					} else if (role.equals("Human Capital")) {
+						
+						new HumanCapitalMainForm();
+						
+					} else if (role.equals("Manager")) {
+						
+						new ManagerMainForm();
+						
+					} else if (role.equals("Membership")) {
+						
+						new MembershipMainForm();
+						
+					} else { // Purchasing
+						
+						new PurchasingMainForm();
+						
+					}
+					
+				} else {
+					
+					// TODO : kasih error message
+					
+				}
+				
 			}
 		});
 		
-		frame.setVisible(true);
-		
-		
-//		// TODO: after the create membership button pressed, then do below
-//		
-//		// Show the form
-//		MemberHandler mh = new MemberHandler();
-//		mh.showCreateMembershipForm();
-//		
-//		// Handle the input field
-//		handleCreateMembershipInput(mh);
-		
-	}
-	
-	private void handleCreateMembershipInput(MemberHandler mh) {
-		
-		HashMap<String, String> inputs = new HashMap<String, String>();
-		
-		// Put all the text in input field to the HashMap
-		inputs.put("name", "input1");
-		inputs.put("gender", "input1");
-		inputs.put("address", "input1");
-		inputs.put("username", "input1");
-		inputs.put("password", "input1");
-		// Actor who handle create membership use case always "membership"
-		inputs.put("role", "membership"); 
-		
-		// Create new Member entity
-		Member m = mh.createMembership(inputs);
-		
-		// Show Member entity in UI
-		showMemberInGUI(m);
-		
-	}
-	
-	private void showMemberInGUI(Member m) {
-		
-		// TODO: tampilin m di UI
-		if (m != null) {
+		// For Create Membership Button
+		btnCreate.addActionListener(new ActionListener() {
 			
-		} else {
-			//show error message
-		}
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				frame.dispose();
+				new CreateMembershipForm();
+				
+			}
+			
+		});
 		
 	}
 }

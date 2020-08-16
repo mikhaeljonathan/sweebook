@@ -1,7 +1,11 @@
 package controller;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -9,7 +13,8 @@ import java.util.UUID;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 
-import check.CheckInput;
+import Helper.CheckInput;
+import Helper.Validation;
 import model.Member;
 import model.Role;
 import model.User;
@@ -45,10 +50,7 @@ public class MemberHandler {
 	public Member createMembership(HashMap<String, String> inputs) {
 		
 		// Check the constraints
-		
-		if (validate(inputs)) {
-			
-			// If validated then do the next jobs:
+		if (Validation.validateMembership(inputs)) {
 			
 			// Get Role object for obtaining roleId for User object
 			RoleHandler rh = new RoleHandler();
@@ -68,27 +70,6 @@ public class MemberHandler {
 		}
 		
 	}
-	
-	private boolean validate(HashMap<String, String> inputs) {
-		
-		// The constraints are given on the Microsoft Word
-		
-		// Retrieve the attributes
-		String name = inputs.get("name");
-		String gender = inputs.get("gender");
-		String address = inputs.get("address");
-		String username = inputs.get("username");
-		String password = inputs.get("password");
-		
-		// Check the constraint
-		if (!CheckInput.validateName(name)) return false;
-		if (!CheckInput.validateGender(gender)) return false;
-		if (!CheckInput.validateAddress(address)) return false;
-		if (!CheckInput.validateUsername(username)) return false;
-		if (!CheckInput.validatePassword(password)) return false;
-		
-		return true;
-	}
 
 	private void createUserEntities(String uuid, Role r, HashMap<String, String> inputs) {
 		
@@ -102,7 +83,15 @@ public class MemberHandler {
 		User u = new User(uuid, r.getId(), name, username, password, gender);
 		
 		// Insert User object into database
-		u.insert();
+		if (u.insert() != null) {
+			
+			// Show success message
+			
+		} else {
+			
+			// Show error message
+			
+		}
 		
 	}
 	
@@ -111,8 +100,13 @@ public class MemberHandler {
 		// Retrieve the attributes
 		String address = inputs.get("address");
 		
+		// Create date
+		Date date = Calendar.getInstance().getTime();  
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");  
+        String strDate = dateFormat.format(date);
+		
 		// Create Member object with corresponding attributes
-		Member m = new Member(uuid, address, LocalDate.now().toString());
+		Member m = new Member(uuid, address, strDate);
 		
 		// Insert Member object into database
 		m.insert();

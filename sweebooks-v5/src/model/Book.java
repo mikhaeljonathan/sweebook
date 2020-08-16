@@ -2,6 +2,8 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+import main.MySQLAccess;
+
 public class Book {
 
 	private String id;
@@ -11,7 +13,7 @@ public class Book {
 	private	int quantity;
 	
 	public Book() {
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	
@@ -31,9 +33,43 @@ public class Book {
 	
 	public Book find(String id) {
 		
-		// TODO: retrieve data buku berdasarkan id di database trs return booknya dan masukin ke atribut
-		// this.id = id <- example
-		return this;
+		String findBookById = "SELECT * FROM books "
+				+ "WHERE id = '%s'";
+		findBookById = String.format(findBookById, id);
+		
+		try {
+			
+			MySQLAccess.rs = MySQLAccess.stmt.executeQuery(findBookById);
+			
+			String id2 = "";
+			String genre_id = "";
+			String title = "";
+			String isbn = "";
+			int quantity = 0;
+			
+			while (MySQLAccess.rs.next()) {
+				
+				id2 = MySQLAccess.rs.getString("id");
+				genre_id = MySQLAccess.rs.getString("genre_id");
+				title = MySQLAccess.rs.getString("title");
+				isbn = MySQLAccess.rs.getString("isbn");
+				quantity = MySQLAccess.rs.getInt("quantity");
+				
+			}
+			
+			this.id = id2;
+			this.genreId = genre_id;
+			this.name = title;
+			this.isbn = isbn;
+			this.quantity = quantity;
+			
+			return this;
+			
+		} catch (Exception e) {
+			
+			return null;
+			
+		}
 		
 	}
 
@@ -43,8 +79,22 @@ public class Book {
 	
 	public Book update() {
 		
-		// TODO: gaatau suruh update apaan
-		return this;
+		// Update books in the DAO
+		String updateBook = "UPDATE books " + 
+				"SET id = '%s', genre_id = '%s', title = '%s', isbn = '%s', quantity = %d " + 
+				"WHERE id = '%s'";
+		updateBook = String.format(updateBook, id, genreId, name, isbn, quantity);
+		
+		try {
+			
+			MySQLAccess.stmt.execute(updateBook);
+			return this;
+			
+		} catch (Exception e) {
+			
+			return null;
+			
+		}
 		
 	}
 	
@@ -58,8 +108,38 @@ public class Book {
 	
 	public List<Book> getBookByQuantityMoreThanZero() {
 		
-		// TODO: minta ke database list buku2 yang quantity nya lbh besar dr 0 terus return
-		return new ArrayList<Book>();
+		// Retrieve available books from DAO
+		List<Book> availableBooks= new ArrayList<Book>();
+		String retrieveAvailableBook = "SELECT * FROM books "
+				+ "WHERE quantity > 0";
+		
+		try {
+			
+			MySQLAccess.rs = MySQLAccess.stmt.executeQuery(retrieveAvailableBook);
+			
+			while (MySQLAccess.rs.next()) {
+				
+				// Retrieve each attribute
+				String id = MySQLAccess.rs.getString("id");
+				String genre_id = MySQLAccess.rs.getString("genre_id");
+				String title = MySQLAccess.rs.getString("title");
+				String isbn = MySQLAccess.rs.getString("isbn");
+				int quantity = MySQLAccess.rs.getInt("quantity");
+				
+				// Add Book object into List<Book>
+				Book b = new Book(id, genre_id, title, isbn, quantity);
+				availableBooks.add(b);
+				
+			}
+			
+			return availableBooks;
+			
+		} catch (Exception e) {
+			
+			return null;
+			
+		}
+		
 	}
 	
 	// Getter and Setter

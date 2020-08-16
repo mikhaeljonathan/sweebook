@@ -1,4 +1,6 @@
-package check;
+package Helper;
+
+import main.MySQLAccess;
 
 public class CheckInput {
 
@@ -31,8 +33,37 @@ public class CheckInput {
 	public static boolean validateUsername(String username) {
 		
 		if (username.isEmpty()) return false;
-		// TODO: if (existInDB(username)) return false;
-		return true;
+		
+		String retrieveUsername = "SELECT username FROM users "
+				+ "WHERE username = '%s'";
+		retrieveUsername = String.format(retrieveUsername, username);
+		
+		try {
+			
+			MySQLAccess.rs = MySQLAccess.stmt.executeQuery(retrieveUsername);
+			
+			String usernameRetrieved = "";
+			while(MySQLAccess.rs.next()) {
+				
+				usernameRetrieved = MySQLAccess.rs.getString("username");
+				
+			}
+			
+			if (usernameRetrieved.isEmpty()) {
+				
+				return true;
+				
+			} else {
+				
+				return false;
+				
+			}
+			
+		} catch (Exception e) {
+			
+			return false;
+			
+		}
 		
 	}
 	

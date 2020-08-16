@@ -2,8 +2,11 @@ package main;
 
 public class Main {
 
-	public Main() {
+	public static String user_id = null;
+	
+	public Main(){
 		
+		MySQLAccess msa = MySQLAccess.getInstance();
 		new LoginForm();
 		
 	}

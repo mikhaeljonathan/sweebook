@@ -34,7 +34,6 @@ bikin form di CreateMembershipForm
 - input address
 - input username
 - input password
-- input role
 - tombol create membership
 
 bikin form di BorrowBookForm

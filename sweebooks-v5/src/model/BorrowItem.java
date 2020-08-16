@@ -2,6 +2,8 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+import main.MySQLAccess;
+
 public class BorrowItem {
 	
 	private String id;
@@ -12,17 +14,31 @@ public class BorrowItem {
 		
 	}
 	
-	public BorrowItem(String id, String bookId) {
+	public BorrowItem(String id, String bookId, String returnTimestamp) {
 		
 		this.id = id;
 		this.bookId = id;
+		this.returnTimestamp = returnTimestamp;
 		
 	}
 	
 	public BorrowItem insert() {
 		
-		// TODO: insert to database
-		return this;
+		// Insert borrowItem into DAO
+		String insertToBorrowItem = "INSERT INTO borrow_items "
+				+ "VALUE('%s', '%s', '%s')";
+		insertToBorrowItem = String.format(insertToBorrowItem, id, bookId, returnTimestamp);
+		
+		try {
+			
+			MySQLAccess.stmt.execute(insertToBorrowItem);
+			return this;
+			
+		} catch (Exception e) {
+			
+			return null;
+			
+		}
 		
 	}
 	
