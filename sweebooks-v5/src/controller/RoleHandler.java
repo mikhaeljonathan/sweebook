@@ -7,7 +7,7 @@ import model.Role;
 public class RoleHandler {
 
 	public RoleHandler() {
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	public List<Role> getAll(){

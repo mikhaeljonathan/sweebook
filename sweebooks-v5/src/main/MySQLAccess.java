@@ -47,5 +47,9 @@ public class MySQLAccess {
     	return instance;
     	
     }
+    
+    public void emptyMethodToPreventWarning() {
+    	
+    }
 
 }

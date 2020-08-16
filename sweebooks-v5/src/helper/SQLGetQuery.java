@@ -1,4 +1,4 @@
-package Helper;
+package helper;
 
 import main.Main;
 import main.MySQLAccess;
@@ -90,6 +90,36 @@ public class SQLGetQuery {
 		} catch (Exception e) {
 			
 			return -1;
+			
+		}
+		
+	}
+	
+	public static String getRoleFromUserId(String userId) {
+		
+		String getRole = "SELECT roles.name FROM roles " + 
+				"INNER JOIN users " + 
+				"ON users.role_id = roles.id " + 
+				"WHERE users.id = '%s'";
+		getRole = String.format(getRole, userId);
+		
+		try {
+			
+			MySQLAccess.rs = MySQLAccess.stmt.executeQuery(getRole);
+			
+			String role = "";
+			
+			while (MySQLAccess.rs.next()) {
+				
+				role = MySQLAccess.rs.getString("roles.name");
+				
+			}
+			
+			return role;
+			
+		} catch (Exception e) {
+			
+			return null;
 			
 		}
 		

@@ -1,5 +1,4 @@
 package controller;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -10,7 +9,7 @@ import model.Book;
 public class BookHandler {
 	
 	public BookHandler() {
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public JInternalFrame showViewBookForm() {
@@ -24,7 +23,9 @@ public class BookHandler {
 	}
 	
 	public List<Book> getAll(){
-		return new ArrayList<Book>();
+		
+		return new Book().all();
+		
 	}
 	
 	public Book getById(String id) {

@@ -2,6 +2,8 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import main.MySQLAccess;
 
 public class Member {
@@ -41,6 +43,7 @@ public class Member {
 		} catch (Exception e) {
 			
 			// Fail to insert to DAO
+			JOptionPane.showMessageDialog(null, "Database error");
 			return null;
 			
 		}

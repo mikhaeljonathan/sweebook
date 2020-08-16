@@ -1,5 +1,7 @@
 package model;
 
+import javax.swing.JOptionPane;
+
 import main.MySQLAccess;
 
 public class User {
@@ -41,6 +43,7 @@ public class User {
 		} catch (Exception e) {
 			
 			// Fail to insert to DAO
+			JOptionPane.showMessageDialog(null, "Database error");
 			return null;
 			
 		}

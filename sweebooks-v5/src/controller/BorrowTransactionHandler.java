@@ -26,7 +26,9 @@ public class BorrowTransactionHandler {
 	}
 	
 	public List<Borrow> getPendingStatus(boolean isOnlyCurrentMember){
-		return new ArrayList<Borrow>();
+		
+		return new Borrow().getPendingStatus(isOnlyCurrentMember);
+		
 	}
 	
 	public List<Borrow> getAcceptStatus(Date date){
@@ -34,7 +36,9 @@ public class BorrowTransactionHandler {
 	}
 	
 	public List<BorrowItem> getBookItem(String id){
-		return new ArrayList<BorrowItem>();
+		
+		return new BorrowItem().getBookItem(id);
+		
 	}
 	
 	public boolean acceptBorrowRequest(String id) {

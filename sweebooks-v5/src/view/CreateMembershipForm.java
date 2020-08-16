@@ -9,6 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -101,7 +102,6 @@ public class CreateMembershipForm extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				
 				handleCreateMembershipInput();
-				new MembershipMainForm();
 				
 			}
 		});
@@ -134,18 +134,13 @@ public class CreateMembershipForm extends JFrame{
 		// Create new Member entity
 		Member m = mh.createMembership(inputs);
 		
-		// Show Member entity in UI
-		showMemberInGUI(m);
-		
-	}
-	
-	private void showMemberInGUI(Member m) {
-		
-		// TODO: tampilin m di UI
 		if (m != null) {
 			
-		} else {
-			//show error message
+			JOptionPane.showMessageDialog(null, "Membership is sucessfully created");
+			
+			frame.dispose();
+			new MembershipMainForm();
+			
 		}
 	}
 }

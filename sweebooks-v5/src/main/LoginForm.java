@@ -6,11 +6,12 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import Helper.SQLGetQuery;
-import Helper.Validation;
+import helper.SQLGetQuery;
+import helper.Validation;
 import view.CreateMembershipForm;
 
 public class LoginForm extends JFrame{
@@ -23,6 +24,7 @@ public class LoginForm extends JFrame{
 
 	public LoginForm() {
 		
+		// Create UI
 		frame = new JFrame();
 		frame.setTitle("Login or Create Member");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -70,6 +72,7 @@ public class LoginForm extends JFrame{
 				char[] passwordTemp = passwordField.getPassword();
 				String password = new String(passwordTemp);
 				
+				// Validate is user name and password match
 				if (Validation.validateLogin(username, password)) {
 					
 					frame.dispose();
@@ -101,7 +104,7 @@ public class LoginForm extends JFrame{
 					
 				} else {
 					
-					// TODO : kasih error message
+					JOptionPane.showMessageDialog(null, "Username and password don't match");
 					
 				}
 				
