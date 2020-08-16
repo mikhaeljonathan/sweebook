@@ -44,8 +44,8 @@ public class Book {
 				
 				// Add Book object into List<Book>
 				lb.add(new Book(MySQLAccess.rs.getString("id"), 
-						MySQLAccess.rs.getString("genre_id"),
 						MySQLAccess.rs.getString("title"),
+						MySQLAccess.rs.getString("genre_id"),
 						MySQLAccess.rs.getString("isbn"),
 						MySQLAccess.rs.getInt("quantity")));
 				
@@ -115,7 +115,7 @@ public class Book {
 		String updateBook = "UPDATE books " + 
 				"SET id = '%s', genre_id = '%s', title = '%s', isbn = '%s', quantity = %d " + 
 				"WHERE id = '%s'";
-		updateBook = String.format(updateBook, id, genreId, name, isbn, quantity);
+		updateBook = String.format(updateBook, id, genreId, name, isbn, quantity, id);
 		
 		try {
 			
@@ -153,8 +153,8 @@ public class Book {
 				
 				// Add Book object into List<Book>
 				availableBooks.add(new Book(MySQLAccess.rs.getString("id"), 
-						MySQLAccess.rs.getString("genre_id"),
 						MySQLAccess.rs.getString("title"),
+						MySQLAccess.rs.getString("genre_id"),
 						MySQLAccess.rs.getString("isbn"),
 						MySQLAccess.rs.getInt("quantity")));
 				

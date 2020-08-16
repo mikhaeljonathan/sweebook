@@ -12,7 +12,8 @@ public class Main {
 		msa.emptyMethodToPreventWarning();
 		
 		// Go to the LoginForm
-		new LoginForm();
+//		new LoginForm();
+		new MembershipMainForm();
 		
 	}
 	
