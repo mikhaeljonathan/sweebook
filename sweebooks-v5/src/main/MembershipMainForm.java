@@ -6,6 +6,7 @@ import java.util.List;
 import controller.BorrowBookHandler;
 import controller.MemberHandler;
 import model.Book;
+import view.BorrowBookForm;
 import view.ViewBookForm;
 import view.ViewBorrowForm;
 import javax.swing.*;
@@ -14,7 +15,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class MembershipMainForm extends JFrame{
-	
+ 
 	 public MembershipMainForm() {
 		 setTitle("Membership Main Form");
 		 getContentPane().setLayout(null);
@@ -25,7 +26,7 @@ public class MembershipMainForm extends JFrame{
 		 btnBorrowBook.addMouseListener(new MouseAdapter() {
 		 @Override
 		  public void mouseClicked(MouseEvent e) {
-			 ViewBorrowForm borrowForm = new ViewBorrowForm();
+			 BorrowBookForm borrowForm = new BorrowBookForm();
 		     borrowForm.setResizable(false);
 //   		 borrowForm.setBounds(174, 11, 500, 261);
 		     borrowForm.setLocation(174, 11);
@@ -41,16 +42,15 @@ public class MembershipMainForm extends JFrame{
 		 JButton btnBookView = new JButton("Book View");
 		 btnBookView.addMouseListener(new MouseAdapter() {
 		 @Override
-		  public void mouseClicked(MouseEvent e) {
-			 ViewBookForm viewBookForm = new ViewBookForm();
-			 viewBookForm.remove(0);
-			 viewBookForm.setResizable(false);
-			 viewBookForm.setLocation(174, 11);
-		     getContentPane().add(viewBookForm);
-		     viewBookForm.getContentPane().setLayout(null);
-		     viewBookForm.setVisible(true);
-		   }
-		  });
+		 	public void mouseClicked(MouseEvent e) {
+				ViewBookForm viewBookForm = new ViewBookForm();
+				viewBookForm.setResizable(false);
+				viewBookForm.setLocation(174, 11);
+			    getContentPane().add(viewBookForm);
+			    viewBookForm.getContentPane().setLayout(null);
+			    viewBookForm.setVisible(true);
+		 	}
+		 });
 		 btnBookView.setBounds(10, 79, 140, 35);
 		 getContentPane().add(btnBookView);
 		  
