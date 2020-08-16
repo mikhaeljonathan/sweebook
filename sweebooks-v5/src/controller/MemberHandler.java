@@ -14,8 +14,8 @@ import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 
-import helper.CheckInput;
-import helper.Validation;
+import Helper.CheckInput;
+import Helper.Validation;
 import model.Member;
 import model.Role;
 import model.User;

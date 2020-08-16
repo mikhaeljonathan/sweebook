@@ -10,7 +10,7 @@ import java.util.UUID;
 
 import javax.swing.JInternalFrame;
 
-import helper.Validation;
+import Helper.Validation;
 import main.Main;
 import model.Book;
 import model.Borrow;
