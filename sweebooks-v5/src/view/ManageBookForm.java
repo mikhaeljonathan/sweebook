@@ -32,5 +32,14 @@ public class ManageBookForm extends JInternalFrame{
 			
 		}
 		
+		// TODO: kalau tombol delete book di setiap list buku ditekan
+		// show confirmation dialog dulu baru execute this:
+		Book b = new Book();
+		if (bh.delete(b.getId())) {
+			
+			JOptionPane.showMessageDialog(null, "Book successfully deleted");
+			
+		}
+		
 	}
 }

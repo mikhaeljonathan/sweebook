@@ -149,7 +149,24 @@ public class Book {
 	}
 	
 	public boolean delete() {
-		return true;
+		
+		String deleteBook = "DELETE FROM books " + 
+				"WHERE id = '%s'";
+		deleteBook = String.format(deleteBook, id);
+		
+		try {
+			
+			MySQLAccess.stmt.execute(deleteBook);
+			return true;
+			
+		} catch (Exception e) {
+			
+			// Fail to delete from DAO
+			JOptionPane.showMessageDialog(null, "Database error");
+			return false;
+			
+		}
+		
 	}
 	
 	public String getByIsbn(String isbn) {

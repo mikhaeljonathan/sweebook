@@ -102,7 +102,9 @@ public class BookHandler {
 	}
 	
 	public boolean delete(String id) {
-		return true;
+		
+		return new Book(id, "dummy name", "dummy genre_id", "dummy isbn", 0).delete();
+		
 	}
 	
 	// Increment book quantity
