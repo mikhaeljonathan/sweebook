@@ -1,6 +1,5 @@
 package main;
 
-import view.ViewBookForm;
 
 public class Main {
 
@@ -14,7 +13,7 @@ public class Main {
 		msa.emptyMethodToPreventWarning();
 		
 		// Go to the LoginForm
-		new MembershipMainForm();
+		new LoginForm();
 		
 	}
 	
