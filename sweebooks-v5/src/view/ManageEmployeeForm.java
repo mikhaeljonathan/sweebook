@@ -74,7 +74,12 @@ public class ManageEmployeeForm extends JInternalFrame{
 		
 		// TODO: kalau salah satu employee diteken dan tekan accept employee request akan exeucte this:
 		// keluar confirmation dialog dul uya apakah setuju
-		
+		if (eh.acceptEmployee(e.getId()) != null) {
+			
+			JOptionPane.showMessageDialog(null, "Employee is successfully accepted\n"
+					+ "Now the employee's status is \"active\"");
+			
+		}
 		
 		
 		

@@ -120,7 +120,20 @@ public class EmployeeHandler {
 	}
 	
 	public Employee acceptEmployee(String id) {
-		return new Employee();
+		
+		Employee e = new Employee().find(id);
+		if (e.getStatus().equals("Active")) {
+			
+			JOptionPane.showMessageDialog(null, "Employee is already accepted");
+			return null;
+			
+		} else {
+			
+			e.setStatus("Active");
+			return e.update();
+			
+		}
+		
 	}
 	
 	private String generatePassword(String username) {
