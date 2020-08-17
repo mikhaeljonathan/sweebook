@@ -60,6 +60,24 @@ public class ManageEmployeeForm extends JInternalFrame{
 			
 		}
 		
+		
+		// kalau role nya skrg human capital tombol fire dan accept ga muncul
+		
+		// TODO: kalau salah satu employee diteken dan tekan fire employee akan execute this:
+		// keluar confirmation dialog dulu ya apakah setuju
+		Employee e = new Employee();
+		if (eh.firedEmployee(e.getId()) != null) {
+			
+			JOptionPane.showMessageDialog(null, "Employee is successfully fired");
+			
+		}
+		
+		// TODO: kalau salah satu employee diteken dan tekan accept employee request akan exeucte this:
+		// keluar confirmation dialog dul uya apakah setuju
+		
+		
+		
+		
 	}
 
 }

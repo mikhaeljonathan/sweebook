@@ -57,7 +57,32 @@ public class Employee {
 	}
 	
 	public Employee find(String id) {
-		return new Employee();
+		
+		String findEmployeeById = "SELECT * FROM employees "
+				+ "WHERE user_id = '%s'";
+		findEmployeeById = String.format(findEmployeeById, id);
+		
+		try {
+			
+			MySQLAccess.rs = MySQLAccess.stmt.executeQuery(findEmployeeById);
+			
+			while (MySQLAccess.rs.next()) {
+				
+				this.id = MySQLAccess.rs.getString("user_id");
+				this.salary = Integer.parseInt(MySQLAccess.rs.getString("salary"));
+				this.status = MySQLAccess.rs.getString("status");
+				
+			}
+			
+			return this;
+			
+		} catch (Exception e) {
+			
+			return null;
+			
+		}
+		
+		
 	}
 	
 	public Employee insert() {
@@ -83,7 +108,65 @@ public class Employee {
 	}
 	
 	public Employee update() {
-		return new Employee();
+		
+		// Update employee in the DAO
+		String updateEmployee = "UPDATE employees " + 
+				"SET user_id = '%s', salary = %d, status = '%s' " + 
+				"WHERE user_id = '%s'";
+		updateEmployee = String.format(updateEmployee, id, salary, status, id);
+		
+		try {
+			
+			MySQLAccess.stmt.execute(updateEmployee);
+			return this;
+			
+		} catch (Exception e) {
+			
+			JOptionPane.showMessageDialog(null, "Database error");
+			return null;
+			
+		}
+		
 	}
+
+	// Getter and Setter
+	
+	public String getId() {
+		
+		return id;
+		
+	}
+
+	public void setId(String id) {
+		
+		this.id = id;
+		
+	}
+
+	public int getSalary() {
+		
+		return salary;
+		
+	}
+
+	public void setSalary(int salary) {
+		
+		this.salary = salary;
+		
+	}
+
+	public String getStatus() {
+		
+		return status;
+		
+	}
+
+	public void setStatus(String status) {
+		
+		this.status = status;
+		
+	}
+	
+	
 
 }

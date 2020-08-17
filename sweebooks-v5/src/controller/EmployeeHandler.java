@@ -5,15 +5,17 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.swing.JInternalFrame;
+import javax.swing.JOptionPane;
 
 import helper.Validation;
+import main.MySQLAccess;
 import model.Employee;
 import model.User;
 
 public class EmployeeHandler {
 
 	public EmployeeHandler() {
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	public JInternalFrame showManageEmployeeForm() {
@@ -27,7 +29,9 @@ public class EmployeeHandler {
 	}
 	
 	public Employee findById(String id) {
-		return new Employee();
+		
+		return new Employee().find(id);
+		
 	}
 	
 	public Employee insert(HashMap<String, String> inputs) {
@@ -99,7 +103,20 @@ public class EmployeeHandler {
 	}
 	
 	public Employee firedEmployee(String id) {
-		return new Employee();
+		
+		Employee e = new Employee().find(id);
+		if (e.getStatus().equals("Fired")) {
+			
+			JOptionPane.showMessageDialog(null, "Employee is already fired");
+			return null;
+			
+		} else {
+			
+			e.setStatus("Fired");
+			return e.update();
+			
+		}
+		
 	}
 	
 	public Employee acceptEmployee(String id) {
