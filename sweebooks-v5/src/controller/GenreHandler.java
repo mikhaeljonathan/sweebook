@@ -1,25 +1,28 @@
 package controller;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.JInternalFrame;
 
 import model.Genre;
+import view.ManageGenreForm;
 
 public class GenreHandler {
 
 	public GenreHandler() {
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	public JInternalFrame showManageGenreForm() {
-		JInternalFrame JIF = new JInternalFrame();
-		return JIF;
+
+		return new ManageGenreForm();
+		
 	}
 	
 	public List<Genre> getAll() {
-		return new ArrayList<Genre>();
+		
+		return new Genre().all();		
+		
 	}
 	
 	public Genre insert(HashMap<String, String> inputs) {
