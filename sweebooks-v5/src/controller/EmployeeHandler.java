@@ -18,7 +18,9 @@ public class EmployeeHandler {
 	}
 	
 	public List<Employee> getAll(){
-		return new ArrayList<Employee>();
+		
+		return new Employee().all();
+		
 	}
 	
 	public Employee findById(String id) {

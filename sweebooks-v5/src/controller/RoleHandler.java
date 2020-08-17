@@ -11,7 +11,9 @@ public class RoleHandler {
 	}
 	
 	public List<Role> getAll(){
-		return new ArrayList<Role>();
+		
+		return new Role().all();
+		
 	}
 	
 	public Role getByName(String name) {

@@ -2,6 +2,10 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
+import main.MySQLAccess;
+
 public class Employee {
 
 	private String id;
@@ -9,11 +13,47 @@ public class Employee {
 	private String status;
 	
 	public Employee() {
-		// TODO Auto-generated constructor stub
+		
 	}
 	
+	public Employee(String id, int salary, String status) {
+		
+		this.id = id;
+		this.salary = salary;
+		this.status = status;
+		
+	}
+
 	public List<Employee> all(){
-		return new ArrayList<Employee>();
+		
+		List<Employee> le = new ArrayList<Employee>();
+		
+		// Retrieve all role data from DAO
+		String findAllEmployee = "SELECT * FROM employees";
+		
+		try {
+			
+			MySQLAccess.rs = MySQLAccess.stmt.executeQuery(findAllEmployee);
+			
+			while (MySQLAccess.rs.next()) {
+				
+				// Add Employee object into List<Employee>
+				le.add(new Employee(MySQLAccess.rs.getString("user_id"), 
+						MySQLAccess.rs.getInt("salary"),
+						MySQLAccess.rs.getString("status")));
+				
+			}
+			
+			return le;
+			
+		} catch (Exception e) {
+			
+			// Fail to retrieve from DAO
+			JOptionPane.showMessageDialog(null, "Database error");
+			return null;
+			
+		}
+		
 	}
 	
 	public Employee find(String id) {
