@@ -61,7 +61,25 @@ public class Employee {
 	}
 	
 	public Employee insert() {
-		return new Employee();
+		
+		// Insert employee into DAO
+		String insertToEmployee = "INSERT INTO employees "
+				+ "VALUE('%s', %d, '%s')";
+		insertToEmployee = String.format(insertToEmployee, id, salary, status);
+		
+		try {
+			
+			MySQLAccess.stmt.execute(insertToEmployee);
+			return this;
+			
+		} catch (Exception e) {
+			
+			// Fail to insert to DAO
+			JOptionPane.showMessageDialog(null, "Database error");
+			return null;
+			
+		}
+		
 	}
 	
 	public Employee update() {

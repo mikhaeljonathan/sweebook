@@ -60,7 +60,6 @@ public class Validation {
 		String password = inputs.get("password");
 		
 		// Check the constraint
-		
 		return (CheckInput.validateName(name) &&
 				CheckInput.validateGender(gender) &&
 				CheckInput.validateAddress(address) &&
@@ -223,4 +222,21 @@ public class Validation {
 		}
 		
 	}
+	
+	public static boolean validateEmployee(HashMap<String, String> inputs) {
+		
+		// Retrieve the attributes
+		String name = inputs.get("name");
+		String gender = inputs.get("gender");
+		String username = inputs.get("username");
+		String salary = inputs.get("salary");
+		
+		// Check the constraint
+		return (CheckInput.validateName(name) &&
+				CheckInput.validateGender(gender) && 
+				CheckInput.validateUsername(username) &&
+				CheckInput.validateSalary(salary));
+		
+	}
+	
 }
