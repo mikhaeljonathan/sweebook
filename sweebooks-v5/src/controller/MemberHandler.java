@@ -18,6 +18,7 @@ import model.Member;
 import model.Role;
 import model.User;
 import view.CreateMembershipForm;
+import view.ViewMembershipForm;
 
 public class MemberHandler {
 
@@ -32,8 +33,9 @@ public class MemberHandler {
 	}
 	
 	public JInternalFrame showViewMembershipForm() {
-		JInternalFrame JIF = new JInternalFrame();
-		return JIF;
+		
+		return new ViewMembershipForm();
+		
 	}
 	
 	public List<Member> getAll(){ 

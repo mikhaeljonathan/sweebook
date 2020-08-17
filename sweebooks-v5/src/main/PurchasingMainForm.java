@@ -17,6 +17,9 @@ public class PurchasingMainForm extends JFrame{
 		// TODO: kalau Manage Book menu
 		new BookHandler().showManageBookForm();
 		
+		// TODO: kalau Book View menu
+		new BookHandler().showViewBookForm();
+		
 	}
 
 }
