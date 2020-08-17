@@ -106,7 +106,25 @@ public class Book {
 	}
 
 	public Book insert() {
-		return new Book();
+		
+		// Insert book into DAO
+		String insertToBook = "INSERT INTO books "
+				+ "VALUE('%s', '%s', '%s', %s, %d)";
+		insertToBook = String.format(insertToBook, id, name, genreId, isbn, quantity);
+		
+		try {
+			
+			MySQLAccess.stmt.execute(insertToBook);
+			return this;
+			
+		} catch (Exception e) {
+			
+			// Fail to insert to DAO
+			JOptionPane.showMessageDialog(null, "Database error");
+			return null;
+			
+		}
+		
 	}
 	
 	public Book update() {
@@ -135,7 +153,40 @@ public class Book {
 	}
 	
 	public String getByIsbn(String isbn) {
-		return "isbn";
+		
+		// Get book id by isbn
+		String retrieveId = "SELECT id FROM books "
+				+ "WHERE isbn = '%s'";
+		retrieveId = String.format(retrieveId, isbn);
+		
+		try {
+			
+			MySQLAccess.rs = MySQLAccess.stmt.executeQuery(retrieveId);
+			
+			String isbnRetrieved = "";
+			while(MySQLAccess.rs.next()) {
+				
+				isbnRetrieved = MySQLAccess.rs.getString("id");
+				
+			}
+			
+			if (isbnRetrieved.isEmpty()) {
+				
+				return null;
+				
+			} else {
+				
+				return isbnRetrieved;
+				
+			}
+			
+		} catch (Exception e) {
+			
+			JOptionPane.showMessageDialog(null, "Database error");
+			return null;
+			
+		}
+		
 	}
 	
 	public List<Book> getBookByQuantityMoreThanZero() {

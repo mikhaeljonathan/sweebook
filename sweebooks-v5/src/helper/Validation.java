@@ -111,8 +111,6 @@ public class Validation {
 		
 	}
 	
-	
-	
 	public static boolean isUserCanBorrow() {
 		
 		CartStorage cs = CartStorage.getInstance();
@@ -166,4 +164,63 @@ public class Validation {
 		
 	}
 	
+	public static boolean validateIsbn(String isbn) {
+		
+		if (isbn.length() < 10 || isbn.length() > 13) {
+			
+			JOptionPane.showMessageDialog(null, "ISBN must be between 10 and 13 characters long");
+			return false;
+			
+		}
+		
+		boolean isAllNum = true;
+		for (int i = 0; i < isbn.length(); i++) {
+			
+			if (!Character.isDigit(isbn.charAt(i))) isAllNum = false;
+			
+		}
+		
+		if (!isAllNum) {
+			
+			JOptionPane.showMessageDialog(null, "ISBN must be numeric");
+			return false;
+			
+		}
+		
+		return true;
+		
+	}
+	
+	public static boolean validateBookInput(String name, String quantity) {
+		
+		if (name.isEmpty()) {
+			
+			JOptionPane.showMessageDialog(null, "Book name can't be empty");
+			return false;
+			
+		}
+		
+		try {
+			
+			int ret = Integer.parseInt(quantity);
+			
+			if (ret > 0) {
+				
+				return true;
+				
+			} else {
+				
+				JOptionPane.showMessageDialog(null, "Book quantity must above zero");
+				return false;
+				
+			}
+			
+		} catch (Exception e) {
+			
+			JOptionPane.showMessageDialog(null, "Quantity must be numeric");
+			return false;
+			
+		}
+		
+	}
 }

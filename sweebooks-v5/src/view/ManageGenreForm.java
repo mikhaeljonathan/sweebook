@@ -22,7 +22,6 @@ public class ManageGenreForm extends JInternalFrame{
 		
 		// TODO: kalau klik tombol create
 		HashMap<String, String> inputs = new HashMap<String, String>();
-		inputs.put("id", UUID.randomUUID().toString());
 		inputs.put("type", "nama genre nya di sini");
 		
 		if (gh.insert(inputs) != null) {

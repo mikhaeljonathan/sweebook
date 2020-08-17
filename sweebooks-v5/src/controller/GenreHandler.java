@@ -1,6 +1,7 @@
 package controller;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
@@ -29,8 +30,15 @@ public class GenreHandler {
 	
 	public Genre insert(HashMap<String, String> inputs) {
 		
-		String id = inputs.get("id");
+		String id = UUID.randomUUID().toString();
 		String type = inputs.get("type");
+		
+		if (type.isEmpty()) {
+			
+			JOptionPane.showMessageDialog(null, "Field can't be empty");
+			return null;
+			
+		}
 		
 		if (Validation.isGenreTypeExist(type)) {
 			
