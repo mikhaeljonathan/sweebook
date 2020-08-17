@@ -26,7 +26,11 @@ public class GenreHandler {
 	}
 	
 	public Genre insert(HashMap<String, String> inputs) {
-		return new Genre();
+		
+		String id = inputs.get("id");
+		String type = inputs.get("type");
+		return new Genre(id, type).insert();
+		
 	}
 
 }

@@ -54,7 +54,25 @@ public class Genre {
 	}
 	
 	public Genre insert() {
-		return new Genre();
+		
+		// Insert member into DAO
+		String insertToGenre = "INSERT INTO genres "
+				+ "VALUE('%s', '%s')";
+		insertToGenre = String.format(insertToGenre, id, type);
+		
+		try {
+			
+			MySQLAccess.stmt.execute(insertToGenre);
+			return this;
+			
+		} catch (Exception e) {
+			
+			// Fail to insert to DAO
+			JOptionPane.showMessageDialog(null, "Database error");
+			return null;
+			
+		}
+		
 	}
 	
 	public Genre getByType(String type) {
