@@ -2,6 +2,8 @@ package helper;
 
 import java.util.HashMap;
 
+import javax.swing.JOptionPane;
+
 import main.Main;
 import main.MySQLAccess;
 import model.Book;
@@ -122,6 +124,42 @@ public class Validation {
 			
 		} else {
 			
+			return false;
+			
+		}
+		
+	}
+	
+	public static boolean isGenreTypeExist(String type) {
+		
+		String retrieveType = "SELECT type FROM genres "
+				+ "WHERE type = '%s'";
+		retrieveType = String.format(retrieveType, type);
+		
+		try {
+			
+			MySQLAccess.rs = MySQLAccess.stmt.executeQuery(retrieveType);
+			
+			String typeRetrieved = "";
+			while(MySQLAccess.rs.next()) {
+				
+				typeRetrieved = MySQLAccess.rs.getString("type");
+				
+			}
+			
+			if (typeRetrieved.isEmpty()) {
+				
+				return false;
+				
+			} else {
+				
+				return true;
+				
+			}
+			
+		} catch (Exception e) {
+			
+			JOptionPane.showMessageDialog(null, "Database error");
 			return false;
 			
 		}

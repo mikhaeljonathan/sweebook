@@ -3,7 +3,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.JInternalFrame;
+import javax.swing.JOptionPane;
 
+import helper.Validation;
 import model.Genre;
 import view.ManageGenreForm;
 
@@ -29,7 +31,17 @@ public class GenreHandler {
 		
 		String id = inputs.get("id");
 		String type = inputs.get("type");
-		return new Genre(id, type).insert();
+		
+		if (Validation.isGenreTypeExist(type)) {
+			
+			return new Genre(id, type).insert();
+			
+		} else {
+			
+			JOptionPane.showMessageDialog(null, "Genre type already exists");
+			return null;
+			
+		}
 		
 	}
 
