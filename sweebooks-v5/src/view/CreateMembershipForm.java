@@ -1,5 +1,9 @@
 package view;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
@@ -10,10 +14,12 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 
 import controller.MemberHandler;
 import main.MembershipMainForm;
@@ -28,73 +34,55 @@ public class CreateMembershipForm extends JFrame{
 	private JPasswordField passwordField;
 	private JComboBox comboBox;
 	private JTextArea addressField;
-	private JFrame frame;
 	
 	public CreateMembershipForm() {
 		
-		frame = new JFrame();
-		frame.setTitle("Create Membership");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(500, 500);
+		//Create UI
+		setTitle("Create Membership Form");
+		setSize(500,350);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setLocationRelativeTo(null);
+		setResizable(false);
 		
-		frame.setLocationRelativeTo(null);
-		frame.getContentPane().setLayout(null);
+		//Tittle Label
+		JLabel titleLbl = new JLabel("Create Membership Form", JLabel.CENTER);
+		titleLbl.setFont(new Font("Times New Roman", Font.BOLD, 20));
 		
-		nameField = new JTextField();
-		nameField.setBounds(111, 57, 242, 20);
-		frame.getContentPane().add(nameField);
-		nameField.setColumns(10);
+		//CreateMembership Panel
+		JLabel nameLbl = new JLabel("Name");
+		JTextField nameField = new JTextField();
 		
-		JLabel lblNewLabel = new JLabel("Name");
-		lblNewLabel.setBounds(29, 57, 49, 20);
-		frame.getContentPane().add(lblNewLabel);
+		JLabel genderLbl = new JLabel("Gender");
+		JComboBox<String> genderCb;
+		genderCb = new JComboBox<>(new String[] {
+			"Male", "Female"
+		});		
 		
-		JLabel lblGender = new JLabel("Gender");
-		lblGender.setBounds(29, 88, 49, 20);
-		frame.getContentPane().add(lblGender);
+		JLabel addressLbl = new JLabel("Address");
+		JTextArea addressArea = new JTextArea();
+		JScrollPane addressSp = new JScrollPane(addressArea);
 		
-		comboBox = new JComboBox();
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Male", "Female"}));
-		comboBox.setBounds(111, 88, 242, 20);
-		frame.getContentPane().add(comboBox);
+		JLabel usernameLbl = new JLabel("Username");
+		JTextField usernameField = new JTextField();
 		
-		JLabel lblAddress = new JLabel("Address");
-		lblAddress.setBounds(29, 119, 49, 20);
-		frame.getContentPane().add(lblAddress);
+		JLabel passwordLbl = new JLabel("Password");
+		JPasswordField passwordField = new JPasswordField();
 		
-		JLabel lblUsername = new JLabel("Username");
-		lblUsername.setBounds(29, 181, 49, 20);
-		frame.getContentPane().add(lblUsername);
+		JPanel createMembershipPanel = new JPanel(new GridLayout(5, 2, 10, 10));
+		createMembershipPanel.add(nameLbl);
+		createMembershipPanel.add(nameField);
+		createMembershipPanel.add(genderLbl);
+		createMembershipPanel.add(genderCb);
+		createMembershipPanel.add(addressLbl);
+		createMembershipPanel.add(addressSp);
+		createMembershipPanel.add(usernameLbl);
+		createMembershipPanel.add(usernameField);
+		createMembershipPanel.add(passwordLbl);
+		createMembershipPanel.add(passwordField);
 		
-		JLabel lblPassword = new JLabel("Password");
-		lblPassword.setBounds(29, 212, 49, 20);
-		frame.getContentPane().add(lblPassword);
-		
-		JButton btnCreate = new JButton("Create Member");
-		btnCreate.setBounds(140, 292, 176, 23);
-		frame.getContentPane().add(btnCreate);
-		
-		usernameField = new JTextField();
-		usernameField.setColumns(10);
-		usernameField.setBounds(111, 181, 242, 20);
-		frame.getContentPane().add(usernameField);
-		
-		passwordField = new JPasswordField();
-		passwordField.setColumns(10);
-		passwordField.setBounds(111, 212, 242, 20);
-		frame.getContentPane().add(passwordField);
-		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(111, 119, 242, 51);
-		frame.getContentPane().add(scrollPane);
-		
-		addressField = new JTextArea();
-		scrollPane.setViewportView(addressField);
-		
-		frame.setVisible(true);
-		
-		btnCreate.addActionListener(new ActionListener() {
-			
+		//CreateMembership Button
+		JButton createMembershipBtn = new JButton("Create Membership");
+		createMembershipBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
@@ -103,6 +91,15 @@ public class CreateMembershipForm extends JFrame{
 			}
 		});
 		
+		//Main Panel
+		JPanel mainPanel = new JPanel(new BorderLayout(20, 20));
+		mainPanel.add(titleLbl, BorderLayout.NORTH);
+		mainPanel.add(createMembershipPanel, BorderLayout.CENTER);
+		mainPanel.add(createMembershipBtn, BorderLayout.SOUTH);
+		mainPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
+		
+		add(mainPanel);
+		setVisible(true);
 		
 	}
 	
@@ -135,7 +132,7 @@ public class CreateMembershipForm extends JFrame{
 			
 			JOptionPane.showMessageDialog(null, "Membership is sucessfully created");
 			
-			frame.dispose();
+			dispose();
 			new MembershipMainForm();
 			
 		}

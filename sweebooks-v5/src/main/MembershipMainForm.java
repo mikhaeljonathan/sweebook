@@ -84,5 +84,3 @@ public class MembershipMainForm extends JFrame{
 		});
 		
 	 }
-	
-}

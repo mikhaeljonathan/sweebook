@@ -1,7 +1,8 @@
-package helper;
+package Helper;
 
 import javax.swing.JOptionPane;
 
+//import jdk.nashorn.internal.scripts.JO;
 import main.MySQLAccess;
 
 public class CheckInput {
@@ -145,6 +146,37 @@ public class CheckInput {
 		}
 		
 		return true;
+		
+	}
+	
+	public static boolean validateSalary(String salary) {
+		
+		if (salary.isEmpty()) {
+			
+			JOptionPane.showMessageDialog(null, "Salary can't be empty");
+			return false;
+			
+		}
+		
+		try {
+			
+			if (Integer.parseInt(salary) > 1000) {
+				
+				return true;
+				
+			} else {
+				
+				JOptionPane.showMessageDialog(null, "Salary must be above 1000");
+				return false;
+				
+			}
+			
+		} catch (Exception e) {
+			
+			JOptionPane.showMessageDialog(null, "Salary must be numeric");
+			return false;
+			
+		}
 		
 	}
 	

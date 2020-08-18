@@ -1,6 +1,8 @@
-package helper;
+package Helper;
 
 import java.util.HashMap;
+
+import javax.swing.JOptionPane;
 
 import main.Main;
 import main.MySQLAccess;
@@ -9,7 +11,10 @@ import model.CartStorage;
 
 public class Validation {
 
-public static boolean validateLogin(String username, String password) {
+	public static String dummyTimestamp = "1990-01-01 12:00:00";
+	public static long twoWeeksInMillisecond = 1209600000;
+	
+	public static boolean validateLogin(String username, String password) {
 		
 		String validateLogin = "SELECT username FROm users " + 
 				"WHERE username = '%s' AND password = '%s'";
@@ -55,7 +60,6 @@ public static boolean validateLogin(String username, String password) {
 		String password = inputs.get("password");
 		
 		// Check the constraint
-		
 		return (CheckInput.validateName(name) &&
 				CheckInput.validateGender(gender) &&
 				CheckInput.validateAddress(address) &&
@@ -106,8 +110,6 @@ public static boolean validateLogin(String username, String password) {
 		
 	}
 	
-	
-	
 	public static boolean isUserCanBorrow() {
 		
 		CartStorage cs = CartStorage.getInstance();
@@ -122,6 +124,118 @@ public static boolean validateLogin(String username, String password) {
 			return false;
 			
 		}
+		
+	}
+	
+	public static boolean isGenreTypeExist(String type) {
+		
+		String retrieveType = "SELECT type FROM genres "
+				+ "WHERE type = '%s'";
+		retrieveType = String.format(retrieveType, type);
+		
+		try {
+			
+			MySQLAccess.rs = MySQLAccess.stmt.executeQuery(retrieveType);
+			
+			String typeRetrieved = "";
+			while(MySQLAccess.rs.next()) {
+				
+				typeRetrieved = MySQLAccess.rs.getString("type");
+				
+			}
+			
+			if (typeRetrieved.isEmpty()) {
+				
+				return false;
+				
+			} else {
+				
+				return true;
+				
+			}
+			
+		} catch (Exception e) {
+			
+			JOptionPane.showMessageDialog(null, "Database error");
+			return false;
+			
+		}
+		
+	}
+	
+	public static boolean validateIsbn(String isbn) {
+		
+		if (isbn.length() < 10 || isbn.length() > 13) {
+			
+			JOptionPane.showMessageDialog(null, "ISBN must be between 10 and 13 characters long");
+			return false;
+			
+		}
+		
+		boolean isAllNum = true;
+		for (int i = 0; i < isbn.length(); i++) {
+			
+			if (!Character.isDigit(isbn.charAt(i))) isAllNum = false;
+			
+		}
+		
+		if (!isAllNum) {
+			
+			JOptionPane.showMessageDialog(null, "ISBN must be numeric");
+			return false;
+			
+		}
+		
+		return true;
+		
+	}
+	
+	public static boolean validateBookInput(String name, String quantity) {
+		
+		if (name.isEmpty()) {
+			
+			JOptionPane.showMessageDialog(null, "Book name can't be empty");
+			return false;
+			
+		}
+		
+		try {
+			
+			int ret = Integer.parseInt(quantity);
+			
+			if (ret > 0) {
+				
+				return true;
+				
+			} else {
+				
+				JOptionPane.showMessageDialog(null, "Book quantity must above zero");
+				return false;
+				
+			}
+			
+		} catch (Exception e) {
+			
+			JOptionPane.showMessageDialog(null, "Quantity must be numeric");
+			return false;
+			
+		}
+		
+	}
+	
+	public static boolean validateEmployee(HashMap<String, String> inputs) {
+		
+		// Retrieve the attributes
+		String name = inputs.get("name");
+		String gender = inputs.get("gender");
+		String username = inputs.get("username");
+		String salary = inputs.get("salary");
+		
+		// Check the constraint
+		return (CheckInput.validateName(name) &&
+				CheckInput.validateGender(gender) && 
+				CheckInput.validateUsername(username) &&
+				CheckInput.validateSalary(salary));
 		
 	}
 	

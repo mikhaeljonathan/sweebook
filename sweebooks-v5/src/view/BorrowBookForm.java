@@ -21,13 +21,6 @@ import model.Book;
 
 public class BorrowBookForm extends JInternalFrame{
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private BorrowBookHandler bbh = new BorrowBookHandler();
-	private Book b = new Book();
-	
 	public BorrowBookForm() {
 		setResizable(false);
 		setTitle("Borrow Book Form");

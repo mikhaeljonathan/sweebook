@@ -15,8 +15,42 @@ public class Role {
 		
 	}
 	
+	public Role(String id, String name) {
+		
+		this.id = id;
+		this.name = name;
+		
+	}
+
 	public List<Role> all(){
-		return new ArrayList<Role>();
+		
+		List<Role> lr = new ArrayList<Role>();
+		
+		// Retrieve all role data from DAO
+		String findAllRole = "SELECT * FROM roles";
+		
+		try {
+			
+			MySQLAccess.rs = MySQLAccess.stmt.executeQuery(findAllRole);
+			
+			while (MySQLAccess.rs.next()) {
+				
+				// Add Role object into List<Role>
+				lr.add(new Role(MySQLAccess.rs.getString("id"), 
+						MySQLAccess.rs.getString("name")));
+				
+			}
+			
+			return lr;
+			
+		} catch (Exception e) {
+			
+			// Fail to retrieve from DAO
+			JOptionPane.showMessageDialog(null, "Database error");
+			return null;
+			
+		}
+		
 	}
 
 	public Role getByName(String name) {
