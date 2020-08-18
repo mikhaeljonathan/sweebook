@@ -96,7 +96,7 @@ public class CreateMembershipForm extends JFrame{
 		mainPanel.add(titleLbl, BorderLayout.NORTH);
 		mainPanel.add(createMembershipPanel, BorderLayout.CENTER);
 		mainPanel.add(createMembershipBtn, BorderLayout.SOUTH);
-		mainPanel.setBorder(new EmptyBorder(10, 20, 20, 20));
+		mainPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
 		
 		add(mainPanel);
 		setVisible(true);
