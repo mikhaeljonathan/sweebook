@@ -6,7 +6,7 @@ import java.util.UUID;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 
-import helper.Validation;
+import Helper.Validation;
 import model.Genre;
 import view.ManageGenreForm;
 

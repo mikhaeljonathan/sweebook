@@ -10,9 +10,8 @@ import java.util.UUID;
 
 import javax.swing.JInternalFrame;
 
-import helper.SQLGetQuery;
-import helper.Validation;
-
+import Helper.SQLGetQuery;
+import Helper.Validation;
 import main.Main;
 import model.Book;
 import model.Borrow;

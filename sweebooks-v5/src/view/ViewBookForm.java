@@ -1,7 +1,6 @@
 package view;
 
 import java.awt.Color;
-
 import java.awt.Component;
 import java.awt.GridLayout;
 import java.util.List;
@@ -14,40 +13,15 @@ import javax.swing.JScrollPane;
 
 import controller.BookHandler;
 import model.Book;
-import javax.swing.JList;
-import javax.swing.ListModel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import java.awt.FlowLayout;
 
 public class ViewBookForm extends JInternalFrame{
 
 	private static final long serialVersionUID = 1L;
 
 	public ViewBookForm() {
-		setTitle("View Book Form");
-		setSize(600, 450);
-		setBorder(null);
-		getContentPane().setLayout(null);
 		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 11, 580, 248);
-		getContentPane().add(scrollPane);
-		
-		JPanel mainPanel = new JPanel();
-		scrollPane.setRowHeaderView(mainPanel);
-		mainPanel.setLayout(null);
-		
-		JPanel listBookPanel = new JPanel();
-		scrollPane.setViewportView(listBookPanel);
-		listBookPanel.setLayout(null);
-		
-		int i=0;
-		for (Book books : lb) {
-			i++;
-			listBookPanel.add(bookPanelForm(books.getName(), books.getGenreId(), books.getIsbn()));
-			listBookPanel.setLayout(new GridLayout(1+i,0,0,10));
-		}
+		BookHandler bh = new BookHandler();
+		List<Book> lb = bh.getAll();
 		
 		// Create UI
 		setTitle("View Book Form");
