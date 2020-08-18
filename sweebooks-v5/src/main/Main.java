@@ -1,5 +1,6 @@
 package main;
 
+
 public class Main {
 
 	// Store user name every time

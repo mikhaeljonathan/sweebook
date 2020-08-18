@@ -1,29 +1,56 @@
 package controller;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import javax.swing.JInternalFrame;
+import javax.swing.JOptionPane;
 
+import helper.Validation;
 import model.Genre;
+import view.ManageGenreForm;
 
 public class GenreHandler {
 
 	public GenreHandler() {
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	public JInternalFrame showManageGenreForm() {
-		JInternalFrame JIF = new JInternalFrame();
-		return JIF;
+
+		return new ManageGenreForm();
+		
 	}
 	
 	public List<Genre> getAll() {
-		return new ArrayList<Genre>();
+		
+		return new Genre().all();		
+		
 	}
 	
 	public Genre insert(HashMap<String, String> inputs) {
-		return new Genre();
+		
+		String id = UUID.randomUUID().toString();
+		String type = inputs.get("type");
+		
+		if (type.isEmpty()) {
+			
+			JOptionPane.showMessageDialog(null, "Field can't be empty");
+			return null;
+			
+		}
+		
+		if (Validation.isGenreTypeExist(type)) {
+			
+			return new Genre(id, type).insert();
+			
+		} else {
+			
+			JOptionPane.showMessageDialog(null, "Genre type already exists");
+			return null;
+			
+		}
+		
 	}
 
 }

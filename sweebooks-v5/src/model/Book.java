@@ -82,8 +82,8 @@ public class Book {
 			while (MySQLAccess.rs.next()) {
 				
 				id2 = MySQLAccess.rs.getString("id");
-				genre_id = MySQLAccess.rs.getString("genre_id");
-				title = MySQLAccess.rs.getString("title");
+				genre_id = MySQLAccess.rs.getString("title");
+				title = MySQLAccess.rs.getString("genre_id");
 				isbn = MySQLAccess.rs.getString("isbn");
 				quantity = MySQLAccess.rs.getInt("quantity");
 				
@@ -106,7 +106,25 @@ public class Book {
 	}
 
 	public Book insert() {
-		return new Book();
+		
+		// Insert book into DAO
+		String insertToBook = "INSERT INTO books "
+				+ "VALUE('%s', '%s', '%s', %s, %d)";
+		insertToBook = String.format(insertToBook, id, name, genreId, isbn, quantity);
+		
+		try {
+			
+			MySQLAccess.stmt.execute(insertToBook);
+			return this;
+			
+		} catch (Exception e) {
+			
+			// Fail to insert to DAO
+			JOptionPane.showMessageDialog(null, "Database error");
+			return null;
+			
+		}
+		
 	}
 	
 	public Book update() {
@@ -131,11 +149,61 @@ public class Book {
 	}
 	
 	public boolean delete() {
-		return true;
+		
+		String deleteBook = "DELETE FROM books " + 
+				"WHERE id = '%s'";
+		deleteBook = String.format(deleteBook, id);
+		
+		try {
+			
+			MySQLAccess.stmt.execute(deleteBook);
+			return true;
+			
+		} catch (Exception e) {
+			
+			// Fail to delete from DAO
+			JOptionPane.showMessageDialog(null, "Database error");
+			return false;
+			
+		}
+		
 	}
 	
 	public String getByIsbn(String isbn) {
-		return "isbn";
+		
+		// Get book id by isbn
+		String retrieveId = "SELECT id FROM books "
+				+ "WHERE isbn = '%s'";
+		retrieveId = String.format(retrieveId, isbn);
+		
+		try {
+			
+			MySQLAccess.rs = MySQLAccess.stmt.executeQuery(retrieveId);
+			
+			String isbnRetrieved = "";
+			while(MySQLAccess.rs.next()) {
+				
+				isbnRetrieved = MySQLAccess.rs.getString("id");
+				
+			}
+			
+			if (isbnRetrieved.isEmpty()) {
+				
+				return null;
+				
+			} else {
+				
+				return isbnRetrieved;
+				
+			}
+			
+		} catch (Exception e) {
+			
+			JOptionPane.showMessageDialog(null, "Database error");
+			return null;
+			
+		}
+		
 	}
 	
 	public List<Book> getBookByQuantityMoreThanZero() {
@@ -153,8 +221,8 @@ public class Book {
 				
 				// Add Book object into List<Book>
 				availableBooks.add(new Book(MySQLAccess.rs.getString("id"), 
-						MySQLAccess.rs.getString("genre_id"),
 						MySQLAccess.rs.getString("title"),
+						MySQLAccess.rs.getString("genre_id"),
 						MySQLAccess.rs.getString("isbn"),
 						MySQLAccess.rs.getInt("quantity")));
 				

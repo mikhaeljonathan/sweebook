@@ -1,23 +1,29 @@
 package view;
 
-import javax.swing.*;
-
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.CardLayout;
 import java.awt.Color;
-import java.awt.Dimension;
-import javax.swing.GroupLayout.Alignment;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
+import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.util.List;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+
+import controller.BorrowTransactionHandler;
+import helper.SQLGetQuery;
+import main.Main;
+import model.Borrow;
+import model.BorrowItem;
 
 public class ViewBorrowForm extends JInternalFrame{
+
+	private static final long serialVersionUID = 1L;
+
+	public ViewBorrowForm() {
 	
 	public JPanel panelBookInCartInfo(String BookName, String Genre, String ISBN, int Quantity) {
 		JPanel panelBookInCartInfo = new JPanel();
@@ -43,7 +49,13 @@ public class ViewBorrowForm extends JInternalFrame{
 		JLabel lblQuantity = new JLabel(String.valueOf(Quantity));
 		panelBookInCartInfo.add(lblQuantity);
 		
-		return panelBookInCartInfo;
+		// TODO: kalau tombol accept diteken keluar ini:
+		if (bth.acceptBorrowRequest(b.getId())) {
+			
+			JOptionPane.showMessageDialog(null, "It's successfully accepted");
+			
+		}
+		
 	}
 	
 	public JPanel panelBookListInfo(String BookName, String Genre, String ISBN, int Quantity) {

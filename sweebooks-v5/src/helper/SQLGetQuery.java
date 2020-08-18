@@ -1,5 +1,7 @@
 package Helper;
 
+import javax.swing.JOptionPane;
+
 import main.Main;
 import main.MySQLAccess;
 
@@ -119,6 +121,36 @@ public class SQLGetQuery {
 			
 		} catch (Exception e) {
 			
+			return null;
+			
+		}
+		
+	}
+	
+	public static String getReturnTimestampFromIdAndBookId(String id, String bookId) {
+		
+		String getReturnTimestamp = "SELECT return_timestamp from borrow_items " + 
+				"WHERE borrow_id = '%s' AND book_id = '%s'";
+		getReturnTimestamp = String.format(getReturnTimestamp, id, bookId);
+		
+		try {
+			
+			MySQLAccess.rs = MySQLAccess.stmt.executeQuery(getReturnTimestamp);
+			
+			String returnTimestamp = "";
+			
+			while (MySQLAccess.rs.next()) {
+				
+				returnTimestamp = MySQLAccess.rs.getString("return_timestamp");
+				
+			}
+			
+			return returnTimestamp;
+			
+		} catch (Exception e) {
+			
+			// Fail to retrieve from DAO
+			JOptionPane.showMessageDialog(null, "Database error");
 			return null;
 			
 		}

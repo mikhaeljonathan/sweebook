@@ -10,7 +10,16 @@ public class UserHandler {
 	}
 	
 	public User insert(HashMap<String, String> inputs) {
-		return new User();
+		
+		String id = inputs.get("id");
+		String roleId = inputs.get("roleId");
+		String name = inputs.get("name");
+		String username = inputs.get("username");
+		String password = inputs.get("password");
+		String gender = inputs.get("gender");
+		
+		return new User(id, roleId, name, username, password, gender).insert();
+		
 	}
 	
 	public User getByUsername(String username) {

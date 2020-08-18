@@ -45,7 +45,26 @@ public class BorrowItem {
 	}
 	
 	public BorrowItem update() {
-		return new BorrowItem();
+		
+		// Update borrow item in the DAO
+		String updateBorrowItem = "UPDATE borrow_items " + 
+				"SET borrow_id = '%s', book_id = '%s', return_timestamp = '%s' "+
+				"WHERE borrow_id = '%s' AND book_id = '%s'";
+		updateBorrowItem = String.format(updateBorrowItem, id, bookId, returnTimestamp, id, bookId);
+		
+		try {
+			
+			MySQLAccess.stmt.execute(updateBorrowItem);
+			return this;
+			
+		} catch (Exception e) {
+			
+			// Failed to update to database
+			JOptionPane.showMessageDialog(null, "Database error");
+			return null;
+			
+		}
+		
 	}
 	
 	public boolean isBookAlreadyReturn(String id, String bookId) {
@@ -82,6 +101,43 @@ public class BorrowItem {
 			return null;
 			
 		}
+		
+	}
+
+	// Getter and Setter
+	public String getId() {
+		
+		return id;
+		
+	}
+
+	public void setId(String id) {
+		
+		this.id = id;
+		
+	}
+
+	public String getBookId() {
+		
+		return bookId;
+		
+	}
+
+	public void setBookId(String bookId) {
+		
+		this.bookId = bookId;
+		
+	}
+
+	public String getReturnTimestamp() {
+		
+		return returnTimestamp;
+		
+	}
+
+	public void setReturnTimestamp(String returnTimestamp) {
+		
+		this.returnTimestamp = returnTimestamp;
 		
 	}
 	
