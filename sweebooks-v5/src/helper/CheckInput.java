@@ -1,8 +1,8 @@
-package helper;
+package Helper;
 
 import javax.swing.JOptionPane;
 
-import jdk.nashorn.internal.scripts.JO;
+//import jdk.nashorn.internal.scripts.JO;
 import main.MySQLAccess;
 
 public class CheckInput {
