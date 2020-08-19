@@ -1,8 +1,11 @@
 package view;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.MouseMotionListener;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -25,49 +28,52 @@ public class ViewBookForm extends JInternalFrame{
 		
 		// Create UI
 		setTitle("View Book Form");
-		setSize(600, 450);
-		setBorder(null);
-		getContentPane().setLayout(null);
+		setSize(700, 450);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setLocation(170, 10);
+		setResizable(false);
+//		setUndecorated(true);
 		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 11, 580, 248);
-		getContentPane().add(scrollPane);
 		
+		//Main Panel
 		JPanel mainPanel = new JPanel();
-		scrollPane.setRowHeaderView(mainPanel);
-		mainPanel.setLayout(null);
+		JScrollPane mainSp = new JScrollPane(mainPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		getContentPane().add(mainSp);
 		
-		JPanel listBookPanel = new JPanel();
-		scrollPane.setViewportView(listBookPanel);
-		listBookPanel.setLayout(null);
-		
+		//add ListBook to MainPanel
 		int i=0;
 		for (Book books : lb) {
 			i++;
-			listBookPanel.add(bookPanelForm(books.getName(), books.getGenreId(), books.getIsbn()));
-			listBookPanel.setLayout(new GridLayout(1+i,0,0,10));
+			mainPanel.add(bookPanelForm(books.getName(), books.getGenreId(), books.getIsbn()));
+			mainPanel.setLayout(new GridLayout(1+i,0,0,10));
 		}
+		
+		setVisible(true);
 		
 	}
 
 	private Component bookPanelForm(String name, String genreId, String isbn) {
 		
+		//List Book Panel
 		JPanel bookPanelForm = new JPanel();
-		bookPanelForm.setSize(219, 50);
-		bookPanelForm.setLayout(new GridLayout(3, 1, 0, 0));
 		bookPanelForm.setBorder(BorderFactory.createLineBorder(Color.black, 2));
+		bookPanelForm.setLayout(new GridLayout(3, 1, 0, 0));
 		
-		JLabel lblName = new JLabel(name);
-		bookPanelForm.add(lblName);
+		JLabel titleBookName = new JLabel(name, JLabel.CENTER);
+		titleBookName.setFont(new Font("Comic Sans MS", Font.BOLD, 20));
+		bookPanelForm.add(titleBookName);
 		
-		JLabel lblGenre = new JLabel(genreId);
-		bookPanelForm.add(lblGenre);
+		JLabel titleBookGenre = new JLabel("Genre        : " + genreId);
+		titleBookGenre.setFont(new Font("Times New Roman", Font.BOLD, 18));
+		bookPanelForm.add(titleBookGenre);
 		  
-		JLabel lblisbn = new JLabel(isbn);
-		bookPanelForm.add(lblisbn);
+		JLabel titleBookIsbn = new JLabel("ISBN         : " + isbn);
+		titleBookIsbn.setFont(new Font("Times New Roman", Font.BOLD, 18));
+		bookPanelForm.add(titleBookIsbn);
 		  
 		return bookPanelForm;
 		
 	}
+
 	
 }
