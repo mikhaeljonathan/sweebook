@@ -28,12 +28,10 @@ public class ViewBookForm extends JInternalFrame{
 		
 		// Create UI
 		setTitle("View Book Form");
-		setSize(700, 450);
+		setSize(800, 400);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocation(170, 10);
 		setResizable(false);
-//		setUndecorated(true);
-		
 		
 		//Main Panel
 		JPanel mainPanel = new JPanel();

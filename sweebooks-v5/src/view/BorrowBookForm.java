@@ -30,6 +30,7 @@ public class BorrowBookForm extends JInternalFrame{
 		getContentPane().setLayout(new GridLayout(1, 2, 0, 0));
 		setVisible(true);
 		
+		BorrowBookHandler bbh = new BorrowBookHandler();
 		List<Book> listOfAvailableBooks = new ArrayList<Book>();
 		listOfAvailableBooks = bbh.getAvailableBook();
 		
@@ -46,7 +47,6 @@ public class BorrowBookForm extends JInternalFrame{
 		getContentPane().add(listBookInCartPanel);
 		//-------------------------------------------------
 		
-//		BorrowBookHandler bbh = new BorrowBookHandler();
 		// Get list all of the available books to be borrowed
 //		List<Book> listOfAvailableBooks = new ArrayList<Book>();
 //		listOfAvailableBooks = bbh.getAvailableBook();
@@ -107,6 +107,8 @@ public class BorrowBookForm extends JInternalFrame{
 		JLabel lblName = new JLabel(BookName);
 		panelBookListInfo.add(lblName);
 		
+		BorrowBookHandler bbh = new BorrowBookHandler();
+		
 		JButton btnAddToCart = new JButton("Add to Cart");
 		panelBookListInfo.add(btnAddToCart);
 		btnAddToCart.addMouseListener(new MouseAdapter() {
@@ -146,6 +148,8 @@ public class BorrowBookForm extends JInternalFrame{
 		
 		JLabel lblName = new JLabel(BookName);
 		panelBookInCartInfo.add(lblName);
+		
+		BorrowBookHandler bbh = new BorrowBookHandler();
 		
 		JButton btnRemoveFromCart = new JButton("Remove");
 		panelBookInCartInfo.add(btnRemoveFromCart);

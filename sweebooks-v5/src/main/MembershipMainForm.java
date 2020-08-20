@@ -18,7 +18,7 @@ public class MembershipMainForm extends JFrame{
 		
 		setTitle("Membership Main Form");
 		getContentPane().setLayout(null);
-		setSize(900, 500);
+		setSize(1000, 500);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setVisible(true);
@@ -84,3 +84,4 @@ public class MembershipMainForm extends JFrame{
 		});
 		
 	 }
+}
