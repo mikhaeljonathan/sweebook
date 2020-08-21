@@ -78,6 +78,13 @@ public class BorrowBookForm extends JInternalFrame{
 		cartBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				List<Book> cartList = new ArrayList<Book>();
+				cartList = bbh.getCart();
+				// TODO: tampilin semua List<Book> nya dari cart
+				// public JPanel panelBookInCartInfo( STRING, STRING, STRING, INT)
+				for (Book books : cartList) {
+					listBookInCartPanel.add(ListBookInCartInfo(books.getId(), books.getName(), books.getGenreId(), books.getIsbn(), books.getQuantity()));
+				}
 				
 				if (!listBookInCartScrollPane.isVisible()) { 
 					listBookInCartScrollPane.setVisible(true); //kalau ga nyala, nyalain
@@ -91,13 +98,7 @@ public class BorrowBookForm extends JInternalFrame{
 		});
 		
 		// Get list all of the books in the cart
-		List<Book> cartList = new ArrayList<Book>();
-		cartList = bbh.getCart();
-		// TODO: tampilin semua List<Book> nya dari cart
-		// public JPanel panelBookInCartInfo( STRING, STRING, STRING, INT)
-		for (Book books : cartList) {
-			listBookInCartPanel.add(ListBookInCartInfo(books.getId(), books.getName(), books.getGenreId(), books.getIsbn(), books.getQuantity()));
-		}
+		
 		
 		// TODO: kalau salah satu buku di listOfAvailableBooks diteken keluar tombol add to cart dan kalau diteken execute ini
 		Book b = new Book();

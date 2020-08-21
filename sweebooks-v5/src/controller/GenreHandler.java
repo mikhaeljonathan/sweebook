@@ -6,7 +6,7 @@ import java.util.UUID;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 
-import Helper.Validation;
+import helper.Validation;
 import model.Genre;
 import view.ManageGenreForm;
 
@@ -40,7 +40,7 @@ public class GenreHandler {
 			
 		}
 		
-		if (Validation.isGenreTypeExist(type)) {
+		if (!Validation.isGenreTypeExist(type)) {
 			
 			return new Genre(id, type).insert();
 			

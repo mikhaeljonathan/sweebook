@@ -14,7 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import controller.BorrowTransactionHandler;
-import Helper.SQLGetQuery;
+import helper.SQLGetQuery;
 import main.Main;
 import model.Borrow;
 import model.BorrowItem;
