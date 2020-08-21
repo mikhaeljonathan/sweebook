@@ -16,6 +16,7 @@ public class MembershipMainForm extends JFrame{
 
 	public MembershipMainForm() {
 		
+		// Create UI
 		setTitle("Membership Main Form");
 		getContentPane().setLayout(null);
 		setSize(900, 500);
@@ -83,5 +84,6 @@ public class MembershipMainForm extends JFrame{
 			
 		});
 		
-	 }
+	}
+	
 }

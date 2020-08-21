@@ -52,8 +52,7 @@ public class MemberHandler {
 		if (Validation.validateMembership(inputs)) {
 			
 			// Get Role object for obtaining roleId for User object
-			RoleHandler rh = new RoleHandler();
-			Role r = rh.getByName(inputs.get("role"));
+			Role r = new RoleHandler().getByName(inputs.get("role"));
 			
 			// Generate ID for User and Member object
 			String uuid = UUID.randomUUID().toString();
@@ -86,6 +85,7 @@ public class MemberHandler {
 			
 			// Show error message
 			JOptionPane.showMessageDialog(null, "Fail created user");
+			
 		}
 			
 	}
@@ -107,4 +107,5 @@ public class MemberHandler {
 		return m.insert();
 		
 	}
+	
 }

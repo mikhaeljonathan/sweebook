@@ -6,6 +6,9 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.HashMap;
 
 import javax.swing.DefaultComboBoxModel;
@@ -32,47 +35,46 @@ public class CreateMembershipForm extends JFrame{
 	private JTextField nameField;
 	private JTextField usernameField;
 	private JPasswordField passwordField;
-	private JComboBox comboBox;
+	private JComboBox<String> genreComboBox;
 	private JTextArea addressField;
 	
 	public CreateMembershipForm() {
 		
-		//Create UI
+		// Create UI
 		setTitle("Create Membership Form");
 		setSize(500,350);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setResizable(false);
 		
-		//Tittle Label
+		// Title Label
 		JLabel titleLbl = new JLabel("Create Membership Form", JLabel.CENTER);
 		titleLbl.setFont(new Font("Times New Roman", Font.BOLD, 20));
 		
-		//CreateMembership Panel
+		// CreateMembership Panel
 		JLabel nameLbl = new JLabel("Name");
-		JTextField nameField = new JTextField();
+		nameField = new JTextField();
 		
 		JLabel genderLbl = new JLabel("Gender");
-		JComboBox<String> genderCb;
-		genderCb = new JComboBox<>(new String[] {
+		genreComboBox = new JComboBox<>(new String[] {
 			"Male", "Female"
 		});		
 		
 		JLabel addressLbl = new JLabel("Address");
-		JTextArea addressArea = new JTextArea();
-		JScrollPane addressSp = new JScrollPane(addressArea);
+		addressField = new JTextArea();
+		JScrollPane addressSp = new JScrollPane(addressField);
 		
 		JLabel usernameLbl = new JLabel("Username");
-		JTextField usernameField = new JTextField();
+		usernameField = new JTextField();
 		
 		JLabel passwordLbl = new JLabel("Password");
-		JPasswordField passwordField = new JPasswordField();
+		passwordField = new JPasswordField();
 		
 		JPanel createMembershipPanel = new JPanel(new GridLayout(5, 2, 10, 10));
 		createMembershipPanel.add(nameLbl);
 		createMembershipPanel.add(nameField);
 		createMembershipPanel.add(genderLbl);
-		createMembershipPanel.add(genderCb);
+		createMembershipPanel.add(genreComboBox);
 		createMembershipPanel.add(addressLbl);
 		createMembershipPanel.add(addressSp);
 		createMembershipPanel.add(usernameLbl);
@@ -82,13 +84,15 @@ public class CreateMembershipForm extends JFrame{
 		
 		//CreateMembership Button
 		JButton createMembershipBtn = new JButton("Create Membership");
-		createMembershipBtn.addActionListener(new ActionListener() {
+		createMembershipBtn.addMouseListener(new MouseAdapter() {
+			
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void mouseClicked(MouseEvent e) {
 				
 				handleCreateMembershipInput();
 				
 			}
+			
 		});
 		
 		//Main Panel
@@ -110,7 +114,7 @@ public class CreateMembershipForm extends JFrame{
 		
 		// Retrieve attributes
 		String name = nameField.getText();
-		String gender = comboBox.getSelectedItem().toString();
+		String gender = genreComboBox.getSelectedItem().toString();
 		String address = addressField.getText();
 		String username = usernameField.getText();
 		char[] passwordTemp = passwordField.getPassword();
@@ -125,10 +129,7 @@ public class CreateMembershipForm extends JFrame{
 		// Actor who handle create membership use case always "membership"
 		inputs.put("role", "Membership"); 
 		
-		// Create new Member entity
-		Member m = mh.createMembership(inputs);
-		
-		if (m != null) {
+		if (mh.createMembership(inputs) != null) {
 			
 			JOptionPane.showMessageDialog(null, "Membership is sucessfully created");
 			

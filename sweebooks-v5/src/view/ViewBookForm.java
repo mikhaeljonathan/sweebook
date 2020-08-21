@@ -1,11 +1,9 @@
 package view;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.event.MouseMotionListener;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -15,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import controller.BookHandler;
+import helper.SQLGetQuery;
 import model.Book;
 
 public class ViewBookForm extends JInternalFrame{
@@ -32,20 +31,19 @@ public class ViewBookForm extends JInternalFrame{
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocation(170, 10);
 		setResizable(false);
-//		setUndecorated(true);
 		
-		
-		//Main Panel
+		// Main Panel
 		JPanel mainPanel = new JPanel();
 		JScrollPane mainSp = new JScrollPane(mainPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		getContentPane().add(mainSp);
 		
-		//add ListBook to MainPanel
-		int i=0;
+		// Add ListBook to MainPanel
+		mainPanel.setLayout(new GridLayout(lb.size(), 0, 0, 10));
+		
 		for (Book books : lb) {
-			i++;
+			
 			mainPanel.add(bookPanelForm(books.getName(), books.getGenreId(), books.getIsbn()));
-			mainPanel.setLayout(new GridLayout(1+i,0,0,10));
+			
 		}
 		
 		setVisible(true);
@@ -54,7 +52,7 @@ public class ViewBookForm extends JInternalFrame{
 
 	private Component bookPanelForm(String name, String genreId, String isbn) {
 		
-		//List Book Panel
+		// List Book Panel
 		JPanel bookPanelForm = new JPanel();
 		bookPanelForm.setBorder(BorderFactory.createLineBorder(Color.black, 2));
 		bookPanelForm.setLayout(new GridLayout(3, 1, 0, 0));
@@ -63,7 +61,8 @@ public class ViewBookForm extends JInternalFrame{
 		titleBookName.setFont(new Font("Comic Sans MS", Font.BOLD, 20));
 		bookPanelForm.add(titleBookName);
 		
-		JLabel titleBookGenre = new JLabel("Genre        : " + genreId);
+		String genre = SQLGetQuery.getTypeFromGenreId(genreId);
+		JLabel titleBookGenre = new JLabel("Genre        : " + genre);
 		titleBookGenre.setFont(new Font("Times New Roman", Font.BOLD, 18));
 		bookPanelForm.add(titleBookGenre);
 		  
@@ -74,6 +73,5 @@ public class ViewBookForm extends JInternalFrame{
 		return bookPanelForm;
 		
 	}
-
 	
 }
