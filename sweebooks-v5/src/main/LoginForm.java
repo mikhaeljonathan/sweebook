@@ -16,8 +16,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-import Helper.SQLGetQuery;
-import Helper.Validation;
+import helper.SQLGetQuery;
+import helper.Validation;
 import view.CreateMembershipForm;
 
 public class LoginForm extends JFrame{

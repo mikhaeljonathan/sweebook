@@ -12,9 +12,9 @@ import javax.swing.JPanel;
 
 import controller.BookHandler;
 import controller.GenreHandler;
-import javax.swing.SwingConstants;
+import helper.SQLGetQuery;
 
-import Helper.SQLGetQuery;
+import javax.swing.SwingConstants;
 
 public class PurchasingMainForm extends JFrame{
 

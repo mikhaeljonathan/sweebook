@@ -9,8 +9,8 @@ import java.util.List;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 
-import Helper.SQLGetQuery;
-import Helper.Validation;
+import helper.SQLGetQuery;
+import helper.Validation;
 import main.Main;
 import model.Book;
 import model.Borrow;
