@@ -4,6 +4,8 @@ package main;
 import controller.BookHandler;
 import controller.BorrowBookHandler;
 import controller.BorrowTransactionHandler;
+import view.ManageGenreForm;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -19,7 +21,7 @@ public class MembershipMainForm extends JFrame{
 		// Create UI
 		setTitle("Membership Main Form");
 		getContentPane().setLayout(null);
-		setSize(900, 500);
+		setSize(1000, 500);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setVisible(true);
@@ -34,7 +36,7 @@ public class MembershipMainForm extends JFrame{
 			public void mouseClicked(MouseEvent e) {
 				
 				add(new BorrowBookHandler().showBorrowBookForm());
-			    
+				
 			 }
 			
 		});
@@ -83,7 +85,4 @@ public class MembershipMainForm extends JFrame{
 			}
 			
 		});
-		
-	}
-	
 }

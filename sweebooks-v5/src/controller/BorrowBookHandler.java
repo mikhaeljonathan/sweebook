@@ -51,7 +51,7 @@ public class BorrowBookHandler {
 	
 	public boolean addToCart(Book book) {
 		
-		if (Validation.isUserEverBorrowThisBook(book)) {
+		if (!Validation.isUserEverBorrowThisBook(book)) {
 			
 			// Add the book to the cart storage
 			CartStorage cs = CartStorage.getInstance();

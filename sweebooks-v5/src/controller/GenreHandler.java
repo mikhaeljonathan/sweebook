@@ -40,7 +40,7 @@ public class GenreHandler {
 			
 		}
 		
-		if (Validation.isGenreTypeExist(type)) {
+		if (!Validation.isGenreTypeExist(type)) {
 			
 			return new Genre(id, type).insert();
 			

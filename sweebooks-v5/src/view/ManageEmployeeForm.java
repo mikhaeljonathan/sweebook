@@ -9,7 +9,7 @@ import javax.swing.JOptionPane;
 
 import controller.EmployeeHandler;
 import controller.RoleHandler;
-import Helper.SQLGetQuery;
+import helper.SQLGetQuery;
 import main.Main;
 import model.Employee;
 import model.Role;
