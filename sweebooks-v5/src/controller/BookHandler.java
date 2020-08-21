@@ -7,7 +7,7 @@ import javax.swing.JInternalFrame;
 
 import com.mysql.jdbc.UpdatableResultSet;
 
-import Helper.Validation;
+import helper.Validation;
 import model.Book;
 import model.Genre;
 import view.ManageBookForm;

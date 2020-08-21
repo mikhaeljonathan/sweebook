@@ -1,34 +1,34 @@
 GUI
 
-bikin form di LoginForm
+bikin form di LoginForm v
 - input username
 - input password
 - tombol login
 - tombol create membership
 
 saat habis login dia detect usernya:
-- membership
+- membership v
   - Borrow Book Menu
   - Book View Menu
   - Borrow View Menu
   - Borrow History Menu
-- purchasing
+- purchasing v
   - Manage Genre Menu
   - Manage Book Menu
   - Book View Menu
-- administrator
+- administrator v
   - Book View Menu
   - Borrow View Menu
   - Borrow History Menu
   - Membership View Menu
-- human capital
+- human capital v
   - Manage Employee Menu
-- manager
+- manager v
   - Borrow History Menu
   - Membership View Menu
   - Manage Employee Menu
 
-bikin form di CreateMembershipForm
+bikin form di CreateMembershipForm v
 - input name
 - input gender
 - input address
@@ -36,7 +36,7 @@ bikin form di CreateMembershipForm
 - input password
 - tombol create membership
 
-bikin form di BorrowBookForm
+bikin form di BorrowBookForm v
 - list buku2 available
 - tombol cart
 - list buku2 di cart
@@ -45,15 +45,15 @@ bikin form di BorrowBookForm
 - kalo confirm
 - muncul tombol borrow kalo sudah liat cart
 
-bikin form di ViewBookForm
+bikin form di ViewBookForm v
 - list buku2 yang ada di perpus termasuk yg unavailable
 
-bikin form di ViewBorrowForm
+bikin form di ViewBorrowForm v
 - list borrow2 yang masih pending, kalau skrg rolenya membership cuma nampilin borrow2nya si member aja
   kalau skrg rolenya administrator, list semua borrow2 yang pending oleh semua membership kalau salah satu borrow diklik akan muncul tombol accept
 - kalau salah 1 item borrow di klik dia nampilin semua borrowitem
 
-bikin form di ViewBorrowHistoryForm
+bikin form di ViewBorrowHistoryForm v
 - spinner month dan year
 - list2 borow2 yang sudah accepted, kalau skrg roleny membership cm nampilin borrow2nya si member aja
   kalau skrg rolenya administrator, list semua borrow2 yang accepted oleh semua membership
@@ -62,13 +62,13 @@ bikin form di ViewBorrowHistoryForm
 - kalau klik return kalau bukunya sdh direturn nampilin error, else kalau ada denda show dendanyaa brp, kalu gaada lgsg success message
 - kalau ada dendany kita input jumlah uang denda, terus tammpilin kembaliannya terus lgsg success message
 
-bikin form di ManageGenreForm
+bikin form di ManageGenreForm v
 - list semua genre2
 - input field buat masukin nama genre
 - tombol create genre
 - kalo input genrenya udah ada genre yang sama show error
 
-bikin form di ManageBookForm
+bikin form di ManageBookForm v
 - list semua genre
 - list semua book
 - input field buat masukin isbn
@@ -76,10 +76,10 @@ bikin form di ManageBookForm
 - kalau book diteken, keluar tombol delete
 - kalau tekan delete ada confirmation dialognya
 
-bikin form di ViewMembershipForm
+bikin form di ViewMembershipForm v
 - list semua membership
 
-bikin form di ManageEmployeeForm
+bikin form di ManageEmployeeForm v
 - list semua role
 - list semua employee
 - textfield name, username, passwrod, gender, salary, status, role

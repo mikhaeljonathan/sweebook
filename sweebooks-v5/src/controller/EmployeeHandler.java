@@ -7,7 +7,7 @@ import java.util.UUID;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 
-import Helper.Validation;
+import helper.Validation;
 import main.MySQLAccess;
 import model.Employee;
 import model.User;
