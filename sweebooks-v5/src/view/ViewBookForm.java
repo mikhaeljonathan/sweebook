@@ -22,8 +22,7 @@ public class ViewBookForm extends JInternalFrame{
 
 	public ViewBookForm() {
 		
-		BookHandler bh = new BookHandler();
-		List<Book> lb = bh.getAll();
+		List<Book> lb = new BookHandler().getAll();
 		
 		// Create UI
 		setTitle("View Book Form");
@@ -37,7 +36,7 @@ public class ViewBookForm extends JInternalFrame{
 		JScrollPane mainSp = new JScrollPane(mainPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		getContentPane().add(mainSp);
 		
-		// Add ListBook to MainPanel
+		// Add List<Book> to MainPanel
 		mainPanel.setLayout(new GridLayout(lb.size(), 0, 0, 10));
 		
 		for (Book books : lb) {
