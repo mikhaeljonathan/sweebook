@@ -50,4 +50,28 @@ public class Member {
 		
 	}
 
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getMemberSince() {
+		return memberSince;
+	}
+
+	public void setMemberSince(String memberSince) {
+		this.memberSince = memberSince;
+	}
+
 }

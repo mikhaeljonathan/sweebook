@@ -37,8 +37,9 @@ public class ManageGenreForm extends JInternalFrame{
 		setResizable(false);
 		setSize(800, 400); //ukuran gui
 		setLocation(160, 10);
-		setDefaultCloseOperation(EXIT_ON_CLOSE); //biar kalo di close ga running di background
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE); //biar kalo di close langsung mati
 		setVisible(true);
+		setClosable(true);
 		
 		//---------------------- panel buat input genre ------------------------------------
 		JPanel inputGenrePanel = new JPanel();
@@ -83,10 +84,7 @@ public class ManageGenreForm extends JInternalFrame{
 				inputs.put("type", genreNameTextField.getText());
 //				System.out.println(genreNameTextField.getText());
 				if (gh.insert(inputs) != null) {
-					validate();
-					repaint();
 					JOptionPane.showMessageDialog(null, "Genre successfully created");
-					
 				}
 			}
 			

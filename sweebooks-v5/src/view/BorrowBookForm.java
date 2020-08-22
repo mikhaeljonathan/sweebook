@@ -1,7 +1,6 @@
 package view;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -9,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
@@ -20,10 +18,14 @@ import javax.swing.JScrollPane;
 import controller.BorrowBookHandler;
 import model.Book;
 import java.awt.BorderLayout;
-import javax.swing.BoxLayout;
-import java.awt.Component;
 
 public class BorrowBookForm extends JInternalFrame{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 
 	public BorrowBookForm() {
 		//Main Frame
@@ -43,8 +45,7 @@ public class BorrowBookForm extends JInternalFrame{
 		// TODO: create UI
 		//-------------- Bagian List Book -----------------------------
 		JPanel listBookPanel = new JPanel();
-//		listOfAvailableBooks.size()
-		listBookPanel.setLayout(new GridLayout(10, 0, 0, 10));
+		listBookPanel.setLayout(new GridLayout(listOfAvailableBooks.size(), 0, 0, 10));
 		JScrollPane listBookScrollPane = new JScrollPane(listBookPanel);
 		getContentPane().add(listBookScrollPane);
 		//-------------------------------------------------------------
@@ -71,7 +72,7 @@ public class BorrowBookForm extends JInternalFrame{
 		// TODO: tampilin semua List<Book> nya
 		// public JPanel panelBookListInfo( STRING, STRING, STRING, INT)
 		for (Book books : listOfAvailableBooks) {
-			listBookPanel.add(ListBookInfo(books.getId(),books.getName(), books.getGenreId(), books.getIsbn(), books.getQuantity()));
+			listBookPanel.add(listBookInfo(books.getId(),books.getName(), books.getGenreId(), books.getIsbn(), books.getQuantity()));
 		}
 		
 		// TODO: kalau tombol cart diteken execute ini:
@@ -83,7 +84,7 @@ public class BorrowBookForm extends JInternalFrame{
 				// TODO: tampilin semua List<Book> nya dari cart
 				// public JPanel panelBookInCartInfo( STRING, STRING, STRING, INT)
 				for (Book books : cartList) {
-					listBookInCartPanel.add(ListBookInCartInfo(books.getId(), books.getName(), books.getGenreId(), books.getIsbn(), books.getQuantity()));
+					listBookInCartPanel.add(listBookInCartInfo(books.getId(), books.getName(), books.getGenreId(), books.getIsbn(), books.getQuantity()));
 				}
 				
 				if (!listBookInCartScrollPane.isVisible()) { 
@@ -101,7 +102,6 @@ public class BorrowBookForm extends JInternalFrame{
 		
 		
 		// TODO: kalau salah satu buku di listOfAvailableBooks diteken keluar tombol add to cart dan kalau diteken execute ini
-		Book b = new Book();
 		
 		// TODO: kalau cartnya keluar, bakal mucnul juga borrow button, terus kalo diklik execute this:
 		borrowBtn.addMouseListener(new MouseAdapter() {
@@ -123,7 +123,7 @@ public class BorrowBookForm extends JInternalFrame{
 	}
 	
 	
-	public JPanel ListBookInfo(String BookID, String BookName, String Genre, String ISBN, int Quantity) {
+	public JPanel listBookInfo(String BookID, String BookName, String Genre, String ISBN, int Quantity) {
 		BorrowBookHandler bbh = new BorrowBookHandler();
 		Book b = new Book(BookID, BookName, Genre, ISBN, Quantity);
 		
@@ -165,7 +165,7 @@ public class BorrowBookForm extends JInternalFrame{
 	}
 	
 	
-	public JPanel ListBookInCartInfo(String BookID, String BookName, String Genre, String ISBN, int Quantity) {
+	public JPanel listBookInCartInfo(String BookID, String BookName, String Genre, String ISBN, int Quantity) {
 		BorrowBookHandler bbh = new BorrowBookHandler();
 		Book b = new Book(BookID, BookName, Genre, ISBN, Quantity);
 		
