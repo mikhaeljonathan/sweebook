@@ -37,115 +37,121 @@ public class ViewBorrowForm extends JInternalFrame{
 	public ViewBorrowForm() {
 		
 		//Create UI
-		setTitle("View Borrow Form");
-		setSize(800, 400);
-		setClosable(true);
+		setTitle("Borrow History");
+		setSize(800,400);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		setClosable(true);
 		setLocation(170, 10);
 		setResizable(false);
+		setLayout(new BorderLayout(5, 5));;
 		
-		//ListBorrow Panel
-		List<Borrow> lb = bth.getPendingStatus(SQLGetQuery.getRoleFromUserId(Main.user_id) == "Membership");
+		//Panel Utama
+		JPanel mainPanel = new JPanel();
+		mainPanel.setLayout(new GridLayout(1, 2, 0, 0));
 		
+		//List Borrow Panel
 		JPanel listBorrowPanel = new JPanel();
 		JScrollPane listBorrowSp = new JScrollPane(listBorrowPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		
 
-		listBorrowPanel.setLayout(new GridLayout(lb.size(), 0, 5, 5));
+		//ListBorrowItem Panel
+		JPanel listBorrowItemPanel = new JPanel();
+		JScrollPane listBorrowItemSp = new JScrollPane(listBorrowItemPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		
+		mainPanel.add(listBorrowSp);
+		
+		// TODO: show lb di sini
+		List<Borrow> lb = bth.getPendingStatus(SQLGetQuery.getRoleFromUserId(Main.user_id) == "Membership");
+		listBorrowPanel.setLayout(new GridLayout(lb.size(), 1, 5, 5));
 		for (Borrow borrows : lb) {
+			//Borrow Panel
+			JPanel borrowPanelForm = new JPanel();
+			borrowPanelForm.setBorder(BorderFactory.createLineBorder(Color.black, 2));
+			borrowPanelForm.setLayout(new GridLayout(3, 2, 0, 0));
 			
-			listBorrowPanel.add(borrowPanelForm(borrows.getId(), borrows.getMemberId(), borrows.getStatus(), borrows.getBorrowTimestamp()));
+			//Id Label
+			JLabel lblId = new JLabel(borrows.getId());
 			
-			List<BorrowItem> lbi = bth.getBookItem(borrows.getId());
+			//MemberId Label
+			JLabel lblMemberId = new JLabel(borrows.getMemberId());
 			
-			//ListBorrowItem Panel
-			JPanel listBorrowItemPanel = new JPanel();
-			//JList buat list Borrow Item
-			JList<BorrowItem> listBorrowItem = new JList<BorrowItem>();
-			DefaultListModel listBorrowitemModel = new DefaultListModel();
-			for (BorrowItem borrowItems : lbi) {
-				listBorrowitemModel.addElement(borrowItems.getId() + "          " + borrowItems.getReturnTimestamp());
+			//Status Label
+			JLabel lblStatus = new JLabel(borrows.getStatus());
+			
+			//BorrowTimestamp Label 
+			JLabel lblBorrowTimestamp = new JLabel(borrows.getBorrowTimestamp());
+			
+			//empty Label biar posisi tombol e seimbang
+			JLabel lblEmpty1 = new JLabel();
+			
+			//Accept Button
+			JButton acceptBtn = new JButton("Accept");
+			if (SQLGetQuery.getRoleFromUserId(Main.user_id).equals("Administrator")) {
+				acceptBtn.setVisible(true);
 			}
-			listBorrowItem.setModel(listBorrowitemModel);
-			JScrollPane listBorrowItemSp = new JScrollPane(listBorrowItem);
-			listBorrowItemPanel.add(listBorrowItemSp);
-			
-			listBorrowItemPanel.setVisible(false);
-			
-			//Details Button Panel
-			JPanel btnPanel = new JPanel();
-			// kalau salah satu item borrow di klik akan execute this
-			JButton detailsBtn = new JButton("Details");
-			detailsBtn.addMouseListener(new MouseAdapter() {
+			acceptBtn.setVisible(false);
+			acceptBtn.addMouseListener(new MouseAdapter() {
 				@Override
-				public void mouseClicked(MouseEvent e) {
-					if (!listBorrowItemPanel.isVisible()) { 
-						listBorrowItemPanel.setVisible(true); //kalau ga nyala, nyalain
-						detailsBtn.setVisible(true);
-						listBorrowItemPanel.revalidate();
-					} else {
-						listBorrowItemPanel.setVisible(false); //kalau nyala, matiin
-					}
+				public void mouseClicked(MouseEvent e) { 	
+					//TODO: kalau tombol accept diteken keluar ini:
+//					if (bth.acceptBorrowRequest(b.getId())) {
+//						
+//						JOptionPane.showMessageDialog(null, "It's successfully accepted");
+//						
+//					}
 				}
 			});
 			
-			btnPanel.add(detailsBtn);
-			btnPanel.add(listBorrowItemPanel);
+			borrowPanelForm.add(lblId);
+			borrowPanelForm.add(lblBorrowTimestamp);
+			borrowPanelForm.add(lblMemberId);
+			borrowPanelForm.add(lblEmpty1);
+			borrowPanelForm.add(lblStatus);
+			borrowPanelForm.add(acceptBtn);
 			
-			listBorrowPanel.add(btnPanel);
+			listBorrowPanel.add(borrowPanelForm);
+			
+			// TODO: show lbi di sini
+			List<BorrowItem> lbi = bth.getBookItem(borrows.getId());
+			
+			listBorrowItemPanel.setLayout(new GridLayout(lbi.size(), 1, 5, 5));
+			for (BorrowItem borrowItems : lbi) {
+				//BorrowItem Panel
+				JPanel borrowItemForm = new JPanel();
+				borrowItemForm.setBorder(BorderFactory.createLineBorder(Color.black, 2));
+				borrowItemForm.setLayout(new GridLayout(2, 1, 0, 0));
+				
+				//BookName Label
+				JLabel lblBookName = new JLabel(borrowItems.getBookId());
+				
+				//ReturnTimestamp Label
+				JLabel lblReturnTimestamp = new JLabel(borrowItems.getReturnTimestamp());
+				
+				borrowItemForm.add(lblBookName);
+				borrowItemForm.add(lblReturnTimestamp);
+				
+				listBorrowItemPanel.add(borrowItemForm);
+				listBorrowItemSp.setVisible(false);
+				mainPanel.add(listBorrowItemSp);
+			}
+//			listBorrowPanel.add(listBorrowItemSp);
+			
+			//Waktu click list keluar borrow itemnya
+			borrowPanelForm.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					if (!listBorrowItemSp.isVisible()) { 
+						listBorrowItemSp.setVisible(true); //kalau ga nyala, nyalain
+					} else {
+						listBorrowItemSp.setVisible(false); //kalau nyala, matiin
+					}
+				}
+			});
+				
 		}
 		
-		add(listBorrowSp);
+		add(mainPanel);
 		setVisible(true);
 
-	}
-	
-	private Component borrowPanelForm(String id, String memberId, String status, String borrowStamp) {
-		//Borrow Panel
-		JPanel borrowPanelForm = new JPanel();
-		borrowPanelForm.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-		borrowPanelForm.setLayout(new GridLayout(5, 1, 0, 0));
-		
-		//Id Title
-		JLabel titleId = new JLabel(id, JLabel.LEFT);
-		titleId.setFont(new Font("Comic Sans MS", Font.BOLD, 12));
-		borrowPanelForm.add(titleId);
-		
-		//BorrowStamp Title
-		JLabel titleBorrowStamp = new JLabel(borrowStamp);
-		titleBorrowStamp.setFont(new Font("Comic Sans MS", Font.BOLD, 12));
-		borrowPanelForm.add(titleBorrowStamp);
-		
-		//MemberId Title
-		JLabel titleMemberId = new JLabel(memberId, JLabel.LEFT);
-		titleMemberId.setFont(new Font("Comic Sans MS", Font.BOLD, 12));
-		borrowPanelForm.add(titleMemberId);
-		
-		//Status Title
-		JLabel titleStatus = new JLabel(status, JLabel.LEFT);
-		titleStatus.setFont(new Font("Comic Sans MS", Font.BOLD, 12));
-		borrowPanelForm.add(titleStatus);
-		
-		//Accept Button
-		JButton acceptBtn = new JButton("Accept");
-		if (SQLGetQuery.getRoleFromUserId(Main.user_id).equals("Administrator")) {
-			acceptBtn.setVisible(true);
-		}
-		acceptBtn.setVisible(false);
-		borrowPanelForm.add(acceptBtn);
-		acceptBtn.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) { 	
-				//TODO: kalau tombol accept diteken keluar ini:
-//				if (bth.acceptBorrowRequest(b.getId())) {
-//					
-//					JOptionPane.showMessageDialog(null, "It's successfully accepted");
-//					
-//				}
-			}
-		});
-		
-		return borrowPanelForm;
 	}
 	
 }
