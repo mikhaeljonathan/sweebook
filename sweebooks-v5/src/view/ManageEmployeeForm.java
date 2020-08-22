@@ -52,7 +52,9 @@ public class ManageEmployeeForm extends JInternalFrame{
 		JScrollPane listEmployeeScrollPane = new JScrollPane(listEmployeePanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		add(listEmployeeScrollPane);
 		for (Employee employee : le) {
-			listEmployeePanel.add(employeeListInfo("Manager", employee.getId(),employee.getId(),employee.getStatus()));
+			String employeeRole = SQLGetQuery.getRoleFromUserId(employee.getId());
+//			System.out.println(employeeRole);
+			listEmployeePanel.add(employeeListInfo(employeeRole, employee.getId(),employee.getId(),employee.getStatus()));
 			//harusnya employeeListInfo(JPanel, Role, ID, NAMA, Status ) , Role buat nentuin button fire & accept visible atau invisible
 		}
 	//----------------------------------------------------
@@ -167,10 +169,10 @@ public class ManageEmployeeForm extends JInternalFrame{
 		employeeInfo.add(statusLabel);
 		
 		if (role == "Manager") {
-			acceptButton.setVisible(true);
+			fireButton.setVisible(true);
 			acceptButton.setVisible(true);
 		} else {
-			acceptButton.setVisible(false);
+			fireButton.setVisible(false);
 			acceptButton.setVisible(false);
 		}
 		
