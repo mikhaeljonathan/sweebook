@@ -26,12 +26,14 @@ public class ViewBookForm extends JInternalFrame{
 		
 		// Create UI
 		setTitle("View Book Form");
-		setSize(700, 450);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setSize(800, 400);
+		setClosable(true);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setLocation(170, 10);
 		setResizable(false);
-		
-		// Main Panel
+	
+		//Main Panel
+
 		JPanel mainPanel = new JPanel();
 		JScrollPane mainSp = new JScrollPane(mainPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		getContentPane().add(mainSp);
