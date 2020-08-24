@@ -120,7 +120,7 @@ public class ViewBorrowHistoryForm extends JInternalFrame{
 		JPanel midPanel = new JPanel(new GridLayout(1, 2, 0, 0));
 		
 		// ListBorrow Panel
-		listBorrowPanel = new JPanel(new GridLayout(lb.size() + 1, 1, 5, 5));
+		listBorrowPanel = new JPanel(new GridLayout(lb.size(), 1, 5, 5));
 		listBorrowPanel.setBorder(BorderFactory.createLineBorder(Color.black, 2));
 		JScrollPane listBorrowSp = new JScrollPane(listBorrowPanel);
 		midPanel.add(listBorrowSp);
