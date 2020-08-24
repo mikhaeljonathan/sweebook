@@ -2,78 +2,20 @@ package helper;
 
 import javax.swing.JOptionPane;
 
-import main.Main;
 import main.MySQLAccess;
 
 public class SQLGetQuery {
 
-	public static String getRoleFromUsername(String username) {
+	public static int countBooksBorrowedByUser(String userId) {
 		
-		String retrieveRoleFromUsername = "SELECT roles.name FROM roles "
-				+ "INNER JOIN users "
-				+ "ON users.role_id = roles.id "
-				+ "WHERE users.username = '%s'";
-		retrieveRoleFromUsername = String.format(retrieveRoleFromUsername, username);
-		
-		try {
-			
-			MySQLAccess.rs = MySQLAccess.stmt.executeQuery(retrieveRoleFromUsername);
-			
-			String role = "";
-			
-			while (MySQLAccess.rs.next()) {
-				
-				role = MySQLAccess.rs.getString("roles.name");
-				
-			}
-			
-			return role;
-			
-		} catch (Exception e) {
-			
-			return null;
-			
-		}
-		
-	}
-	
-	public static String getIdFromUsername(String username) {
-		
-		String retrieveIdFromUsername = "SELECT id FROM users " + 
-				"WHERE username = '%s'";
-		retrieveIdFromUsername = String.format(retrieveIdFromUsername, username);
-		
-		try {
-			
-			MySQLAccess.rs = MySQLAccess.stmt.executeQuery(retrieveIdFromUsername);
-			
-			String id = "";
-			
-			while (MySQLAccess.rs.next()) {
-				
-				id = MySQLAccess.rs.getString("id");
-				
-			}
-			
-			return id;
-			
-		} catch (Exception e) {
-			
-			return null;
-			
-		}
-		
-	}
-	
-	public static int countBooksBorrowedByUser() {
-		
+		// Retrieve count of borrowed books from corresponding user from DAO
 		String isUserBorrowMoreThan10Books = "SELECT COUNT(members.user_id) FROM members " + 
 				"INNER JOIN borrows " + 
 				"ON borrows.member_id = members.user_id " + 
 				"INNER JOIN borrow_items " + 
 				"ON borrow_items.borrow_id = borrows.id " + 
-				"WHERE members.user_id = '%s'";
-		isUserBorrowMoreThan10Books = String.format(isUserBorrowMoreThan10Books, Main.user_id);
+				"WHERE members.user_id = '%s' AND borrow_items.return_timestamp = '1990-01-01 12:00:00'";
+		isUserBorrowMoreThan10Books = String.format(isUserBorrowMoreThan10Books, userId);
 		
 		try {
 			
@@ -91,6 +33,8 @@ public class SQLGetQuery {
 			
 		} catch (Exception e) {
 			
+			// Fail to retrieve from DAO
+			JOptionPane.showMessageDialog(null, "Database error");
 			return -1;
 			
 		}
@@ -99,6 +43,7 @@ public class SQLGetQuery {
 	
 	public static String getRoleFromUserId(String userId) {
 		
+		// Get role name from user Id
 		String getRole = "SELECT roles.name FROM roles " + 
 				"INNER JOIN users " + 
 				"ON users.role_id = roles.id " + 
@@ -129,6 +74,7 @@ public class SQLGetQuery {
 	
 	public static String getReturnTimestampFromIdAndBookId(String id, String bookId) {
 		
+		// Get return time stamp of borrow item by borrow id and book id from DAO 
 		String getReturnTimestamp = "SELECT return_timestamp from borrow_items " + 
 				"WHERE borrow_id = '%s' AND book_id = '%s'";
 		getReturnTimestamp = String.format(getReturnTimestamp, id, bookId);
@@ -146,6 +92,194 @@ public class SQLGetQuery {
 			}
 			
 			return returnTimestamp;
+			
+		} catch (Exception e) {
+			
+			// Fail to retrieve from DAO
+			JOptionPane.showMessageDialog(null, "Database error");
+			return null;
+			
+		}
+		
+	}
+	
+	public static String getTypeFromGenreId(String genreId) {
+		
+		// Get genre type by genre id from DAO
+		String getType = "SELECT type FROM genres " + 
+				"WHERE id = '%s'";
+		getType = String.format(getType, genreId);
+		
+		try {
+			
+			MySQLAccess.rs = MySQLAccess.stmt.executeQuery(getType);
+			
+			String type = "";
+			
+			while (MySQLAccess.rs.next()) {
+				
+				type = MySQLAccess.rs.getString("type");
+				
+			}
+			
+			return type;
+			
+		} catch (Exception e) {
+			
+			// Fail to retrieve from DAO
+			JOptionPane.showMessageDialog(null, "Database error");
+			return null;
+			
+		}
+		
+	}
+	
+	public static String getUsernameFromId(String id) {
+		
+		// Retrieve user name from users by userId from DAO
+		String getUsername = "SELECT username FROM users " + 
+				"WHERE id = '%s'";
+		getUsername = String.format(getUsername, id);
+		
+		try {
+			
+			MySQLAccess.rs = MySQLAccess.stmt.executeQuery(getUsername);
+			
+			String username = "";
+			
+			while (MySQLAccess.rs.next()) {
+				
+				username = MySQLAccess.rs.getString("username");
+				
+			}
+			
+			return username;
+			
+		} catch (Exception e) {
+			
+			// Fail to retrieve from DAO
+			JOptionPane.showMessageDialog(null, "Database error");
+			return null;
+			
+		}
+		
+	}
+	
+	public static String getBookNameFromId(String id) {
+		
+		// Retrieve book name by bookId from DAO
+		String getBookName = "SELECT title FROM books " + 
+				"WHERE id = '%s'";
+		getBookName = String.format(getBookName, id);
+		
+		try {
+			
+			MySQLAccess.rs = MySQLAccess.stmt.executeQuery(getBookName);
+			
+			String title = "";
+			
+			while (MySQLAccess.rs.next()) {
+				
+				title = MySQLAccess.rs.getString("title");
+				
+			}
+			
+			return title;
+			
+		} catch (Exception e) {
+			
+			// Fail to retrieve from DAO
+			JOptionPane.showMessageDialog(null, "Database error");
+			return null;
+			
+		}
+		
+	}
+	
+	public static String getNameFromUserId(String id) {
+		
+		// Retrieve name from users by userId from DAO
+		String getName = "SELECT name FROM users " + 
+				"WHERE id = '%s'";
+		getName = String.format(getName, id);
+		
+		try {
+			
+			MySQLAccess.rs = MySQLAccess.stmt.executeQuery(getName);
+			
+			String name = "";
+			
+			while (MySQLAccess.rs.next()) {
+				
+				name = MySQLAccess.rs.getString("name");
+				
+			}
+			
+			return name;
+			
+		} catch (Exception e) {
+			
+			// Fail to retrieve from DAO
+			JOptionPane.showMessageDialog(null, "Database error");
+			return null;
+			
+		}
+		
+	}
+	
+	public static String getRoleIdFromRoleName(String roleName) {
+		
+		// Retrieve roleId by roleName from DAO
+		String getRoleId = "SELECT id FROM roles " + 
+				"WHERE name = '%s'";
+		getRoleId = String.format(getRoleId, roleName);
+		
+		try {
+			
+			MySQLAccess.rs = MySQLAccess.stmt.executeQuery(getRoleId);
+			
+			String id = "";
+			
+			while (MySQLAccess.rs.next()) {
+				
+				id = MySQLAccess.rs.getString("id");
+				
+			}
+			
+			return id;
+			
+		} catch (Exception e) {
+			
+			// Fail to retrieve from DAO
+			JOptionPane.showMessageDialog(null, "Database error");
+			return null;
+			
+		}
+		
+	}
+	
+	public static String getTypeFromBookId(String bookId) {
+		
+		// Retrieve genre name by bookId from DAO
+		String getType = "SELECT genres.type FROM genres " + 
+				"INNER JOIN books " +
+				"ON books.genre_id = genres.id " +
+				"WHERE books.id = '%s'";
+		getType = String.format(getType, bookId);
+		
+		try {
+			
+			MySQLAccess.rs = MySQLAccess.stmt.executeQuery(getType);
+			
+			String type = "";
+			
+			while (MySQLAccess.rs.next()) {
+				
+				type = MySQLAccess.rs.getString("genres.type");
+				
+			}
+			
+			return type;
 			
 		} catch (Exception e) {
 			

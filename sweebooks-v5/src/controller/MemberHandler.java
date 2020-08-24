@@ -1,10 +1,7 @@
 package controller;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -34,16 +31,25 @@ public class MemberHandler {
 	
 	public JInternalFrame showViewMembershipForm() {
 		
-		return new ViewMembershipForm();
+		return ViewMembershipForm.getInstance();
 		
 	}
 	
 	public List<Member> getAll(){ 
-		return new ArrayList<Member>();
+		
+		return new Member().all();
+		
 	}
 	
 	public Member insert(HashMap<String, String> inputs) {
-		return new Member();
+		
+		// Retrieve the attributes
+		String id = inputs.get("id");
+		String address = inputs.get("address");
+		String memberSince = inputs.get("memberSince");
+		
+		return new Member(id, address, memberSince).insert();
+		
 	}
 	
 	public Member createMembership(HashMap<String, String> inputs) {
@@ -96,15 +102,10 @@ public class MemberHandler {
 		String address = inputs.get("address");
 		
 		// Create date
-		Date date = Calendar.getInstance().getTime();  
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");  
-        String strDate = dateFormat.format(date);
+        String strDate = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(Calendar.getInstance().getTime());
 		
-		// Create Member object with corresponding attributes
-		Member m = new Member(uuid, address, strDate);
-		
-		// Insert Member object into database and return it
-		return m.insert();
+		// Create and insert Member object into database and return it
+		return new Member(uuid, address, strDate).insert();
 		
 	}
 }

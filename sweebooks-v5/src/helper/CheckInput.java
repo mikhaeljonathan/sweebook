@@ -2,9 +2,6 @@ package helper;
 
 import javax.swing.JOptionPane;
 
-import jdk.nashorn.internal.scripts.JO;
-import main.MySQLAccess;
-
 public class CheckInput {
 
 	// Name constraint
@@ -21,21 +18,12 @@ public class CheckInput {
 		
 	}
 	
-	// Gender constraint
-	public static boolean validateGender(String gender) {
-		
-		if (gender == "Male") return true;
-		if (gender == "Female") return true;
-		return false;
-		
-	}
-	
 	// Address constraint
 	public static boolean validateAddress(String address) {
 		
 		if (address.isEmpty()) {
 			
-			JOptionPane.showMessageDialog(null, "address can't be empty");
+			JOptionPane.showMessageDialog(null, "Address can't be empty");
 			return false;
 			
 		}
@@ -46,6 +34,22 @@ public class CheckInput {
 	// User name constraint
 	public static boolean validateUsername(String username) {
 		
+		// User name can't have space
+		boolean containSpace = false;
+		for (int i = 0; i < username.length(); i++) {
+			
+			if (username.charAt(i) == ' ') containSpace = true;
+			
+		}
+		
+		if (containSpace) {
+			
+			JOptionPane.showMessageDialog(null, "Usernaem can't contain spaces");
+			return false;
+			
+		}
+		
+		// User name must be unique
 		if (username.isEmpty()) {
 			
 			JOptionPane.showMessageDialog(null, "Username can't be empty");
@@ -53,44 +57,15 @@ public class CheckInput {
 			
 		}
 		
-		String retrieveUsername = "SELECT username FROM users "
-				+ "WHERE username = '%s'";
-		retrieveUsername = String.format(retrieveUsername, username);
-		
-		try {
-			
-			MySQLAccess.rs = MySQLAccess.stmt.executeQuery(retrieveUsername);
-			
-			String usernameRetrieved = "";
-			while(MySQLAccess.rs.next()) {
-				
-				usernameRetrieved = MySQLAccess.rs.getString("username");
-				
-			}
-			
-			if (usernameRetrieved.isEmpty()) {
-				
-				return true;
-				
-			} else {
-				
-				JOptionPane.showMessageDialog(null, "Username already exists");
-				return false;
-				
-			}
-			
-		} catch (Exception e) {
-			
-			return false;
-			
-		}
+		return true;
 		
 	}
 	
 	// Password constraint
 	public static boolean validatePassword(String password) {
 		
-		/* Criteria:
+		/* 
+		 * Criteria:
 		 * - minimum length 8
 		 * - contains alphanumeric
 		 * - contains upper and lower case
@@ -151,7 +126,7 @@ public class CheckInput {
 	
 	public static boolean validateSalary(String salary) {
 		
-		if (salary.isEmpty()) {
+		if (salary == null || salary.isEmpty()) {
 			
 			JOptionPane.showMessageDialog(null, "Salary can't be empty");
 			return false;
@@ -174,6 +149,66 @@ public class CheckInput {
 		} catch (Exception e) {
 			
 			JOptionPane.showMessageDialog(null, "Salary must be numeric");
+			return false;
+			
+		}
+		
+	}
+	
+	public static boolean validateIsbn(String isbn) {
+		
+		if (isbn.length() < 10 || isbn.length() > 13) {
+			
+			JOptionPane.showMessageDialog(null, "ISBN must be between 10 and 13 characters long");
+			return false;
+			
+		}
+		
+		boolean isAllNum = true;
+		for (int i = 0; i < isbn.length(); i++) {
+			
+			if (!Character.isDigit(isbn.charAt(i))) isAllNum = false;
+			
+		}
+		
+		if (!isAllNum) {
+			
+			JOptionPane.showMessageDialog(null, "ISBN must be numeric");
+			return false;
+			
+		}
+		
+		return true;
+		
+	}
+	
+	public static boolean validateBookInput(String name, String quantity) {
+		
+		if (name.isEmpty()) {
+			
+			JOptionPane.showMessageDialog(null, "Book name can't be empty");
+			return false;
+			
+		}
+		
+		try {
+			
+			int ret = Integer.parseInt(quantity);
+			
+			if (ret > 0) {
+				
+				return true;
+				
+			} else {
+				
+				JOptionPane.showMessageDialog(null, "Book quantity must above zero");
+				return false;
+				
+			}
+			
+		} catch (Exception e) {
+			
+			JOptionPane.showMessageDialog(null, "Quantity must be numeric");
 			return false;
 			
 		}

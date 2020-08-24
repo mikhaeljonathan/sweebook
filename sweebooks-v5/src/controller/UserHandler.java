@@ -6,7 +6,7 @@ import model.User;
 public class UserHandler {
 
 	public UserHandler() {
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	public User insert(HashMap<String, String> inputs) {
@@ -23,6 +23,9 @@ public class UserHandler {
 	}
 	
 	public User getByUsername(String username) {
-		return new User();
+		
+		return new User().getByUsername(username);
+		
 	}
+	
 }

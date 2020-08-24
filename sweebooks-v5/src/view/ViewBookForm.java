@@ -14,11 +14,13 @@ import javax.swing.JScrollPane;
 import controller.BookHandler;
 import model.Book;
 
+// This is a singleton class
 public class ViewBookForm extends JInternalFrame{
 
 	private static final long serialVersionUID = 1L;
+	private static ViewBookForm instance = null;
 
-	public ViewBookForm() {
+	private ViewBookForm() {
 		
 		BookHandler bh = new BookHandler();
 		List<Book> lb = bh.getAll();
@@ -27,11 +29,11 @@ public class ViewBookForm extends JInternalFrame{
 		setTitle("View Book Form");
 		setSize(600, 450);
 		setBorder(null);
-		getContentPane().setLayout(null);
+		setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 11, 580, 248);
-		getContentPane().add(scrollPane);
+		add(scrollPane);
 		
 		JPanel mainPanel = new JPanel();
 		scrollPane.setRowHeaderView(mainPanel);
@@ -47,6 +49,16 @@ public class ViewBookForm extends JInternalFrame{
 			listBookPanel.add(bookPanelForm(books.getName(), books.getGenreId(), books.getIsbn()));
 			listBookPanel.setLayout(new GridLayout(1+i,0,0,10));
 		}
+		
+	}
+	
+	public static ViewBookForm getInstance() {
+		
+		if (instance == null) {
+			instance = new ViewBookForm();
+		}
+		
+		return instance;
 		
 	}
 
