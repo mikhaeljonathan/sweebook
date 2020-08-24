@@ -26,9 +26,9 @@ public class ViewBorrowForm extends JInternalFrame{
 	private static final long serialVersionUID = 1L;
 	private static ViewBorrowForm instance = null;
 	
-	BorrowTransactionHandler bth;
-	JPanel listBorrowPanel;
-	JPanel listBorrowItemTempPanel;
+	private BorrowTransactionHandler bth;
+	private JPanel listBorrowPanel;
+	private JPanel listBorrowItemTempPanel;
 	
 	private ViewBorrowForm() {
 		

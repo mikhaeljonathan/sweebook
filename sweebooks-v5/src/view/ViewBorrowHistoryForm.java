@@ -33,15 +33,15 @@ public class ViewBorrowHistoryForm extends JInternalFrame{
 	private static final long serialVersionUID = 1L;
 	private static ViewBorrowHistoryForm instance = null;
 	
-	BorrowTransactionHandler bth;
-	JPanel listBorrowItemTempPanel;
-	JPanel listBorrowPanel;
+	private BorrowTransactionHandler bth;
+	private JPanel listBorrowItemTempPanel;
+	private JPanel listBorrowPanel;
 	private int month = 0;
 	private int year = 0;
 	
 	private ViewBorrowHistoryForm () {
 		
-		//Create UI
+		// Create UI
 		setTitle("Borrow History");
 		setSize(800,400);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);

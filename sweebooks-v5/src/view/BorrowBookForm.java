@@ -27,11 +27,11 @@ public class BorrowBookForm extends JInternalFrame{
 	private static final long serialVersionUID = 1L;
 	private static BorrowBookForm instance = null;
 	
-	BorrowBookHandler bbh;
-	JPanel listBookPanel;
-	JPanel listBookInCartPanel;
-	JScrollPane listBookInCartScrollPane;
-	JButton borrowBtn;
+	private BorrowBookHandler bbh;
+	private JPanel listBookPanel;
+	private JPanel listBookInCartPanel;
+	private JScrollPane listBookInCartScrollPane;
+	private JButton borrowBtn;
 	
 	private BorrowBookForm() {
 		
