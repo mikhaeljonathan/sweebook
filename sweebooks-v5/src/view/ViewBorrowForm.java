@@ -45,7 +45,6 @@ public class ViewBorrowForm extends JInternalFrame{
 		
 		// Retrieve all borrows
 		List<Borrow> lb = bth.getPendingStatus(SQLGetQuery.getRoleFromUserId(Main.user_id).equals("Membership"));
-		System.out.println(lb.size());
 		
 		// ListBorrow Panel
 		listBorrowPanel = new JPanel(new GridLayout(lb.size(), 1, 5, 5));

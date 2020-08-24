@@ -42,7 +42,9 @@ public class BookHandler {
 	}
 	
 	public Book getByIsbn(String isbn) {
-		return new Book();
+		
+		return new Book().getByIsbn(isbn);
+		
 	}
 	
 	public List<Book> getBookByQuantityMoreThanZero(){
@@ -52,7 +54,9 @@ public class BookHandler {
 	}
 	
 	public Book insert(HashMap<String, String> inputs) {
+		
 		return new Book();
+		
 	}
 	
 	public Book update(HashMap<String, String> inputs) {
@@ -72,16 +76,14 @@ public class BookHandler {
 		
 		if (CheckInput.validateIsbn(isbn)) {
 			
-			Book b = new Book();
-			String id = b.getByIsbn(isbn);
+			Book b = new Book().getByIsbn(isbn);
 			
-			if (id != null) { // ISBN exists in DAO
+			if (b != null) { // ISBN exists in DAO
 				
-				b = updateBookQuantity(b.find(id));
+				b = updateBookQuantity(b.find(b.getId()));
 				
 			} else { // ISBN doesn't exist in DAO
 				
-				// TODO: nanti show form untuk buat buku baru
 				b = createNewBook(isbn);
 				
 			}
@@ -118,6 +120,7 @@ public class BookHandler {
 	private Book createNewBook(String isbn) {
 		
 		// TODO: ada textfield buat nama buku, combobox buat genre, textfield buat quantity
+		List<Genre> lg = new GenreHandler().getAll();
 		
 		String name = "nama buku";
 		String quantity = "1";

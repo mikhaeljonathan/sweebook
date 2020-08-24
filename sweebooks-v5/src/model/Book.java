@@ -84,6 +84,8 @@ public class Book {
 				
 			}
 			
+			if (this.id.isEmpty()) return null;
+			
 			return this;
 			
 		} catch (Exception e) {
@@ -163,10 +165,10 @@ public class Book {
 		
 	}
 	
-	public String getByIsbn(String isbn) {
+	public Book getByIsbn(String isbn) {
 		
 		// Get book id by ISBN from DAO
-		String retrieveId = "SELECT id FROM books "
+		String retrieveId = "SELECT * FROM books "
 				+ "WHERE isbn = '%s'";
 		retrieveId = String.format(retrieveId, isbn);
 		
@@ -174,22 +176,17 @@ public class Book {
 			
 			MySQLAccess.rs = MySQLAccess.stmt.executeQuery(retrieveId);
 			
-			String isbnRetrieved = "";
 			while(MySQLAccess.rs.next()) {
 				
-				isbnRetrieved = MySQLAccess.rs.getString("id");
+				this.id = MySQLAccess.rs.getString("id");
+				this.genreId = MySQLAccess.rs.getString("genre_id");
+				this.name = MySQLAccess.rs.getString("title");
+				this.isbn = MySQLAccess.rs.getString("isbn");
+				this.quantity = Integer.parseInt(MySQLAccess.rs.getString("quantity"));
 				
 			}
 			
-			if (isbnRetrieved.isEmpty()) {
-				
-				return null;
-				
-			} else {
-				
-				return isbnRetrieved;
-				
-			}
+			return this;
 			
 		} catch (Exception e) {
 			
