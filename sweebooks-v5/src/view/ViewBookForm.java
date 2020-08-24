@@ -16,58 +16,65 @@ import controller.BookHandler;
 import helper.SQLGetQuery;
 import model.Book;
 
+// This is a singleton class
 public class ViewBookForm extends JInternalFrame{
 
 	private static final long serialVersionUID = 1L;
+	private static ViewBookForm instance = null;
 
-	public ViewBookForm() {
+	private ViewBookForm() {
 		
 		List<Book> lb = new BookHandler().getAll();
 		
 		// Create UI
 		setTitle("View Book Form");
 		setSize(800, 400);
-		setClosable(true);
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocation(170, 10);
 		setResizable(false);
 	
 		//Main Panel
-
-		JPanel mainPanel = new JPanel();
+		JPanel mainPanel = new JPanel(new GridLayout(lb.size(), 0, 0, 10));
 		JScrollPane mainSp = new JScrollPane(mainPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		getContentPane().add(mainSp);
+		add(mainSp);
 		
-		// Add List<Book> to MainPanel
-		mainPanel.setLayout(new GridLayout(lb.size(), 0, 0, 10));
-		
-		for (Book books : lb) {
+		// For each book
+		for (Book book : lb) {
 			
-			mainPanel.add(bookPanelForm(books.getName(), books.getGenreId(), books.getIsbn()));
+			mainPanel.add(bookPanelForm(book));
 			
 		}
 		
 		setVisible(true);
 		
 	}
+	
+	public static ViewBookForm getInstance() {
+		
+		if (instance == null) {
+			instance = new ViewBookForm();
+		}
+		
+		return instance;
+		
+	}
 
-	private Component bookPanelForm(String name, String genreId, String isbn) {
+	private Component bookPanelForm(Book book) {
 		
 		// List Book Panel
-		JPanel bookPanelForm = new JPanel();
+		JPanel bookPanelForm = new JPanel(new GridLayout(3, 1, 0, 0));
 		bookPanelForm.setBorder(BorderFactory.createLineBorder(Color.black, 2));
-		bookPanelForm.setLayout(new GridLayout(3, 1, 0, 0));
 		
-		JLabel titleBookName = new JLabel(name, JLabel.CENTER);
+		JLabel titleBookName = new JLabel(book.getName(), JLabel.CENTER);
 		titleBookName.setFont(new Font("Comic Sans MS", Font.BOLD, 20));
 		bookPanelForm.add(titleBookName);
 		
-		String genre = SQLGetQuery.getTypeFromGenreId(genreId);
+		String genre = SQLGetQuery.getTypeFromGenreId(book.getGenreId());
 		JLabel titleBookGenre = new JLabel("Genre        : " + genre);
 		titleBookGenre.setFont(new Font("Times New Roman", Font.BOLD, 18));
 		bookPanelForm.add(titleBookGenre);
 		  
-		JLabel titleBookIsbn = new JLabel("ISBN         : " + isbn);
+		JLabel titleBookIsbn = new JLabel("ISBN         : " + book.getIsbn());
 		titleBookIsbn.setFont(new Font("Times New Roman", Font.BOLD, 18));
 		bookPanelForm.add(titleBookIsbn);
 		  

@@ -25,7 +25,35 @@ public class Member {
 	}
 	
 	public List<Member> all(){
-		return new ArrayList<Member>();
+		
+		List<Member> lm = new ArrayList<Member>();
+		
+		// Retrieve all member data from DAO
+		String findAllMembers = "SELECT * FROM members";
+		
+		try {
+			
+			MySQLAccess.rs = MySQLAccess.stmt.executeQuery(findAllMembers);
+			
+			while (MySQLAccess.rs.next()) {
+				
+				// Add Member object into List<Member>
+				lm.add(new Member(MySQLAccess.rs.getString("user_id"), 
+						MySQLAccess.rs.getString("address"),
+						MySQLAccess.rs.getString("member_since")));
+				
+			}
+			
+			return lm;
+			
+		} catch (Exception e) {
+			
+			// Fail to retrieve from DAO
+			JOptionPane.showMessageDialog(null, "Database error");
+			return null;
+			
+		}
+		
 	}
 	
 	public Member insert() {
@@ -50,4 +78,42 @@ public class Member {
 		
 	}
 
+	// Getter and Setter
+	
+	public String getId() {
+		
+		return id;
+		
+	}
+
+	public void setId(String id) {
+		
+		this.id = id;
+		
+	}
+
+	public String getAddress() {
+		
+		return address;
+		
+	}
+
+	public void setAddress(String address) {
+		
+		this.address = address;
+		
+	}
+
+	public String getMemberSince() {
+		
+		return memberSince;
+		
+	}
+
+	public void setMemberSince(String memberSince) {
+		
+		this.memberSince = memberSince;
+		
+	}
+	
 }

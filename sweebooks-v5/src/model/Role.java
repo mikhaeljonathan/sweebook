@@ -64,16 +64,12 @@ public class Role {
 			
 			MySQLAccess.rs = MySQLAccess.stmt.executeQuery(getRoleObjectByName);
 			
-			String id = "";
-			
 			while(MySQLAccess.rs.next()) {
 				
-				id = MySQLAccess.rs.getString("id");
+				this.id = MySQLAccess.rs.getString("id");
+				this.name = name;
 				
 			}
-			
-			this.id = id;
-			this.name = name;
 			
 			return this;
 			
@@ -94,4 +90,24 @@ public class Role {
 		return id;
 		
 	}
+
+	public String getName() {
+		
+		return name;
+		
+	}
+
+	public void setName(String name) {
+		
+		this.name = name;
+		
+	}
+
+	public void setId(String id) {
+		
+		this.id = id;
+		
+	}
+	
 }
+

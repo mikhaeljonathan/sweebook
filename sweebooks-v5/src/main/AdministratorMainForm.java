@@ -8,7 +8,6 @@ import javax.swing.JFrame;
 
 import controller.BookHandler;
 import controller.BorrowTransactionHandler;
-import controller.GenreHandler;
 import controller.MemberHandler;
 
 public class AdministratorMainForm extends JFrame{
@@ -17,23 +16,28 @@ public class AdministratorMainForm extends JFrame{
 
 	public AdministratorMainForm() {
 		
+		// Create UI
 		setTitle("Administrator Main Form");
-		getContentPane().setLayout(null);
+		setLayout(null);
 		setSize(1000, 500);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
 		
-		//View Book Button
+		// View Book Button
 		JButton viewBookBtn = new JButton("View Book");
 		viewBookBtn.setBounds(10, 11, 140, 35);
 		add(viewBookBtn);
 		viewBookBtn.addMouseListener(new MouseAdapter() {
+			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				// TODO: kalau Book View Menu
+				
+				removeInternalFrames();
 				add(new BookHandler().showViewBookForm());
+				
 			}
+			
 		});
 		
 		//ViewBorrowForm Button
@@ -41,10 +45,13 @@ public class AdministratorMainForm extends JFrame{
 		viewBorrowBtn.setBounds(10, 79, 140, 35);
 		add(viewBorrowBtn);
 		viewBorrowBtn.addMouseListener(new MouseAdapter() {
+			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				// TODO: kalau Borrow View menu
+				
+				removeInternalFrames();
 				add(new BorrowTransactionHandler().showBorrowForm());
+				
 			}
 		});
 		
@@ -53,11 +60,15 @@ public class AdministratorMainForm extends JFrame{
 		borrowHistoryBtn.setBounds(10, 148, 140, 35);
 		add(borrowHistoryBtn);
 		borrowHistoryBtn.addMouseListener(new MouseAdapter() {
+			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				// TODO: kalau Borrow History menu
+				
+				removeInternalFrames();
 				add(new BorrowTransactionHandler().showBorrowHistoryForm());
+				
 			}
+			
 		});
 		
 		//MembershipView Button	
@@ -65,14 +76,44 @@ public class AdministratorMainForm extends JFrame{
 		membershipViewBtn.setBounds(10, 215, 140, 35);
 		add(membershipViewBtn);
 		membershipViewBtn.addMouseListener(new MouseAdapter() {
+			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				// TODO: kalau Membership View menu
+				
+				removeInternalFrames();
 				add(new MemberHandler().showViewMembershipForm());
 			}
+			
+		});
+		
+		// Logout Button
+		JButton logoutBtn = new JButton("Log Out");
+		logoutBtn.setBounds(10, 283, 140, 35);
+		add(logoutBtn);
+		logoutBtn.addMouseListener(new MouseAdapter() {
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				removeInternalFrames();
+				dispose();
+				Main.user_id = null;
+				new LoginForm();
+				
+			}
+			
 		});
 		
 		setVisible(true);
+		
+	}
+	
+	private void removeInternalFrames() {
+		
+		remove(new BookHandler().showViewBookForm());
+		remove(new BorrowTransactionHandler().showBorrowForm());
+		remove(new BorrowTransactionHandler().showBorrowHistoryForm());
+		remove(new MemberHandler().showViewMembershipForm());
 		
 	}
 	

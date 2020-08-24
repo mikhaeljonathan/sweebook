@@ -1,16 +1,14 @@
 package controller;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
 import javax.swing.JInternalFrame;
+import javax.swing.JOptionPane;
 
-import helper.SQLGetQuery;
 import helper.Validation;
 import main.Main;
 import model.Book;
@@ -22,91 +20,100 @@ import view.BorrowBookForm;
 public class BorrowBookHandler {
 	
 	public BorrowBookHandler() {
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	public JInternalFrame showBorrowBookForm() {
 		
-		return new BorrowBookForm();
+		return BorrowBookForm.getInstance();
 		
 	}
 	
 	public List<Book> getCart(){
 		
-		CartStorage cs = CartStorage.getInstance();
 		List<Book> lb = new ArrayList<Book>();
 		
 		// Convert Collection into List<E>
-		lb.addAll(cs.getCart());
+		lb.addAll(CartStorage.getInstance().getCart());
 		return lb;
 		
 	}
 	
 	public List<Book> getAvailableBook(){
 		
-		BookHandler bh = new BookHandler();
-		return bh.getBookByQuantityMoreThanZero();
+		return new BookHandler().getBookByQuantityMoreThanZero();
 		
 	}
 	
 	public boolean addToCart(Book book) {
 		
-		if (!Validation.isUserEverBorrowThisBook(book)) {
+		if (new Borrow().isBookStillBorrowing(Main.user_id, book.getId())) {
 			
-			// Add the book to the cart storage
-			CartStorage cs = CartStorage.getInstance();
-			cs.addCart(book);
+			JOptionPane.showMessageDialog(null, "You have borrowed this book");
+			return false;
 			
-			Book b = new BookHandler().getById(book.getId());
-			updateQuantity(b);
+		} 
+		
+		if (Validation.isBookIsInTheCart(book)) {
 			
-			return true;
-			
-		} else {
-			
+			JOptionPane.showMessageDialog(null, "The book is already in the cart");
 			return false;
 			
 		}
+		
+		// Add the book to the cart storage
+		CartStorage.getInstance().addCart(book);
+		
+		updateQuantity(new BookHandler().getById(book.getId()));
+		
+		return true;
 		
 	}
 	
 	public boolean removeCart(Book book) {
 		
-		CartStorage cs = CartStorage.getInstance();
-		cs.removeCart(book);
+		CartStorage.getInstance().removeCart(book);
 		
-		BookHandler bh = new BookHandler();
-		Book b = bh.getById(book.getId());
-		
-		updateBookQuantity(bh, b);
+		updateBookQuantity(new BookHandler().getById(book.getId()));
 		
 		return true;
+		
+	}
+	
+	public boolean removeAllCart() {
+		
+		List<Book> lb = getCart();
+		
+		for (Book b : lb) {
+			
+			CartStorage.getInstance().removeCart(b);
+			
+		}
+		
+		return true;
+		
 	}
 	
 	public boolean borrowBook() {
 		
-		if (Validation.isUserCanBorrow()) {
+		if (new Borrow().getCountBookStillBorrowing(Main.user_id) <= 10) {
 			
 			// Generate ID for Borrow object
 			String uuid = UUID.randomUUID().toString();
 			
 			// Create date
-			Date date = Calendar.getInstance().getTime();  
-	        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");  
-	        String strDate = dateFormat.format(date);
+	        String strDate = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(Calendar.getInstance().getTime());
 	        
 	        // Create borrow object
-			Borrow b = new Borrow(uuid, Main.user_id, "Pending", strDate);
-			Borrow bNew = b.insert();
+			Borrow b = new Borrow(uuid, Main.user_id, "Pending", strDate).insert();
 			
 			// Create borrowItem objects
-			List<Book> lb = new ArrayList<Book>();
-			lb = getCart();
+			List<Book> lb = getCart();
 			
 			for (Book book : lb) {
 				
-				BorrowItem bi = new BorrowItem(bNew.getId(), book.getId(), Validation.dummyTimestamp);
-				bi.insert();
+				// Hasn't returned yet so the return date is dummy
+				new BorrowItem(b.getId(), book.getId(), Validation.dummyTimestamp).insert();
 				
 			}
 			
@@ -114,6 +121,7 @@ public class BorrowBookHandler {
 			
 		} else {
 			
+			JOptionPane.showMessageDialog(null, "Can't borrow more than 10 books!");
 			return false;
 			
 		}
@@ -136,7 +144,7 @@ public class BorrowBookHandler {
 	}
 	
 	// Increment book quantity
-	private void updateBookQuantity(BookHandler bh, Book b) {
+	private void updateBookQuantity(Book b) {
 		
 		HashMap<String, String> inputs = new HashMap<String, String>();
 		inputs.put("id", b.getId());
@@ -145,7 +153,7 @@ public class BorrowBookHandler {
 		inputs.put("isbn", b.getIsbn());
 		inputs.put("quantity", Integer.toString(b.getQuantity() + 1));
 		
-		bh.update(inputs);
+		new BookHandler().update(inputs);
 		
 	}
 

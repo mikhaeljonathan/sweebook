@@ -76,10 +76,38 @@ public class Genre {
 	}
 	
 	public Genre getByType(String type) {
-		return new Genre();
+		
+		// Get genre type by genre id from DAO
+		String getGenre = "SELECT * FROM genres " + 
+				"WHERE type = '%s'";
+		getGenre = String.format(getGenre, type);
+		
+		try {
+			
+			MySQLAccess.rs = MySQLAccess.stmt.executeQuery(getGenre);
+			
+			while (MySQLAccess.rs.next()) {
+				
+				
+				this.id = MySQLAccess.rs.getString("id");
+				this.type = MySQLAccess.rs.getString("type");
+				
+			}
+			
+			return this;
+			
+		} catch (Exception e) {
+			
+			// Fail to retrieve from DAO
+			JOptionPane.showMessageDialog(null, "Database error");
+			return null;
+			
+		}
+		
 	}
 	
 	// Getter and setter
+	
 	public String getId() {
 		
 		return id;

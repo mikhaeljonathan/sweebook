@@ -58,6 +58,7 @@ public class Employee {
 	
 	public Employee find(String id) {
 		
+		// Retrieve all employee by user id from DAO
 		String findEmployeeById = "SELECT * FROM employees "
 				+ "WHERE user_id = '%s'";
 		findEmployeeById = String.format(findEmployeeById, id);
@@ -78,10 +79,11 @@ public class Employee {
 			
 		} catch (Exception e) {
 			
+			// Fail to retrieve from DAO
+			JOptionPane.showMessageDialog(null, "Database error");
 			return null;
 			
 		}
-		
 		
 	}
 	
@@ -122,6 +124,7 @@ public class Employee {
 			
 		} catch (Exception e) {
 			
+			// Fail to update to DAO
 			JOptionPane.showMessageDialog(null, "Database error");
 			return null;
 			
@@ -167,6 +170,4 @@ public class Employee {
 		
 	}
 	
-	
-
 }

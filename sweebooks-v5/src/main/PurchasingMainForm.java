@@ -1,20 +1,13 @@
 package main;
 
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 import controller.BookHandler;
 import controller.GenreHandler;
-import helper.SQLGetQuery;
-
-import javax.swing.SwingConstants;
 
 public class PurchasingMainForm extends JFrame{
 
@@ -22,51 +15,90 @@ public class PurchasingMainForm extends JFrame{
 	
 	public PurchasingMainForm() {
 		
+		// Create UI
 		setTitle("Purchasing Main Form");
-		getContentPane().setLayout(null);
+		setLayout(null);
 		setSize(1000, 500);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
 		
-		//Manage Genre Button
+		// Manage Genre Button
 		JButton manageGenreBtn = new JButton("Manage Genre");
 		manageGenreBtn.setBounds(10, 11, 140, 35);
 		add(manageGenreBtn);
 		manageGenreBtn.addMouseListener(new MouseAdapter() {
+			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				// TODO: kalau Manage Genre menu
+				
+				removeInternalFrames();
 				add(new GenreHandler().showManageGenreForm());
+				
 			}
+			
 		});
 		
-		//Manage Book Button	
+		// Manage Book Button	
 		JButton manageBookBtn = new JButton("Manage Book");
 		manageBookBtn.setBounds(10, 79, 140, 35);
 		add(manageBookBtn);
 		manageBookBtn.addMouseListener(new MouseAdapter() {
+			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				// TODO: kalau Manage Book menu
+				
+				removeInternalFrames();
 				add(new BookHandler().showManageBookForm());
+				
 			}
+			
 		});
 		
-		//View Book Button
+		// View Book Button
 		JButton viewBookBtn = new JButton("View Book");
 		viewBookBtn.setBounds(10, 148, 140, 35);
 		add(viewBookBtn);
 		viewBookBtn.addMouseListener(new MouseAdapter() {
+			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				// TODO: kalau Book View menu
+				
+				removeInternalFrames();
 				add(new BookHandler().showViewBookForm());
+				
 			}
+			
+		});
+		
+		// Logout Button
+		JButton logoutBtn = new JButton("Log Out");
+		logoutBtn.setBounds(10, 216, 140, 35);
+		add(logoutBtn);
+		logoutBtn.addMouseListener(new MouseAdapter() {
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				removeInternalFrames();
+				dispose();
+				Main.user_id = null;
+				new LoginForm();
+				
+			}
+			
 		});
 		
 		setVisible(true);
 		
 	}
 
+	public void removeInternalFrames() {
+		
+		remove(new GenreHandler().showManageGenreForm());
+		remove(new BookHandler().showManageBookForm());
+		remove(new BookHandler().showViewBookForm());
+		
+	}
+	
 }
