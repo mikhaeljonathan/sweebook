@@ -291,32 +291,4 @@ public class SQLGetQuery {
 		
 	}
 	
-	public static String getTypeFromGenreId(String genreId) {
-		
-		String getType = "SELECT type FROM genres " + 
-				"WHERE id = '%s'";
-		getType = String.format(getType, genreId);
-		
-		try {
-			
-			MySQLAccess.rs = MySQLAccess.stmt.executeQuery(getType);
-			
-			String type = "";
-			
-			while (MySQLAccess.rs.next()) {
-				
-				type = MySQLAccess.rs.getString("type");
-				
-			}
-			
-			return type;
-			
-		} catch (Exception e) {
-			
-			return null;
-			
-		}
-		
-	}
-	
 }
