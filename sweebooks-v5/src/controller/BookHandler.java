@@ -1,9 +1,17 @@
 package controller;
+import java.awt.GridLayout;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import javax.swing.JComboBox;
 import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 
 import helper.CheckInput;
 import model.Book;
@@ -100,7 +108,7 @@ public class BookHandler {
 	
 	public boolean delete(String id) {
 		
-		return new Book(id, "dummy name", "dummy genre_id", "dummy isbn", 0).delete();
+		return new Book(id, "", "", "", 0).delete();
 		
 	}
 	
@@ -119,20 +127,51 @@ public class BookHandler {
 	
 	private Book createNewBook(String isbn) {
 		
-		// TODO: ada textfield buat nama buku, combobox buat genre, textfield buat quantity
+		JPanel addBookPanel = new JPanel(new GridLayout(0, 1));
+		
+		JTextField nameTextField = new JTextField();
+		addBookPanel.add(new JLabel("Book Name :"));
+		addBookPanel.add(nameTextField);
+		
+		JComboBox<String> genreComboBox = new JComboBox<String>();
+		addBookPanel.add(new JLabel("Genre :"));
 		List<Genre> lg = new GenreHandler().getAll();
 		
-		String name = "nama buku";
-		String quantity = "1";
-		Genre g = new Genre();
+		// For each genre
+		for (Genre genre : lg) 
+		{
+			genreComboBox.addItem(genre.getType());
+			
+		}
+		addBookPanel.add(genreComboBox);
 		
-		if (CheckInput.validateBookInput(name, quantity)) {
+		JSpinner quantitySpinner = new JSpinner(new SpinnerNumberModel(1, 1, 100, 1));
+		addBookPanel.add(new JLabel("Quantity :"));
+		addBookPanel.add(quantitySpinner);
+		
+		
+		while (true) {
 			
-			return new Book(UUID.randomUUID().toString(), name, g.getId(), isbn, Integer.parseInt(quantity)).insert();
+			int option = JOptionPane.showConfirmDialog(null, addBookPanel, "Add Book Form", JOptionPane.DEFAULT_OPTION);
 			
-		} else {
+			if (option == JOptionPane.YES_OPTION) {
+				
+				String name = nameTextField.getText();
+				String quantity = quantitySpinner.getValue().toString();
+				Genre g = new Genre().getByType(genreComboBox.getSelectedItem().toString());
+				
+				if (CheckInput.validateBookInput(name, quantity)) {
+					
+					return new Book(UUID.randomUUID().toString(), name, g.getId(), isbn, Integer.parseInt(quantity)).insert();
+					
+				}
+				
+			} else {
+				
+				return null;
+				
+			}
 			
-			return null;
 		}
 		
 	}

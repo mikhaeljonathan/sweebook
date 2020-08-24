@@ -56,6 +56,7 @@ public class ManageBookForm extends JInternalFrame{
 		// RestockBook Button
 		JButton restockBookBtn = new JButton("Restock");
 		restockBookBtn.addMouseListener(new MouseAdapter() {
+			
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				
@@ -106,7 +107,7 @@ public class ManageBookForm extends JInternalFrame{
 		List<Genre> lg = new GenreHandler().getAll();
 		
 		// Panel for retrieving list genres
-		JPanel listGenreTempPanel = new JPanel(new GridLayout(lg.size(), 1, 5, 5));
+		JPanel listGenreTempPanel = new JPanel(new GridLayout(lg.size() + 1, 1, 5, 5));
 		
 		// For each genre
 		for (Genre genres : lg) {

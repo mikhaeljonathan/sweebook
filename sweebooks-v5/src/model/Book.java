@@ -186,12 +186,14 @@ public class Book {
 				
 			}
 			
+			if (this.id == null) return null;
+			
 			return this;
 			
 		} catch (Exception e) {
 			
 			// Fail to retrieve from DAO
-			JOptionPane.showMessageDialog(null, "Database error");
+			JOptionPane.showMessageDialog(null, "Database errorwkwk");
 			return null;
 			
 		}
