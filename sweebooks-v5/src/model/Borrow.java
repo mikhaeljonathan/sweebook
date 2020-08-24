@@ -166,10 +166,7 @@ public class Borrow {
 			
 			// Administrator : retrieve all borrow list
 			String retrieveAllBorrowList = "SELECT * FROM borrows " + 
-					"INNER JOIN members " + 
-					"ON members.user_id = borrows.member_id " + 
 					"WHERE borrows.status = 'Pending'";
-			retrieveAllBorrowList = String.format(retrieveAllBorrowList, Main.user_id);
 			
 			try {
 				
@@ -258,17 +255,14 @@ public class Borrow {
 			
 			if (date == null) { // No specific month and year
 				
-				retrieveAllBorrowList = "SELECT * FROM borrows " + 
-						"INNER JOIN members " + 
-						"ON members.user_id = borrows.member_id " + 
+				retrieveAllBorrowList = "SELECT * FROM borrows " +
 						"WHERE borrows.status = 'Accepted'";
 				
 			} else { // Specific month and year
 			
 				retrieveAllBorrowList = "SELECT * FROM borrows " + 
-						"INNER JOIN members " + 
-						"ON members.user_id = borrows.member_id " + 
 						"WHERE borrows.status = 'Accepted' AND MONTH(borrows.borrow_timestamp) = %d AND YEAR(borrows.borrow_timestamp) = %d";
+				
 				retrieveAllBorrowList = String.format(retrieveAllBorrowList, 
 						date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getMonthValue(),
 						date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getYear());
