@@ -51,7 +51,7 @@ public class BorrowBookForm extends JInternalFrame{
 		List<Book> listOfAvailableBooks = bbh.getAvailableBook();
 		
 		// List of available books panel
-		listBookPanel = new JPanel(new GridLayout(listOfAvailableBooks.size(), 0, 0, 10));
+		listBookPanel = new JPanel(new GridLayout(listOfAvailableBooks.size() + 1, 0, 0, 10));
 		
 		// Retrieve all books
 		for (Book book : listOfAvailableBooks) {
@@ -269,13 +269,14 @@ public class BorrowBookForm extends JInternalFrame{
 	
 	private void refreshListBookPanel() {
 		
+		listBookPanel.setVisible(false);
 		// Remove all
 		listBookPanel.removeAll();
 		
 		// Get list all of the available books to be borrowed
 		List<Book> listOfAvailableBooks = bbh.getAvailableBook();
 		
-		listBookPanel.setLayout(new GridLayout(listOfAvailableBooks.size(), 0, 0, 10));
+		listBookPanel.setLayout(new GridLayout(listOfAvailableBooks.size() + 1, 0, 0, 10));
 		
 		// Retrieve all books
 		for (Book book : listOfAvailableBooks) {
@@ -283,6 +284,7 @@ public class BorrowBookForm extends JInternalFrame{
 			listBookPanel.add(listBookInfo(book));
 			
 		}
+		listBookPanel.setVisible(true);
 		
 	}
 	
