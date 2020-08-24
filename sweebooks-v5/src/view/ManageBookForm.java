@@ -19,49 +19,56 @@ import javax.swing.JTextField;
 
 import controller.BookHandler;
 import controller.GenreHandler;
+import helper.SQLGetQuery;
 import model.Book;
 import model.Genre;
 
+// This is a singleton class
 public class ManageBookForm extends JInternalFrame{
 
 	private static final long serialVersionUID = 1L;
+	private static ManageBookForm instance = null;
+	
+	private BookHandler bh;
+	private JPanel listBookTempPanel;
 	
 	public ManageBookForm() {
 	
-		BookHandler bh = new BookHandler();
+		bh = new BookHandler();
 		
-		//create UI
+		// Create UI
 		setTitle("Manage Book Form");
 		setSize(800,400);
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		setClosable(true);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocation(170,  10);
 		setResizable(false);
 		setLayout(new BorderLayout(5, 5));
 		
-		//Panel Atas
-		JPanel topPanel = new JPanel();
-		topPanel.setLayout(new BorderLayout(5, 5));
+		// Top Panel
+		JPanel topPanel = new JPanel(new BorderLayout(5, 5));
 		
-		//ISBN Label
+		// ISBN Label
 		JLabel isbnTitle = new JLabel("ISBN : ");
 		
-		//ISBN TextField
+		// ISBN TextField
 		JTextField isbnField = new JTextField();
-		//RestockBook Button
 		
+		// RestockBook Button
 		JButton restockBookBtn = new JButton("Restock");
 		restockBookBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				// TODO: kalau tombol restock ditekan
-				String isbn = "dummy string";
+				
+				String isbn = isbnField.getText();
 				if (bh.restockBook(isbn) != null) {
 					
 					JOptionPane.showMessageDialog(null, "Book successfully restocked");
+					refreshListBookPanel();
 					
 				}
+				
 			}
+			
 		});
 		
 		topPanel.add(isbnTitle, BorderLayout.WEST);
@@ -69,111 +76,148 @@ public class ManageBookForm extends JInternalFrame{
 		topPanel.add(restockBookBtn, BorderLayout.EAST);
 		
 		
-		//Panel Tengah
-		JPanel midPanel = new JPanel();
-		midPanel.setLayout(new GridLayout(1, 2, 0, 0));
+		// Mid Panel
+		JPanel midPanel = new JPanel(new GridLayout(1, 2, 0, 0));
 		
-		//ListBook Panel
-		JPanel listBookPanel = new JPanel();
-		listBookPanel.setLayout(new BorderLayout(5, 5));
+		// ListBook Panel
+		JPanel listBookPanel = new JPanel(new BorderLayout(5, 5));
 		JScrollPane listBookSp = new JScrollPane(listBookPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);	
-		
-		//Panel untuk tampung list Book
-		JPanel listBookTempPanel = new JPanel();
-		
-		// show lb here
+
+		// Retrieve all the books
 		List<Book> lb = bh.getAll();
-		listBookTempPanel.setLayout(new GridLayout(lb.size(), 1, 5, 5));
-		for (Book books : lb) {
-			//Panel Buku
-			JPanel bookPanelForm = new JPanel();
-			bookPanelForm.setBorder(BorderFactory.createLineBorder(Color.black, 2));
-			bookPanelForm.setLayout(new GridLayout(5, 1, 0, 0));
+		
+		// Panel for retrieving list Book
+		listBookTempPanel = new JPanel(new GridLayout(lb.size(), 1, 5, 5));
+		
+		// For each book
+		for (Book book : lb) {
 			
-			//bookName Label
-			JLabel lblBookName = new JLabel("Book Name: " + books.getName());
+			listBookTempPanel.add(bookPanelInfo(book));
 			
-			//genre Label
-			JLabel lblBookGenre = new JLabel("Genre: " + books.getGenreId());
-			
-			//isbn Label
-			JLabel lblIsbn = new JLabel("ISBN: " + books.getIsbn());
-			
-			//quantity Label
-			JLabel lblQuantity = new JLabel("Quantity: " + books.getQuantity());
-			
-			//delete Button
-			JButton deleteBtn = new JButton("Delete");
-			deleteBtn.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					// TODO: kalau tombol delete book di setiap list buku ditekan
-					int clickConfirm = JOptionPane.showConfirmDialog(null, "Are you sure to delete this book ?");
-					if(clickConfirm == 0) {
-						// show confirmation dialog dulu baru execute this:
-						Book b = new Book();
-						if (bh.delete(b.getId())) {
-							
-							JOptionPane.showMessageDialog(null, "Book successfully deleted");
-							
-						}
-					}
-				}
-			});;
-			
-			bookPanelForm.add(lblBookName);
-			bookPanelForm.add(lblBookGenre);
-			bookPanelForm.add(lblIsbn);
-			bookPanelForm.add(lblQuantity);
-			bookPanelForm.add(deleteBtn);
-			
-			listBookTempPanel.add(bookPanelForm);
 		}
+		
 		listBookPanel.add(listBookTempPanel);
 		
-		//List Genre Panel
-		JPanel listGenrePanel = new JPanel();
-		listGenrePanel.setLayout(new BorderLayout(5, 5));
+		// List Genre Panel
+		JPanel listGenrePanel = new JPanel(new BorderLayout(5, 5));
 		JScrollPane listGenreSp = new JScrollPane(listGenrePanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		
-		//List Genre Temp
-		JPanel listGenreTempPanel = new JPanel();
-		
+		// Retrieve all genres
 		List<Genre> lg = new GenreHandler().getAll();
-		listGenreTempPanel.setLayout(new GridLayout(lb.size(), 1, 5, 5));
-//		listGenreTempPanel.addMouseListener(new MouseAdapter() {
-//			@Override
-//			public void mouseClicked(MouseEvent e) {
-//				if (!listBookSp.isVisible()) { 
-//					listBookSp.setVisible(true); //kalau ga nyala, nyalain
-//				} else {
-//					listBookSp.setVisible(false); //kalau nyala, matiin
-//				}
-//			}
-//		});
-		// show lg here
+		
+		// Panel for retrieving list genres
+		JPanel listGenreTempPanel = new JPanel(new GridLayout(lg.size(), 1, 5, 5));
+		
+		// For each genre
 		for (Genre genres : lg) {
-			//Genre Panel
-			JPanel genrePanelForm = new JPanel();
-			genrePanelForm.setBorder(BorderFactory.createLineBorder(Color.black, 2));
-			genrePanelForm.setLayout(new GridLayout(1, 1, 0, 0));
 			
-			//genre Label
+			// Genre Panel
+			JPanel genrePanelForm = new JPanel(new GridLayout(1, 1, 0, 0));
+			genrePanelForm.setBorder(BorderFactory.createLineBorder(Color.black, 2));
+			
+			// genre Label
 			JLabel lblGenre = new JLabel(genres.getType());
 			lblGenre.setFont(new Font("Comic Sans MS", Font.ITALIC, 20));
 			
 			genrePanelForm.add(lblGenre);
 			
 			listGenreTempPanel.add(genrePanelForm);
+			
 		}
+		
 		listGenrePanel.add(listGenreTempPanel, BorderLayout.CENTER);
-//		listBookSp.setVisible(false);
 
 		midPanel.add(listGenreSp);
 		midPanel.add(listBookSp);
 		
 		add(topPanel, BorderLayout.NORTH);
-		add(midPanel, BorderLayout.CENTER );
+		add(midPanel, BorderLayout.CENTER);
+
 		setVisible(true);
+		
 	}
+	
+	public static ManageBookForm getInstance() {
+		
+		if (instance == null) {
+			instance = new ManageBookForm();
+		}
+		
+		return instance;
+		
+	}
+	
+	private JPanel bookPanelInfo(Book book) {
+		
+		// Book panel
+		JPanel bookPanelForm = new JPanel(new GridLayout(5, 1, 0, 0));
+		bookPanelForm.setBorder(BorderFactory.createLineBorder(Color.black, 2));
+		
+		// bookName Label
+		JLabel lblBookName = new JLabel("Book Name: " + book.getName());
+		
+		// genre Label
+		JLabel lblBookGenre = new JLabel("Genre: " + SQLGetQuery.getTypeFromGenreId(book.getGenreId()));
+		
+		// ISBN Label
+		JLabel lblIsbn = new JLabel("ISBN: " + book.getIsbn());
+		
+		// quantity Label
+		JLabel lblQuantity = new JLabel("Quantity: " + book.getQuantity());
+		
+		// delete Button
+		JButton deleteBtn = new JButton("Delete");
+		deleteBtn.addMouseListener(new MouseAdapter() {
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				int clickConfirm = JOptionPane.showConfirmDialog(null, "Are you sure to delete this book ?");
+				
+				if (clickConfirm == JOptionPane.YES_OPTION) {
+					
+					if (bh.delete(book.getId())) {
+						
+						JOptionPane.showMessageDialog(null, "Book successfully deleted");
+						refreshListBookPanel();
+						
+					}
+					
+				}
+				
+			}
+			
+		});;
+		
+		bookPanelForm.add(lblBookName);
+		bookPanelForm.add(lblBookGenre);
+		bookPanelForm.add(lblIsbn);
+		bookPanelForm.add(lblQuantity);
+		bookPanelForm.add(deleteBtn);
+		
+		return bookPanelForm;
+		
+	}
+	
+	private void refreshListBookPanel() {
+		
+		listBookTempPanel.setVisible(false);
+		listBookTempPanel.removeAll();
+		
+		// Retrieve all the books
+		List<Book> lb = bh.getAll();
+		
+		listBookTempPanel.setLayout(new GridLayout(lb.size(), 1, 5, 5));
+		
+		// For each book
+		for (Book book : lb) {
+		
+			listBookTempPanel.add(bookPanelInfo(book));
+			
+		}
+		
+		listBookTempPanel.setVisible(true);
+		
+	}
+	
 }

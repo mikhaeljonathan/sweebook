@@ -18,7 +18,7 @@ public class GenreHandler {
 	
 	public JInternalFrame showManageGenreForm() {
 
-		return new ManageGenreForm();
+		return ManageGenreForm.getInstance();
 		
 	}
 	

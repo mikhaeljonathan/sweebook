@@ -1,6 +1,5 @@
 package controller;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -26,12 +25,12 @@ public class BorrowTransactionHandler {
 	
 	public JInternalFrame showBorrowForm() {
 		
-		return new ViewBorrowForm();
+		return ViewBorrowForm.getInstance();
 	}
 	
 	public JInternalFrame showBorrowHistoryForm() {
 		
-		return new ViewBorrowHistoryForm();
+		return ViewBorrowHistoryForm.getInstance();
 		
 	}
 	
@@ -43,7 +42,7 @@ public class BorrowTransactionHandler {
 	
 	public List<Borrow> getAcceptStatus(Date date){
 		
-		return new Borrow().getAcceptStatus(date, SQLGetQuery.getRoleFromUserId(Main.user_id) == "Membership");
+		return new Borrow().getAcceptStatus(date, SQLGetQuery.getRoleFromUserId(Main.user_id).equals("Membership"));
 		
 	}
 	
@@ -82,32 +81,33 @@ public class BorrowTransactionHandler {
 	
 	public BorrowItem returnBook(HashMap<String, String> inputs) {
 		
-		if (!SQLGetQuery.getReturnTimestampFromIdAndBookId(inputs.get("id"), inputs.get("bookId")).equals(Validation.dummyTimestamp)) {
+		String id = inputs.get("id");
+		String bookId = inputs.get("bookId");
+		
+		if (!new BorrowItem().isBookAlreadyReturn(id, bookId)) {
 			
-			BorrowItem bi = new BorrowItem(
-					inputs.get("id"),
-					inputs.get("bookId"),
-					inputs.get("returnTimestamp"));
+			// Create date
+	        String strDate = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(Calendar.getInstance().getTime());
 			
-			bi =  bi.update();
-			
-			Book b = new BookHandler().getById(bi.getBookId());
-			updateQuantity(b);
+			BorrowItem bi = new BorrowItem(id, bookId, strDate);
 			
 			int fine = calculateFine(bi);
+			
 			if (fine > 0) {
 				
 				while (true) {
 					
 					try {
 						
-						String fineInputtedString = JOptionPane.showInputDialog("Fine: " + fine + "\nEnter your money: ");
+						String fineInputtedString = JOptionPane.showInputDialog(null, "Fine: " + fine + "\nEnter your money: ");
+						
+						if (fineInputtedString == null) return null;
+						
 						int fineInputted = Integer.parseInt(fineInputtedString);
 						
 						if (fineInputted >= fine) {
 							
-							JOptionPane.showMessageDialog(null, "Book is successfully returned\n"
-									+ "Change: " + (fineInputted - fine));
+							JOptionPane.showMessageDialog(null, "Change: " + (fineInputted - fine));
 							break;
 							
 						} else {
@@ -124,13 +124,11 @@ public class BorrowTransactionHandler {
 					
 				}
 				
-			} else {
-				
-				JOptionPane.showMessageDialog(null, "Book is successfully returned");
-				
 			}
 			
-			return bi;
+			updateQuantity(new BookHandler().getById(bi.getBookId()));
+			
+			return bi.update();
 			
 		} else {
 			
@@ -180,7 +178,7 @@ public class BorrowTransactionHandler {
 		
 		if (diff > 0) {
 
-			long howManyDays = diff / Validation.twoWeeksInMillisecond;
+			long howManyDays = diff / Validation.oneDayInMillisecond + 1;
 			return ((int)howManyDays * 1000);
 			
 		} else {

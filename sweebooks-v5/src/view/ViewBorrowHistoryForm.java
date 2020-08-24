@@ -2,15 +2,12 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Graphics;
 import java.awt.GridLayout;
-import java.awt.Insets;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -23,8 +20,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.border.Border;
-import javax.swing.text.html.ListView;
 
 import controller.BorrowTransactionHandler;
 import helper.SQLGetQuery;
@@ -32,195 +27,255 @@ import main.Main;
 import model.Borrow;
 import model.BorrowItem;
 
+// This is a singleton class
 public class ViewBorrowHistoryForm extends JInternalFrame{
 
 	private static final long serialVersionUID = 1L;
+	private static ViewBorrowHistoryForm instance = null;
 	
-	BorrowTransactionHandler bth = new BorrowTransactionHandler();
+	BorrowTransactionHandler bth;
+	JPanel listBorrowItemTempPanel;
+	JPanel listBorrowPanel;
+	private int month = 0;
+	private int year = 0;
 	
-	public ViewBorrowHistoryForm () {
-		
+	private ViewBorrowHistoryForm () {
 		
 		//Create UI
 		setTitle("Borrow History");
 		setSize(800,400);
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		setClosable(true);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocation(170, 10);
 		setResizable(false);
 		setLayout(new BorderLayout(5, 5));;
 		
-		//Panel Atas
+		bth = new BorrowTransactionHandler();
+		
+		// Top Panel
 		JPanel topPanel = new JPanel();
-		topPanel.setLayout(new GridLayout(1, 4, 0, 0));
+		topPanel.setLayout(new GridLayout(1, 4, 10, 10));
 		
-		//Month Label 
+		// Month 
 		JLabel lblMonth = new JLabel("Month");
-		
-		//Month ComboBox
-		JComboBox<Integer> cbMonth = new JComboBox<>(new Integer[] {
-				-1
+		JComboBox<String> cbMonth = new JComboBox<>(new String[] {
+				"-"
 		});
-		for(int i = 1;i<=12;i++) {
-			cbMonth.addItem(i);
+		for(int i = 1; i <= 12; i++) {
+			
+			cbMonth.addItem(Integer.toString(i));
+			
 		}
+		cbMonth.addItemListener(new ItemListener() {
+			
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+					
+					month = cbMonth.getSelectedIndex();
+					refreshAll(month, year);
+					
+				}
+				
+			}
+			
+		});
 		
-		//Year Label
+		// Year
 		JLabel lblYear = new JLabel("Year");
-		
-		//Year ComboBox
-		JComboBox<Integer> cbYear = new JComboBox<>(new Integer[] {
-				-1
+		JComboBox<String> cbYear = new JComboBox<>(new String[] {
+				"-"
 		});
-		//buat nambah tahun di combo box
-		for(int i = 2001;i<=2999;i++) {
-			cbYear.addItem(i);
+		for(int i = 2001; i <= 2999; i++) {
+			
+			cbYear.addItem(Integer.toString(i));
+			
 		}
+		cbYear.addItemListener(new ItemListener() {
+			
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+					
+					year = cbYear.getSelectedIndex() + 2000;
+					refreshAll(month, year);
+					
+				}
+				
+			}
+			
+		});
 		
+		// Add all to the top panel
 		topPanel.add(lblMonth);
 		topPanel.add(cbMonth);
 		topPanel.add(lblYear);
 		topPanel.add(cbYear);
 		
-		int month = cbMonth.getSelectedIndex();
-		int year = cbYear.getSelectedIndex();
+		// Retrieve all borrows
+		List<Borrow> lb = bth.getAcceptStatus(null);
 		
-		String sDate = "01/%02d/%d";
-		sDate = String.format(sDate, month, year);
-		Date date = null;
+		// Mid Panel
+		JPanel midPanel = new JPanel(new GridLayout(1, 2, 0, 0));
 		
-		try {
-			
-			date = new SimpleDateFormat("dd/MM/yyyy").parse(sDate);
-			
-		} catch (Exception e) {
-			
-		}
-		
-		//Panel Tengah
-		JPanel midPanel = new JPanel();
-		midPanel.setLayout(new GridLayout(1, 2, 0, 0));
-		
-		//ListBorrow Panel
-		JPanel listBorrowPanel = new JPanel();
+		// ListBorrow Panel
+		listBorrowPanel = new JPanel(new GridLayout(lb.size(), 1, 5, 5));
 		listBorrowPanel.setBorder(BorderFactory.createLineBorder(Color.black, 2));
 		JScrollPane listBorrowSp = new JScrollPane(listBorrowPanel);
 		midPanel.add(listBorrowSp);
 		
-		//ListBorrowItem Panel
-		JPanel listBorrowItemTempPanel = new JPanel();
+		// ListBorrowItem Panel
+		listBorrowItemTempPanel = new JPanel(new GridLayout(1, 1, 0, 0));
 		listBorrowPanel.setBorder(BorderFactory.createLineBorder(Color.black, 2));
-		listBorrowItemTempPanel.setLayout(new GridLayout(1, 1, 0, 0));
 		JScrollPane listBorrowItemSp = new JScrollPane(listBorrowItemTempPanel);
+		listBorrowItemTempPanel.setVisible(false);
 		midPanel.add(listBorrowItemSp);
 		
-		//Borrow Panel 
-		// TODO: show lb di sini
-		List<Borrow> lb = bth.getAcceptStatus(date);
-		listBorrowPanel.setLayout(new GridLayout(lb.size(), 1, 5, 5));
+		// Borrow Panel 
+		int counter = 1;
 		for (Borrow borrows : lb) {
-			//Borrow Panel
-			JPanel borrowPanelForm = new JPanel();
-			borrowPanelForm.setBorder(BorderFactory.createLineBorder(Color.black, 2));
-			borrowPanelForm.setLayout(new GridLayout(3, 2, 0, 0));
 			
-			//Id Label
-			JLabel lblId = new JLabel(borrows.getId());
+			listBorrowPanel.add(getBorrowView(borrows, counter));
+			counter++;
 			
-			//MemberId Label
-			JLabel lblMemberId = new JLabel(borrows.getMemberId());
-			
-			//Status Label
-			JLabel lblStatus = new JLabel(borrows.getStatus());
-			
-			//BorrowTimestamp Label 
-			JLabel lblBorrowTimestamp = new JLabel(borrows.getBorrowTimestamp());
-			
-			//empty Label
-			JLabel lblEmpty = new JLabel();
-			
-			//Details Button 
-			JButton detailsBtn = new JButton("Details");
-			listBorrowPanel.add(detailsBtn);
-			listBorrowItemTempPanel.setVisible(false);
-			detailsBtn.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					if (!listBorrowItemTempPanel.isVisible()) {
-						listBorrowItemTempPanel.removeAll();
-						listBorrowItemTempPanel.add(getBorrowsItem(borrows));
-						listBorrowItemTempPanel.setVisible(true); //kalau ga nyala, nyalain
-						detailsBtn.setVisible(true);
-					} else {
-						listBorrowItemTempPanel.setVisible(false); //kalau nyala, matiin
-					}
-				}
-			});
-			
-			borrowPanelForm.add(lblId);
-			borrowPanelForm.add(lblBorrowTimestamp);
-			borrowPanelForm.add(lblMemberId);
-			borrowPanelForm.add(detailsBtn);
-			borrowPanelForm.add(lblStatus);
-			borrowPanelForm.add(lblEmpty);
-	
-			listBorrowPanel.add(borrowPanelForm);
 		}
 		
 		add(topPanel, BorderLayout.NORTH);
 		add(midPanel, BorderLayout.CENTER);
 		setVisible(true);
+		
+	}
+	
+	public static ViewBorrowHistoryForm getInstance() {
+		
+		if (instance == null) {
+			instance = new ViewBorrowHistoryForm();
+		}
+		
+		return instance;
+		
+	}
+	
+	public JPanel getBorrowView(Borrow borrow, int counter) {
+		
+		// Borrow Panel
+		JPanel borrowPanelForm = new JPanel();
+		borrowPanelForm.setBorder(BorderFactory.createLineBorder(Color.black, 2));
+		borrowPanelForm.setLayout(new GridLayout(3, 2, 0, 0));
+		
+		// Id Label
+		JLabel lblId = new JLabel(counter + ".");
+		counter++;
+		
+		// MemberId Label
+		JLabel lblUsername = new JLabel("Username: " + SQLGetQuery.getUsernameFromId(borrow.getMemberId()));
+		
+		// Status Label
+		String status = borrow.getStatus();
+		JLabel lblStatus = new JLabel(status);
+		if (status.equals("Pending")) {
+			
+			lblStatus.setForeground(Color.RED);
+			
+		} else {
+			
+			lblStatus.setForeground(Color.GREEN);
+			
+		}
+		
+		// BorrowTimestamp Label 
+		String timeStamp = borrow.getBorrowTimestamp();
+		timeStamp = timeStamp.substring(0, timeStamp.length() - 2);
+		JLabel lblBorrowTimestamp = new JLabel("Borrow time: " + timeStamp);
+		
+		// Details Button 
+		JButton detailsBtn = new JButton("Details");
+		detailsBtn.addMouseListener(new MouseAdapter() {
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				if (!listBorrowItemTempPanel.isVisible()) {
+					
+					refreshListBorrowItem(borrow);
+					
+				} else {
+					
+					listBorrowItemTempPanel.setVisible(false);
+					
+				}
+				
+			}
+			
+		});
+		
+		borrowPanelForm.add(lblId);
+		borrowPanelForm.add(lblBorrowTimestamp);
+		borrowPanelForm.add(lblUsername);
+		borrowPanelForm.add(detailsBtn);
+		borrowPanelForm.add(lblStatus);
+		
+		return borrowPanelForm;
+		
 	}
 
-	//TODO: show lbi di sini
-	public JPanel getBorrowsItem(Borrow b) {
+	public JPanel getBorrowItemView(Borrow borrow) {
 		
-		//ListBorrowItem Panel
-		JPanel listBorrowItemPanel = new JPanel();
+		// Retrieve borrow items for corresponding borrow
+		List<BorrowItem> lbi = bth.getBookItem(borrow.getId());
+		
+		// ListBorrowItem Panel
+		JPanel listBorrowItemPanel = new JPanel(new GridLayout(lbi.size(), 1, 5, 5));
 		listBorrowItemPanel.setBorder(BorderFactory.createLineBorder(Color.black, 2));
 		
-		List<BorrowItem> lbi = bth.getBookItem(b.getId());
-		listBorrowItemPanel.setLayout(new GridLayout(lbi.size(), 1, 5, 5));
-		for (BorrowItem borrowItems : lbi) {
-			//BorrowItem Panel
-			JPanel borrowItemForm = new JPanel();
+		// For each borrow item
+		for (BorrowItem borrowItem : lbi) {
+			
+			// BorrowItem Panel
+			JPanel borrowItemForm = new JPanel(new GridLayout(3, 1, 0, 0));
 			borrowItemForm.setBorder(BorderFactory.createLineBorder(Color.black, 2));
-			borrowItemForm.setLayout(new GridLayout(3, 1, 0, 0));
 			
-			//BookName Label
-			JLabel lblBookName = new JLabel(borrowItems.getBookId());
+			// BookName Label
+			JLabel lblBookName = new JLabel(SQLGetQuery.getBookNameFromId(borrowItem.getBookId()));
 			
-			//ReturnTimestamp Label
-			JLabel lblReturnTimestamp = new JLabel(borrowItems.getReturnTimestamp());
+			// ReturnTimestamp Label
+			String returnTime = borrowItem.getReturnTimestamp();
+			returnTime = returnTime.substring(0, returnTime.length() - 2);
+			if (!new BorrowItem().isBookAlreadyReturn(borrowItem.getId(), borrowItem.getBookId())) {
+				
+				returnTime = "Hasn't returned";
+				
+			}
+			JLabel lblReturnTimestamp = new JLabel("Return time: " + returnTime);
 			
-			//Return Button
+			// Return Button (Membership only)
 			JButton returnBtn = new JButton("Return");
+			returnBtn.setVisible(false);
+			if (SQLGetQuery.getRoleFromUserId(Main.user_id).equals("Membership")) {
+				
+				if (!new BorrowItem().isBookAlreadyReturn(borrowItem.getId(), borrowItem.getBookId())) 
+					returnBtn.setVisible(true);
+				
+			}
 			returnBtn.addMouseListener(new MouseAdapter() {
+				
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					
-					String denda = JOptionPane.showInputDialog(null, "Denda: ", "Konfirmasi Denda");
-					
-					JOptionPane.showMessageDialog(null, "Kembalian anda: ");
-					
-					// TODO: kalau salah satu lbi di klik return keluar ini
-					
-					// Create date
-					Date dateNow = Calendar.getInstance().getTime();  
-			        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");  
-			        String strDate = dateFormat.format(dateNow);
-					
 					HashMap<String, String> inputs = new HashMap<String, String>();
-					inputs.put("id", borrowItems.getId());
-					inputs.put("bookId", borrowItems.getBookId());
-					inputs.put("returnTimestamp", strDate);
+					inputs.put("id", borrowItem.getId());
+					inputs.put("bookId", borrowItem.getBookId());
 					
-//					if (bth.returnBook(inputs) != null) {
-//						
-//						JOptionPane.showMessageDialog(null, "Book is successfully returned");
-//						
-//					}
+					if (bth.returnBook(inputs) != null) {
+						
+						JOptionPane.showMessageDialog(null, "Book is successfully returned");
+						refreshListBorrowItem(borrow);
+						
+					}
+					
 				}
+				
 			});
 			
 			borrowItemForm.add(lblBookName);
@@ -230,7 +285,62 @@ public class ViewBorrowHistoryForm extends JInternalFrame{
 			listBorrowItemPanel.add(borrowItemForm);
 			
 		}
+		
 		return listBorrowItemPanel;
+		
+	}
+	
+	private void refreshAll(int month, int year) {
+		
+		Date date = null;
+		
+		String sDate = "01/%02d/%d";
+		sDate = String.format(sDate, month, year);
+		
+		if (month != 0 || year != 0) {
+			
+			try {
+				
+				date = new SimpleDateFormat("dd/MM/yyyy").parse(sDate);
+				
+			} catch (Exception e2) {
+				
+			}
+			
+		}
+		
+		// Retrieve borrow
+		List<Borrow> lb = bth.getAcceptStatus(date);
+		
+		// Borrow panel
+		listBorrowPanel.setVisible(false);
+		listBorrowPanel.removeAll();
+		
+		listBorrowPanel.setLayout(new GridLayout(lb.size(), 1, 5, 5));
+		
+		int counter = 1;
+		for (Borrow borrows : lb) {
+			
+			listBorrowPanel.add(getBorrowView(borrows, counter));
+			counter++;
+			
+		}
+		listBorrowPanel.setVisible(true);
+		
+		// Borrow item panel
+		listBorrowItemTempPanel.removeAll();
+		listBorrowItemTempPanel.setVisible(false);
+		
+	}
+	
+	
+	private void refreshListBorrowItem(Borrow borrow) {
+		
+		listBorrowItemTempPanel.setVisible(false);
+		listBorrowItemTempPanel.removeAll();
+		listBorrowItemTempPanel.add(getBorrowItemView(borrow));
+		listBorrowItemTempPanel.setVisible(true);
+		
 	}
 
 }

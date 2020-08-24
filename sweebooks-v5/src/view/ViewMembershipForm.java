@@ -1,7 +1,6 @@
 package view;
 
 import java.awt.GridLayout;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JInternalFrame;
@@ -10,55 +9,72 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import controller.MemberHandler;
+import helper.SQLGetQuery;
 import model.Member;
 
+// This is a singleton class
 public class ViewMembershipForm extends JInternalFrame{
 
 	private static final long serialVersionUID = 1L;
+	private static ViewMembershipForm instance = null;
 	
-	public ViewMembershipForm() {
+	private ViewMembershipForm() {
+		
+		// Create UI
 		setResizable(false);
 		setTitle("View Membership Form");
-		setSize(400, 400); //ukuran gui
-		setLocation(160, 10); //start location frame
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE); //biar kalo di close langsung mati
+		setSize(400, 400);
+		setLocation(160, 10);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setVisible(true);
-		setClosable(true);
 		
-		List<Member> lm = new ArrayList<Member>();
-		lm = new MemberHandler().getAll();
+		List<Member> lm = new MemberHandler().getAll();
 		
-		JPanel membershipPanel = new JPanel();
-		membershipPanel.setLayout(new GridLayout(lm.size()+1,0,0,10)); // +1 biar kalau db kosong, grid nya masih ada 1 kolom
-																		// kalau 0 kolom 0 baris, error
+		JPanel membershipPanel = new JPanel(new GridLayout(lm.size() + 1, 0, 0, 10));
 		JScrollPane membershipScrollPane = new JScrollPane(membershipPanel);
 		add(membershipScrollPane);
 		
-//		System.out.println(lm.size());
-		// TODO: show lm here:
+		// For each member
+		int counter = 1;
 		for (Member member : lm) {
-			membershipPanel.add(membershipInfoPanel(member.getId(),member.getId(),member.getAddress(),member.getMemberSince()));
+			
+			membershipPanel.add(membershipInfoPanel(member, counter));
+			counter++;
+			
 		}
 		
 	}
 	
-	private JPanel membershipInfoPanel(String id, String name, String address, String since) {
-		JPanel membershipInfoPanel = new JPanel();
-		membershipInfoPanel.setLayout(new GridLayout(4, 2, 0, 0));
+	private JPanel membershipInfoPanel(Member member, int counter) {
 		
-		JLabel membershipID = new JLabel(id);
+		JPanel membershipInfoPanel = new JPanel(new GridLayout(4, 2, 0, 0));
+		
+		JLabel membershipID = new JLabel(counter + ".");
 		membershipInfoPanel.add(membershipID);
 		
-		JLabel membershipName = new JLabel(name);
-		membershipInfoPanel.add(membershipName);
+		JLabel membershipUsername = new JLabel("Username: " + SQLGetQuery.getUsernameFromId(member.getId()));
+		membershipInfoPanel.add(membershipUsername);
 		
-		JLabel membershipAddress = new JLabel(address);
+		JLabel membershipAddress = new JLabel("<html>Address: <br/>" + member.getAddress() + "</html>");
 		membershipInfoPanel.add(membershipAddress);
 		
-		JLabel membershipSince = new JLabel(since);
+		String memberSince = member.getMemberSince();
+		memberSince = memberSince.substring(0, memberSince.length() - 2);
+		JLabel membershipSince = new JLabel("Member since: " + memberSince);
 		membershipInfoPanel.add(membershipSince);
 		
 		return membershipInfoPanel;
+		
+	}
+	
+	public static ViewMembershipForm getInstance() {
+		
+		if (instance == null) {
+			instance = new ViewMembershipForm();
+		}
+		
+		return instance;
+		
 	}
 
 }

@@ -16,6 +16,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import controller.UserHandler;
 import helper.SQLGetQuery;
 import helper.Validation;
 import view.CreateMembershipForm;
@@ -24,9 +25,6 @@ public class LoginForm extends JFrame{
 
 	private static final long serialVersionUID = 1L;
 	
-	private JTextField usernameField;
-	private JPasswordField passwordField;
-
 	public LoginForm() {
 		
 		// Create UI
@@ -85,16 +83,15 @@ public class LoginForm extends JFrame{
 				
 				// Retrieve user name and password from text field
 				String username = usernameField.getText();
-				char[] passwordTemp = passwordField.getPassword();
-				String password = new String(passwordTemp);
+				String password = new String(passwordField.getPassword());
 				
 				// Validate is user name and password match
 				if (Validation.validateLogin(username, password)) {
 					
 					dispose();
 					
-					String role = SQLGetQuery.getRoleFromUsername(username);
-					Main.user_id = SQLGetQuery.getIdFromUsername(username);
+					Main.user_id = new UserHandler().getByUsername(username).getId();
+					String role = SQLGetQuery.getRoleFromUserId(Main.user_id);
 					
 					if (role.equals("Administrator")) {
 						
@@ -125,6 +122,7 @@ public class LoginForm extends JFrame{
 				}
 				
 			}
+			
 		});
 		
 		// For Create Membership Button

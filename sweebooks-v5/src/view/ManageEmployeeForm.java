@@ -1,6 +1,5 @@
 package view;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -18,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -25,72 +25,85 @@ import java.awt.event.MouseEvent;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 
+// This is a singleton class
 public class ManageEmployeeForm extends JInternalFrame{
 
 	private static final long serialVersionUID = 1L;
+	private static ManageEmployeeForm instance = null;
+	
+	private EmployeeHandler eh;
+	private JPanel listEmployeePanel;
+	private JTextField nameTextField;
+	private JTextField usernameTextField;
+	private JTextField salaryTextField;
 
-	public ManageEmployeeForm() {
+	private ManageEmployeeForm() {
 		
+		// Create UI
+		setLayout(new GridLayout(1, 2, 0, 0));
 		setResizable(false);
 		setTitle("Manage Employee Form");
-		setSize(800, 400); //ukuran gui
-		setLocation(160, 10); //start location frame
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE); //biar kalo di close langsung mati
+		setSize(800, 400);
+		setLocation(160, 10);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setVisible(true);
-		setClosable(true);
-		setLayout(new GridLayout(1, 2, 0, 0)); //layout 1 row, 2 kolom
 		
-		EmployeeHandler eh = new EmployeeHandler();
+		eh = new EmployeeHandler();
 		
-	//--------- PANEL KIRI -------------------------------
-	// Bagian List Employee
-		List<Employee> le = new ArrayList<Employee>();
-		le = eh.getAll();
-		// TODO: show le here
-		JPanel listEmployeePanel = new JPanel();
-		listEmployeePanel.setLayout(new GridLayout(10,0,0,10)); //row sebanyak jumlah employee
+		// Retrieve all employee
+		List<Employee> le = eh.getAll();
+		
+		// List Employee (left)
+		listEmployeePanel = new JPanel(new GridLayout(le.size() + 1, 0, 0, 10));
 		JScrollPane listEmployeeScrollPane = new JScrollPane(listEmployeePanel,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		add(listEmployeeScrollPane);
+		
+		// For each employee
+		listEmployeePanel.add(new JLabel("Employees:"));
+		int counter = 1;
 		for (Employee employee : le) {
-			String employeeRole = SQLGetQuery.getRoleFromUserId(employee.getId());
-//			System.out.println(employeeRole);
-			listEmployeePanel.add(employeeListInfo(employeeRole, employee.getId(),employee.getId(),employee.getStatus()));
-			//harusnya employeeListInfo(JPanel, Role, ID, NAMA, Status ) , Role buat nentuin button fire & accept visible atau invisible
+			
+			listEmployeePanel.add(employeeListInfo(employee, counter));
+			counter++;
+			
 		}
-	//----------------------------------------------------
 		
-	//-------- PANEL KANAN --------------------------------
-		JPanel kananPanel = new JPanel();
-		kananPanel.setLayout(new GridLayout(2,1,0,0)); // panel yang paling besar di kanan, row 2 karna ada 2 bagian
-		add(kananPanel);
+		// Right panel (list role and add new employee)
+		JPanel rightPanel = new JPanel(new GridLayout(2, 1, 0, 0));
+		add(rightPanel);
 		
-	// Bagian List Role
-		List<Role> lr = new ArrayList<Role>();
-		lr = new RoleHandler().getAll();
-		// TODO: show lr here
-		JPanel listRolePanel = new JPanel(); // panel buat list role
-		listRolePanel.setLayout(new GridLayout(10,0,0,10)); //row sebanyak role, 1 column, 0 hgap, 10 vertical gap (jarak kotak ke kotak lain)
+		// Retrieve all role
+		List<Role> lr = new RoleHandler().getAll();
+		
+		// List role
+		JPanel listRolePanel = new JPanel(new GridLayout(lr.size() + 1, 0, 0, 10));
 		JScrollPane listRoleScrollPane = new JScrollPane(listRolePanel);
-		kananPanel.add(listRoleScrollPane);
+		rightPanel.add(listRoleScrollPane);
 		
+		listRolePanel.add(new JLabel("Role List:"));
+		
+		// For each role
 		for (Role role : lr) {
-			JLabel roleLabel = new JLabel(role.getId()); // label yg isi text nya role.getId
+			
+			JLabel roleLabel = new JLabel(role.getName());
 			listRolePanel.add(roleLabel);
+			
 		}
 		
-	// nanti ada textfield name, username, gender, salary, role(ourchasing, admin, human capital)
-		JPanel addEmployeePanel = new JPanel();
-		addEmployeePanel.setLayout(new GridLayout(6,2,0,10)); //7 row, 2 kolom
-		kananPanel.add(addEmployeePanel);
+		// Add employee panel
+		JPanel addEmployeePanel = new JPanel(new GridLayout(6,2,0,10));
+		rightPanel.add(addEmployeePanel);
 		
 		JLabel nameLabel = new JLabel("Name");
 		addEmployeePanel.add(nameLabel);
-		JTextField nameTextField = new JTextField();
+		
+		nameTextField = new JTextField();
 		addEmployeePanel.add(nameTextField);
 		
 		JLabel usernameLabel = new JLabel("Username");
 		addEmployeePanel.add(usernameLabel);
-		JTextField usernameTextField = new JTextField();
+		
+		usernameTextField = new JTextField();
 		addEmployeePanel.add(usernameTextField);
 		
 		JLabel genderLabel = new JLabel("Gender");
@@ -101,7 +114,8 @@ public class ManageEmployeeForm extends JInternalFrame{
 		
 		JLabel salaryLabel = new JLabel("Salary");
 		addEmployeePanel.add(salaryLabel);
-		JTextField salaryTextField = new JTextField();
+		
+		salaryTextField = new JTextField();
 		addEmployeePanel.add(salaryTextField);
 		
 		JLabel roleLabel = new JLabel("Role");
@@ -113,24 +127,26 @@ public class ManageEmployeeForm extends JInternalFrame{
 		JButton addButton = new JButton("Add New Employee");
 		addEmployeePanel.add(addButton);
 		
-	// TODO: kalau tombol add new employee diteken execute this:
 		addButton.addMouseListener(new MouseAdapter() {
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				
 				HashMap<String, String> inputs = new HashMap<String, String>();
+				
 				inputs.put("name", nameTextField.getText());
 				inputs.put("username", usernameTextField.getText());
-				inputs.put("gender", (String)genderComboBox.getSelectedItem());
-				inputs.put("roleId", salaryTextField.getText());
-				inputs.put("salary", (String)roleComboBox.getSelectedItem());
+				inputs.put("gender", (String) genderComboBox.getSelectedItem());
+				inputs.put("roleId", SQLGetQuery.getRoleIdFromRoleName((String) roleComboBox.getSelectedItem()));
+				inputs.put("salary", salaryTextField.getText());
 				
 				if (SQLGetQuery.getRoleFromUserId(Main.user_id).equals("Manager")) {
 					
 					if (eh.createWithActiveStatus(inputs) != null) {
 						
 						JOptionPane.showMessageDialog(null, "Employee successfully created");
+						refreshEmployeeList();
+						refreshInputPanel();
 						
 					}
 					
@@ -140,90 +156,156 @@ public class ManageEmployeeForm extends JInternalFrame{
 						
 						JOptionPane.showMessageDialog(null, "Employee successfully created\n"
 								+ "It needs an approval from manager to be an active employee");
+						refreshEmployeeList();
+						refreshInputPanel();
 						
 					}
 					
 				}
+				
 			}
 		
 		});
 	}
 	
-	private JPanel employeeListInfo(String role, String id, String name, String status) {
-		JPanel employeeInfo = new JPanel();
-		employeeInfo.setLayout(new GridLayout(3, 2, 0, 0));
+	public static ManageEmployeeForm getInstance() {
 		
-		JLabel idLabel = new JLabel(id);
+		if (instance == null) {
+			instance = new ManageEmployeeForm();
+		}
+		
+		return instance;
+		
+	}
+	
+	private JPanel employeeListInfo(Employee employee, int counter) {
+		
+		String id = employee.getId();
+		String role = SQLGetQuery.getRoleFromUserId(employee.getId());
+		String status = employee.getStatus();
+		
+		JPanel employeeInfo = new JPanel(new GridLayout(3, 2, 0, 0));
+		
+		JLabel idLabel = new JLabel(counter + ".");
 		employeeInfo.add(idLabel);
+		
+		JLabel nameLabel = new JLabel(SQLGetQuery.getNameFromUserId(id));
+		employeeInfo.add(nameLabel);
+		
+		JLabel roleLabel = new JLabel(role);
+		employeeInfo.add(roleLabel);
 		
 		JButton fireButton = new JButton("Fire");
 		employeeInfo.add(fireButton);
 		
-		JLabel nameLabel = new JLabel(name);
-		employeeInfo.add(nameLabel);
+		JLabel statusLabel = new JLabel(status);
+		if (status.equals("Active")) {
+			
+			statusLabel.setForeground(Color.GREEN);
+			
+		} else if (status.equals("Pending")) {
+			
+			statusLabel.setForeground(Color.RED);
+			
+		} else {
+			
+			statusLabel.setForeground(Color.GRAY);
+
+		}
+		employeeInfo.add(statusLabel);
 		
 		JButton acceptButton = new JButton("Accept");
 		employeeInfo.add(acceptButton);
 		
-		JLabel statusLabel = new JLabel(status);
-		employeeInfo.add(statusLabel);
+		fireButton.setVisible(false);
+		acceptButton.setVisible(false);
 		
-		if (role == "Manager") {
-			fireButton.setVisible(true);
-			acceptButton.setVisible(true);
-		} else {
-			fireButton.setVisible(false);
-			acceptButton.setVisible(false);
+		if (SQLGetQuery.getRoleFromUserId(Main.user_id).equals("Manager")) {
+			
+			if (status.equals("Active")) fireButton.setVisible(true);
+			if (status.equals("Pending")) acceptButton.setVisible(true);
+			
 		}
 		
-		EmployeeHandler eh = new EmployeeHandler();
-		Employee em = new Employee();
-		// kalau role nya skrg human capital tombol fire dan accept ga muncul
-		
-		// TODO: kalau salah satu employee diteken dan tekan fire employee akan execute this:
-		// keluar confirmation dialog dulu ya apakah setuju
 		fireButton.addMouseListener(new MouseAdapter() {
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				int result = JOptionPane.showConfirmDialog(null,"Are you sure ?");
+				
+				int result = JOptionPane.showConfirmDialog(null, "Are you sure to fire this employee?");
+				
 	            if(result == JOptionPane.YES_OPTION){
-	            	if (eh.firedEmployee(em.getId()) != null) {
+	            	
+	            	if (eh.firedEmployee(employee.getId()) != null) {
+	            		
 	        			JOptionPane.showMessageDialog(null, "Employee is successfully fired");
-	        		} else {
-	        			JOptionPane.showMessageDialog(null, "Employee is not fired");
+	        			refreshEmployeeList();
+	        			
 	        		}
-	            } else if (result == JOptionPane.NO_OPTION){
-	            	JOptionPane.showMessageDialog(null, "Employee is not fired");
-	            }
+	            	
+	            } 
+	            
 			}
 			
 		});
 		
-		// TODO: kalau salah satu employee diteken dan tekan accept employee request akan exeucte this:
-		// keluar confirmation dialog dul uya apakah setuju
 		acceptButton.addMouseListener(new MouseAdapter() {
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				int result = JOptionPane.showConfirmDialog(null,"Are you sure ?");
 				
-	            if(result == JOptionPane.YES_OPTION){
-	            	if (eh.acceptEmployee(em.getId()) != null) {
+				int result = JOptionPane.showConfirmDialog(null, "Are you sure to accept this employee?");
+				
+	            if (result == JOptionPane.YES_OPTION){
+	            	
+	            	if (eh.acceptEmployee(employee.getId()) != null) {
+	            		
 	        			JOptionPane.showMessageDialog(null, "Employee is successfully accepted\n"
 	        					+ "Now the employee's status is \"active\"");
-	        		} else {
-	        			JOptionPane.showMessageDialog(null, "Employee is not Accepted");
+	        			refreshEmployeeList();
+	        			
 	        		}
-	            } else if (result == JOptionPane.NO_OPTION){
-	            	JOptionPane.showMessageDialog(null, "Employee is not Accepted");
+	            	
 	            }
+	            
 			}
 			
 		});
 		
 		return employeeInfo;
+		
+	}
+	
+	private void refreshEmployeeList() {
+		
+		listEmployeePanel.setVisible(false);
+		listEmployeePanel.removeAll();
+		
+		// Retrieve all employee
+		List<Employee> le = eh.getAll();
+		
+		listEmployeePanel.setLayout(new GridLayout(le.size() + 1, 0, 0, 10));
+		
+		// For each employee
+		listEmployeePanel.add(new JLabel("Employees:"));
+		int counter = 1;
+		for (Employee employee : le) {
+			
+			listEmployeePanel.add(employeeListInfo(employee, counter));
+			counter++;
+			
+		}
+		
+		listEmployeePanel.setVisible(true);
+		
+	}
+	
+	private void refreshInputPanel() {
+		
+		nameTextField.setText("");
+		usernameTextField.setText("");
+		salaryTextField.setText("");
+		
 	}
 
 }
-

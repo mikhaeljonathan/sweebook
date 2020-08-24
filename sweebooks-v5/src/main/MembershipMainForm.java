@@ -1,11 +1,8 @@
 package main;
 
-
 import controller.BookHandler;
 import controller.BorrowBookHandler;
 import controller.BorrowTransactionHandler;
-import view.ManageGenreForm;
-
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -18,9 +15,8 @@ public class MembershipMainForm extends JFrame{
 
 	public MembershipMainForm() {
 		
-		// Create UI
 		setTitle("Membership Main Form");
-		getContentPane().setLayout(null);
+		setLayout(null);
 		setSize(1000, 500);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -35,8 +31,9 @@ public class MembershipMainForm extends JFrame{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				
+				removeInternalFrames();
 				add(new BorrowBookHandler().showBorrowBookForm());
-				
+			    
 			 }
 			
 		});
@@ -50,6 +47,7 @@ public class MembershipMainForm extends JFrame{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				
+				removeInternalFrames();
 				add(new BookHandler().showViewBookForm());
 				
 			}
@@ -65,6 +63,7 @@ public class MembershipMainForm extends JFrame{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				
+				removeInternalFrames();
 				add(new BorrowTransactionHandler().showBorrowForm());
 				
 			}
@@ -80,10 +79,40 @@ public class MembershipMainForm extends JFrame{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				
+				removeInternalFrames();
 				add(new BorrowTransactionHandler().showBorrowHistoryForm());
 				
 			}
 			
 		});
+		
+		// Logout Button
+		JButton logoutBtn = new JButton("Log Out");
+		logoutBtn.setBounds(10, 283, 140, 35);
+		add(logoutBtn);
+		logoutBtn.addMouseListener(new MouseAdapter() {
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				removeInternalFrames();
+				dispose();
+				Main.user_id = null;
+				new LoginForm();
+				
+			}
+			
+		});
+		
 	}
+	
+	private void removeInternalFrames() {
+		
+		remove(new BorrowBookHandler().showBorrowBookForm());
+		remove(new BookHandler().showViewBookForm());
+		remove(new BorrowTransactionHandler().showBorrowForm());
+		remove(new BorrowTransactionHandler().showBorrowHistoryForm());
+		
+	}
+	
 }

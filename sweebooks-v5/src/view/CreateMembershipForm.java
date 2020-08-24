@@ -1,17 +1,12 @@
 package view;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.HashMap;
 
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -25,8 +20,9 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import controller.MemberHandler;
+import controller.UserHandler;
+import main.Main;
 import main.MembershipMainForm;
-import model.Member;
 
 public class CreateMembershipForm extends JFrame{
 	
@@ -109,7 +105,6 @@ public class CreateMembershipForm extends JFrame{
 	
 	private void handleCreateMembershipInput() {
 		
-		MemberHandler mh = new MemberHandler();
 		HashMap<String, String> inputs = new HashMap<String, String>();
 		
 		// Retrieve attributes
@@ -117,8 +112,7 @@ public class CreateMembershipForm extends JFrame{
 		String gender = genreComboBox.getSelectedItem().toString();
 		String address = addressField.getText();
 		String username = usernameField.getText();
-		char[] passwordTemp = passwordField.getPassword();
-		String password = new String(passwordTemp);
+		String password = new String(passwordField.getPassword());
 		
 		// Put all the text in input field to the HashMap
 		inputs.put("name", name);
@@ -129,9 +123,10 @@ public class CreateMembershipForm extends JFrame{
 		// Actor who handle create membership use case always "membership"
 		inputs.put("role", "Membership"); 
 		
-		if (mh.createMembership(inputs) != null) {
+		if (new MemberHandler().createMembership(inputs) != null) {
 			
 			JOptionPane.showMessageDialog(null, "Membership is sucessfully created");
+			Main.user_id = new UserHandler().getByUsername(username).getId();
 			
 			dispose();
 			new MembershipMainForm();
