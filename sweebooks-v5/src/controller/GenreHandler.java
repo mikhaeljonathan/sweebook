@@ -22,6 +22,12 @@ public class GenreHandler {
 		
 	}
 	
+	public void unshowManageGenreForm() {
+		
+		ManageGenreForm.getInstance().destroy();
+		
+	}
+	
 	public List<Genre> getAll() {
 		
 		return new Genre().all();		

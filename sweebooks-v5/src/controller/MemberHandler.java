@@ -35,6 +35,12 @@ public class MemberHandler {
 		
 	}
 	
+	public void unshowViewMembershipForm() {
+		
+		ViewMembershipForm.getInstance().destroy();
+		
+	}
+	
 	public List<Member> getAll(){ 
 		
 		return new Member().all();
@@ -80,7 +86,7 @@ public class MemberHandler {
 		// Retrieve the attributes
 		String name = inputs.get("name");
 		String gender = inputs.get("gender");
-		String username = inputs.get("username");
+		String username = inputs.get("username").toLowerCase();
 		String password = inputs.get("password");
 		
 		// Create User object with corresponding attributes

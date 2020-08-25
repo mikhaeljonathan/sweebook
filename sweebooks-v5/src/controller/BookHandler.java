@@ -14,6 +14,7 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 
 import helper.CheckInput;
+import helper.Validation;
 import model.Book;
 import model.Genre;
 import view.ManageBookForm;
@@ -31,9 +32,21 @@ public class BookHandler {
 		
 	}
 	
+	public void unshowViewBookForm() {
+		
+		ViewBookForm.getInstance().destroy();
+		
+	}
+	
 	public JInternalFrame showManageBookForm() {
 		
 		return ManageBookForm.getInstance();
+		
+	}
+	
+	public void unshowManageBookForm() {
+		
+		ManageBookForm.getInstance().destroy();
 		
 	}
 	
@@ -108,7 +121,17 @@ public class BookHandler {
 	
 	public boolean delete(String id) {
 		
-		return new Book(id, "", "", "", 0).delete();
+		if (!Validation.isBookInUnreturnedBorrowItem(id)) {
+			
+			return new Book(id, "", "", "", 0).delete();
+			
+		} else {
+			
+			JOptionPane.showMessageDialog(null, "The book is still in the borrow list and hasn't returned yet");
+			return false;
+			
+		}
+		
 		
 	}
 	

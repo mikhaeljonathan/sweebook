@@ -13,6 +13,8 @@ import javax.swing.JScrollPane;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -28,6 +30,7 @@ public class ManageGenreForm extends JInternalFrame{
 	
 	private GenreHandler gh;
 	private JPanel genreListPanel;
+	private JTextField genreNameTextField;
 
 	private ManageGenreForm() {
 		
@@ -39,6 +42,21 @@ public class ManageGenreForm extends JInternalFrame{
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setVisible(true);
 		
+		KeyAdapter keyAdapter = new KeyAdapter() {
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+				
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					
+					createGenre();
+					
+				}
+				
+			}
+			
+		};
+		
 		gh = new GenreHandler();
 		
 		JPanel inputGenrePanel = new JPanel();
@@ -47,7 +65,8 @@ public class ManageGenreForm extends JInternalFrame{
 		JLabel genreNameLabel = new JLabel("Genre Name");
 		inputGenrePanel.add(genreNameLabel);
 		
-		JTextField genreNameTextField = new JTextField();
+		genreNameTextField = new JTextField();
+		genreNameTextField.addKeyListener(keyAdapter);
 		genreNameTextField.setColumns(20);
 		inputGenrePanel.add(genreNameTextField);
 		
@@ -75,15 +94,7 @@ public class ManageGenreForm extends JInternalFrame{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				
-				HashMap<String, String> inputs = new HashMap<String, String>();
-				inputs.put("type", genreNameTextField.getText());
-				
-				if (gh.insert(inputs) != null) {
-					
-					JOptionPane.showMessageDialog(null, "Genre successfully created");
-					refreshListGenre();
-					
-				}
+				createGenre();
 				
 			}
 			
@@ -105,6 +116,20 @@ public class ManageGenreForm extends JInternalFrame{
 		
 		setVisible(false);
 		instance = null;
+		
+	}
+	
+	private void createGenre() {
+		
+		HashMap<String, String> inputs = new HashMap<String, String>();
+		inputs.put("type", genreNameTextField.getText());
+		
+		if (gh.insert(inputs) != null) {
+			
+			JOptionPane.showMessageDialog(null, "Genre successfully created");
+			refreshListGenre();
+			
+		}
 		
 	}
 	

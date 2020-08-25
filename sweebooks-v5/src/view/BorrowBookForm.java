@@ -114,7 +114,7 @@ public class BorrowBookForm extends JInternalFrame{
 				if (bbh.borrowBook()) {
 					
 					JOptionPane.showMessageDialog(null, "Success borrow book(s).");
-					new BorrowBookHandler().removeAllCart();
+					bbh.removeAllCart();
 					unshowCart();
 					refreshListBookPanel();
 					
@@ -139,6 +139,7 @@ public class BorrowBookForm extends JInternalFrame{
 	public void destroy() {
 		
 		setVisible(false);
+		bbh.removeAllCart();
 		instance = null;
 		
 	}

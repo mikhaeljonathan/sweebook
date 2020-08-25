@@ -26,12 +26,25 @@ public class BorrowTransactionHandler {
 	public JInternalFrame showBorrowForm() {
 		
 		return ViewBorrowForm.getInstance();
+		
+	}
+	
+	public void unshowBorrowForm() {
+		
+		ViewBorrowForm.getInstance().destroy();
+
 	}
 	
 	public JInternalFrame showBorrowHistoryForm() {
 		
 		return ViewBorrowHistoryForm.getInstance();
 		
+	}
+	
+	public void unshowBorrowHistoryForm() {
+		
+		ViewBorrowHistoryForm.getInstance().destroy();
+
 	}
 	
 	public List<Borrow> getPendingStatus(boolean isOnlyCurrentMember){

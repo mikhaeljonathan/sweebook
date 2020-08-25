@@ -86,7 +86,7 @@ public class ViewBorrowHistoryForm extends JInternalFrame{
 		JComboBox<String> cbYear = new JComboBox<>(new String[] {
 				"-"
 		});
-		for(int i = 2001; i <= 2999; i++) {
+		for(int i = 2001; i <= 2020; i++) {
 			
 			cbYear.addItem(Integer.toString(i));
 			
@@ -193,8 +193,8 @@ public class ViewBorrowHistoryForm extends JInternalFrame{
 		
 		// BorrowTimestamp Label 
 		String timeStamp = borrow.getBorrowTimestamp();
-		timeStamp = timeStamp.substring(0, timeStamp.length() - 2);
-		JLabel lblBorrowTimestamp = new JLabel("Borrow time: " + timeStamp);
+		timeStamp = timeStamp.substring(0, timeStamp.length() - 11);
+		JLabel lblBorrowTimestamp = new JLabel("Borrow date: " + timeStamp);
 		
 		// Details Button 
 		JButton detailsBtn = new JButton("Details");

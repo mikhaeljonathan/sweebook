@@ -1,20 +1,26 @@
 package main;
 
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Calendar;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 import controller.BookHandler;
 import controller.GenreHandler;
-import view.ManageBookForm;
-import view.ManageGenreForm;
-import view.ViewBookForm;
+import helper.SQLGetQuery;
 
 public class PurchasingMainForm extends JFrame{
 
 	private static final long serialVersionUID = 1L;
+	
+	private GenreHandler gh;
+	private BookHandler bh;
+	private JLabel welcomeLabel;
 	
 	public PurchasingMainForm() {
 		
@@ -25,6 +31,10 @@ public class PurchasingMainForm extends JFrame{
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
+		setVisible(true);
+		
+		gh = new GenreHandler();
+		bh = new BookHandler();
 		
 		// Manage Genre Button
 		JButton manageGenreBtn = new JButton("Manage Genre");
@@ -36,7 +46,7 @@ public class PurchasingMainForm extends JFrame{
 			public void mouseClicked(MouseEvent e) {
 				
 				removeInternalFrames();
-				add(new GenreHandler().showManageGenreForm());
+				add(gh.showManageGenreForm());
 				
 			}
 			
@@ -52,7 +62,7 @@ public class PurchasingMainForm extends JFrame{
 			public void mouseClicked(MouseEvent e) {
 				
 				removeInternalFrames();
-				add(new BookHandler().showManageBookForm());
+				add(bh.showManageBookForm());
 				
 			}
 			
@@ -68,7 +78,7 @@ public class PurchasingMainForm extends JFrame{
 			public void mouseClicked(MouseEvent e) {
 				
 				removeInternalFrames();
-				add(new BookHandler().showViewBookForm());
+				add(bh.showViewBookForm());
 				
 			}
 			
@@ -92,15 +102,38 @@ public class PurchasingMainForm extends JFrame{
 			
 		});
 		
-		setVisible(true);
+		// Welcome Label
+		Calendar cal = Calendar.getInstance();
+		int hour = cal.get(Calendar.HOUR_OF_DAY);
+		String time = "morning";
+		if (hour > 11 && hour < 18) {
+			
+			time = "afternoon";
+			
+		} else if (hour < 22) {
+			
+			time = "evening";
+			
+		} else if (hour <= 24){
+			
+			time = "night";
+			
+		}
+		welcomeLabel = new JLabel("<HTML>Good " + time + ", " + SQLGetQuery.getNameFromUserId(Main.user_id) + "!"
+				+ "<br/><br/>You can manage books and genres here!");
+		welcomeLabel.setBounds(200, 10, 800, 300);
+		welcomeLabel.setPreferredSize(new Dimension(400, 50));
+		welcomeLabel.setFont(new Font("Times New Roman", Font.BOLD, 30));
+		add(welcomeLabel);
 		
 	}
 
 	public void removeInternalFrames() {
 		
-		ManageGenreForm.getInstance().destroy();
-		ManageBookForm.getInstance().destroy();
-		ViewBookForm.getInstance().destroy();
+		welcomeLabel.setVisible(false);
+		gh.unshowManageGenreForm();
+		bh.unshowManageBookForm();
+		bh.unshowViewBookForm();
 		
 	}
 	

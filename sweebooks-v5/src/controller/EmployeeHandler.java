@@ -23,6 +23,12 @@ public class EmployeeHandler {
 		
 	}
 	
+	public void unshowManageEmployeeForm() {
+		
+		ManageEmployeeForm.getInstance().destroy();
+		
+	}
+	
 	public List<Employee> getAll(){
 		
 		return new Employee().all();
@@ -60,7 +66,7 @@ public class EmployeeHandler {
 		
 		inputs.put("status", "Pending");
 		
-		if (Validation.validateEmployee(inputs)) {
+		if (Validation.validateEmployeeInput(inputs)) {
 			
 			String password = generatePassword(inputs.get("username"));
 			inputs.put("password", password);
@@ -89,7 +95,7 @@ public class EmployeeHandler {
 		
 		inputs.put("status", "Active");
 		
-		if (Validation.validateEmployee(inputs)) {
+		if (Validation.validateEmployeeInput(inputs)) {
 			
 			String password = generatePassword(inputs.get("username"));
 			inputs.put("password", password);

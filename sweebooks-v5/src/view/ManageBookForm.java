@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -31,6 +33,7 @@ public class ManageBookForm extends JInternalFrame{
 	
 	private BookHandler bh;
 	private JPanel listBookTempPanel;
+	private JTextField isbnField;
 	
 	public ManageBookForm() {
 	
@@ -44,6 +47,21 @@ public class ManageBookForm extends JInternalFrame{
 		setResizable(false);
 		setLayout(new BorderLayout(5, 5));
 		
+		KeyAdapter keyAdapter = new KeyAdapter() {
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+				
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					
+					restockBook();
+					
+				}
+				
+			}
+			
+		};
+		
 		// Top Panel
 		JPanel topPanel = new JPanel(new BorderLayout(5, 5));
 		
@@ -51,7 +69,8 @@ public class ManageBookForm extends JInternalFrame{
 		JLabel isbnTitle = new JLabel("ISBN : ");
 		
 		// ISBN TextField
-		JTextField isbnField = new JTextField();
+		isbnField = new JTextField();
+		isbnField.addKeyListener(keyAdapter);
 		
 		// RestockBook Button
 		JButton restockBookBtn = new JButton("Restock");
@@ -60,13 +79,7 @@ public class ManageBookForm extends JInternalFrame{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				
-				String isbn = isbnField.getText();
-				if (bh.restockBook(isbn) != null) {
-					
-					JOptionPane.showMessageDialog(null, "Book successfully restocked");
-					refreshListBookPanel();
-					
-				}
+				restockBook();
 				
 			}
 			
@@ -171,7 +184,7 @@ public class ManageBookForm extends JInternalFrame{
 		JLabel lblIsbn = new JLabel("ISBN: " + book.getIsbn());
 		
 		// quantity Label
-		JLabel lblQuantity = new JLabel("Quantity: " + book.getQuantity());
+		JLabel lblQuantity = new JLabel("Stock: " + book.getQuantity());
 		
 		// delete Button
 		JButton deleteBtn = new JButton("Delete");
@@ -204,6 +217,18 @@ public class ManageBookForm extends JInternalFrame{
 		bookPanelForm.add(deleteBtn);
 		
 		return bookPanelForm;
+		
+	}
+	
+	private void restockBook() {
+		
+		String isbn = isbnField.getText();
+		if (bh.restockBook(isbn) != null) {
+			
+			JOptionPane.showMessageDialog(null, "Book successfully restocked");
+			refreshListBookPanel();
+			
+		}
 		
 	}
 	

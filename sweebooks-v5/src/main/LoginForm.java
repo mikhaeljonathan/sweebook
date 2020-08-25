@@ -4,35 +4,54 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import controller.MemberHandler;
 import controller.UserHandler;
 import helper.SQLGetQuery;
 import helper.Validation;
-import view.CreateMembershipForm;
 
 public class LoginForm extends JFrame{
 
 	private static final long serialVersionUID = 1L;
 	
+	private JTextField usernameField;
+	private JPasswordField passwordField;
+	
 	public LoginForm() {
 		
 		// Create UI
-		setTitle("Welcome to Sweebook Library");
+		setTitle("Sweebook Library");
 		setSize(500, 250);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setResizable(false);
+		
+		KeyAdapter keyAdapter = new KeyAdapter() {
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+				
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					
+					handleLogin();
+					
+				}
+				
+			}
+			
+		};
 		
 		// Title
 		JLabel title = new JLabel("Welcome to Sweebook Library", JLabel.CENTER);
@@ -41,9 +60,12 @@ public class LoginForm extends JFrame{
 		
 		// Login Panel
 		JLabel usernameLbl = new JLabel("Username");
-		JTextField usernameField = new JTextField();
+		usernameField = new JTextField();
+		usernameField.addKeyListener(keyAdapter);
+		
 		JLabel passwordLbl = new JLabel("Password");
-		JPasswordField passwordField = new JPasswordField();
+		passwordField = new JPasswordField();
+		passwordField.addKeyListener(keyAdapter);
 		
 		JPanel fieldPanel = new JPanel(new GridLayout(2, 2, 5, 5));
 		fieldPanel.add(usernameLbl);
@@ -76,67 +98,69 @@ public class LoginForm extends JFrame{
 		setVisible(true);
 		
 		// Back end
-		loginBtn.addActionListener(new ActionListener() {
+		loginBtn.addMouseListener(new MouseAdapter() {
 			
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void mouseClicked(MouseEvent e) {
 				
-				// Retrieve user name and password from text field
-				String username = usernameField.getText();
-				String password = new String(passwordField.getPassword());
-				
-				// Validate is user name and password match
-				if (Validation.validateLogin(username, password)) {
-					
-					dispose();
-					
-					Main.user_id = new UserHandler().getByUsername(username).getId();
-					String role = SQLGetQuery.getRoleFromUserId(Main.user_id);
-					
-					if (role.equals("Administrator")) {
-						
-						new AdministratorMainForm();
-						
-					} else if (role.equals("Human Capital")) {
-						
-						new HumanCapitalMainForm();
-						
-					} else if (role.equals("Manager")) {
-						
-						new ManagerMainForm();
-						
-					} else if (role.equals("Membership")) {
-						
-						new MembershipMainForm();
-						
-					} else { // Purchasing
-						
-						new PurchasingMainForm();
-						
-					}
-					
-				} else {
-					
-					JOptionPane.showMessageDialog(null, "Username and password don't match");
-					
-				}
+				handleLogin();
 				
 			}
 			
 		});
 		
 		// For Create Membership Button
-		createMembershipBtn.addActionListener(new ActionListener() {
+		createMembershipBtn.addMouseListener(new MouseAdapter() {
 			
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void mouseClicked(MouseEvent e) {
 				
 				dispose();
-				new CreateMembershipForm();
+				new MemberHandler().showCreateMembershipForm();
 				
 			}
 			
 		});
+		
+	}
+	
+	private void handleLogin() {
+		
+		// Retrieve user name and password from text field
+		String username = usernameField.getText();
+		String password = new String(passwordField.getPassword());
+		
+		// Validate is user name and password match
+		if (Validation.validateLogin(username, password)) {
+			
+			dispose();
+			
+			Main.user_id = new UserHandler().getByUsername(username).getId();
+			String role = SQLGetQuery.getRoleFromUserId(Main.user_id);
+			
+			if (role.equals("Administrator")) {
+				
+				new AdministratorMainForm();
+				
+			} else if (role.equals("Human Capital")) {
+				
+				new HumanCapitalMainForm();
+				
+			} else if (role.equals("Manager")) {
+				
+				new ManagerMainForm();
+				
+			} else if (role.equals("Membership")) {
+				
+				new MembershipMainForm();
+				
+			} else { // Purchasing
+				
+				new PurchasingMainForm();
+				
+			}
+			
+		}
 		
 	}
 	

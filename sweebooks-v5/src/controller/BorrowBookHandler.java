@@ -29,6 +29,12 @@ public class BorrowBookHandler {
 		
 	}
 	
+	public void unshowBorrowBookForm() {
+		
+		BorrowBookForm.getInstance().destroy();
+		
+	}
+	
 	public List<Book> getCart(){
 		
 		List<Book> lb = new ArrayList<Book>();
