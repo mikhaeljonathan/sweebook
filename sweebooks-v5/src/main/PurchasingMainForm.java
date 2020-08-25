@@ -105,18 +105,18 @@ public class PurchasingMainForm extends JFrame{
 		// Welcome Label
 		Calendar cal = Calendar.getInstance();
 		int hour = cal.get(Calendar.HOUR_OF_DAY);
-		String time = "morning";
-		if (hour > 11 && hour < 18) {
+		String time = "night";
+		if (hour < 12) {
+			
+			time = "morning";
+			
+		} else if (hour < 18) {
 			
 			time = "afternoon";
 			
-		} else if (hour < 22) {
+		} else if (hour < 22){
 			
 			time = "evening";
-			
-		} else if (hour <= 24){
-			
-			time = "night";
 			
 		}
 		welcomeLabel = new JLabel("<HTML>Good " + time + ", " + SQLGetQuery.getNameFromUserId(Main.user_id) + "!"
