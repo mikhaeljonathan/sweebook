@@ -1,5 +1,5 @@
 # sweebook-group5
- Project OOAD ALM8TY
- Agivrian
- Anthony
- Mikhael
+This is an Object Oriented Design and Analysis project from PPTI 8 - group 5 :
+- Agivrian Triputra
+- Anthony Wijaya
+- Mikhael Jonathan
