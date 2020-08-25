@@ -9,7 +9,7 @@ public class CartStorage {
 	
 	private static CartStorage instance = null;
 	private HashMap<String, Book> carts;
-
+	
 	private CartStorage() {
 		
 		carts = new HashMap<String, Book>();
@@ -32,7 +32,9 @@ public class CartStorage {
 		
 		// Iterate through HashMap and add the books into the collection
 		for (Map.Entry<String, Book> me : carts.entrySet()) {
+			
 			cb.add(me.getValue());
+			
 		}
 		
 		return cb;		

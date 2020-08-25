@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
+import helper.SQLGetQuery;
+import helper.Validation;
 import main.MySQLAccess;
 
 public class BorrowItem {
@@ -19,7 +21,7 @@ public class BorrowItem {
 	public BorrowItem(String id, String bookId, String returnTimestamp) {
 		
 		this.id = id;
-		this.bookId = id;
+		this.bookId = bookId;
 		this.returnTimestamp = returnTimestamp;
 		
 	}
@@ -38,6 +40,8 @@ public class BorrowItem {
 			
 		} catch (Exception e) {
 			
+			// Fail to insert to DAO
+			JOptionPane.showMessageDialog(null, "Database error");
 			return null;
 			
 		}
@@ -68,7 +72,10 @@ public class BorrowItem {
 	}
 	
 	public boolean isBookAlreadyReturn(String id, String bookId) {
-		return true;
+		
+		String returnTimeStamp = SQLGetQuery.getReturnTimestampFromIdAndBookId(id, bookId);
+		return !returnTimeStamp.substring(0, returnTimeStamp.length() - 2).equals(Validation.dummyTimestamp);
+		
 	}
 	
 	public List<BorrowItem> getBookItem(String id){
@@ -78,7 +85,9 @@ public class BorrowItem {
 		// Retrieve book item of single borrow from DAO
 		String getBookItems = "SELECT borrow_items.borrow_id, borrow_items.book_id, borrow_items.return_timestamp FROM borrow_items " + 
 				"INNER JOIN borrows " + 
-				"ON borrows.id = borrow_items.borrow_id";
+				"ON borrows.id = borrow_items.borrow_id " + 
+				"WHERE borrows.id = '%s'";
+		getBookItems = String.format(getBookItems, id);
 		
 		try {
 			
@@ -105,6 +114,7 @@ public class BorrowItem {
 	}
 
 	// Getter and Setter
+	
 	public String getId() {
 		
 		return id;

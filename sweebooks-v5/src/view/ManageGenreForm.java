@@ -1,96 +1,126 @@
 package view;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 
-import controller.BookHandler;
 import controller.GenreHandler;
 import model.Genre;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JTextField;
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 
+// This is a singleton class
 public class ManageGenreForm extends JInternalFrame{
 
 	private static final long serialVersionUID = 1L;
-	private JTextField genreNameTextField;
-	private JTable table;
+	private static ManageGenreForm instance = null;
+	
+	private GenreHandler gh;
+	private JPanel genreListPanel;
 
-	public ManageGenreForm() {
+	private ManageGenreForm() {
+		
+		// Create UI
 		setTitle("Manage Genre Form");
 		setResizable(false);
-		setSize(800, 400); //ukuran gui
+		setSize(800, 400);
 		setLocation(160, 10);
-		setDefaultCloseOperation(EXIT_ON_CLOSE); //biar kalo di close ga running di background
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setVisible(true);
 		
-		//---------------------- panel buat input genre ------------------------------------
+		gh = new GenreHandler();
+		
 		JPanel inputGenrePanel = new JPanel();
-		getContentPane().add(inputGenrePanel, BorderLayout.NORTH);
+		add(inputGenrePanel, BorderLayout.NORTH);
 		
 		JLabel genreNameLabel = new JLabel("Genre Name");
 		inputGenrePanel.add(genreNameLabel);
 		
-		genreNameTextField = new JTextField();
-		inputGenrePanel.add(genreNameTextField);
+		JTextField genreNameTextField = new JTextField();
 		genreNameTextField.setColumns(20);
+		inputGenrePanel.add(genreNameTextField);
 		
 		JButton createBtn = new JButton("Create");
 		inputGenrePanel.add(createBtn);
-		//----------------------------------------------------------------------------------
 		
-		GenreHandler gh = new GenreHandler();
-		List<Genre> lg = new ArrayList<Genre>();
-		lg = gh.getAll();
-		// TODO: show lg here
-		//----------------------------- panel buat list genre ------------------------------
-		JPanel genreListPanel = new JPanel();
-		getContentPane().add(genreListPanel, BorderLayout.CENTER);
+		// Retrieve all genre
+		List<Genre> lg = gh.getAll();
 		
-		JList<Genre> listGenre = new JList<Genre>();
-		DefaultListModel listGenreModel = new DefaultListModel();
+		// List Genre
+		genreListPanel = new JPanel(new GridLayout(lg.size(), 1, 0, 10));
+		JScrollPane listGenreScrollPane = new JScrollPane(genreListPanel);
+		add(listGenreScrollPane, BorderLayout.CENTER);
+		
+		// For each genre
 		for (Genre genre : lg) {
-			listGenreModel.addElement(genre.getType());
+			
+			JLabel genreInfo = new JLabel(genre.getType());
+			genreListPanel.add(genreInfo);
+			
 		}
-		listGenre.setModel(listGenreModel);
-		JScrollPane listGenreScrollPane = new JScrollPane(listGenre);
-		genreListPanel.add(listGenreScrollPane);
 		
-		//----------------------------------------------------------------------------------
-		
-		// TODO: kalau klik tombol create
 		createBtn.addMouseListener(new MouseAdapter() {
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				
 				HashMap<String, String> inputs = new HashMap<String, String>();
 				inputs.put("type", genreNameTextField.getText());
-//				System.out.println(genreNameTextField.getText());
+				
 				if (gh.insert(inputs) != null) {
-					validate();
-					repaint();
+					
 					JOptionPane.showMessageDialog(null, "Genre successfully created");
+					refreshListGenre();
 					
 				}
+				
 			}
 			
 		});
+		
+	}
+	
+	public static ManageGenreForm getInstance() {
+		
+		if (instance == null) {
+			instance = new ManageGenreForm();
+		}
+		
+		return instance;
+		
+	}
+	
+	private void refreshListGenre() {
+		
+		genreListPanel.setVisible(false);
+		genreListPanel.removeAll();
+		
+		// Retrieve all genre
+		List<Genre> lg = gh.getAll();
+		
+		genreListPanel.setLayout(new GridLayout(lg.size(), 1, 0, 10));
+		
+		// For each genre
+		for (Genre genre : lg) {
+			
+			JLabel genreInfo = new JLabel(genre.getType());
+			genreListPanel.add(genreInfo);
+			
+		}
+		
+		genreListPanel.setVisible(true);
+		
 	}
 	
 }

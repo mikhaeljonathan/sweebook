@@ -1,3 +1,4 @@
+  
 package main;
 
 import java.awt.event.MouseAdapter;
@@ -6,8 +7,6 @@ import java.awt.event.MouseEvent;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
-import controller.BookHandler;
-import controller.BorrowBookHandler;
 import controller.BorrowTransactionHandler;
 import controller.EmployeeHandler;
 import controller.MemberHandler;
@@ -35,7 +34,7 @@ public class ManagerMainForm extends JFrame{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				
-				// TODO: kalau Borrow History menu
+				removeInternalFrames();
 				add(new BorrowTransactionHandler().showBorrowHistoryForm());
 				
 			 }
@@ -51,7 +50,7 @@ public class ManagerMainForm extends JFrame{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				
-				// TODO: kalau Membership View menu
+				removeInternalFrames();
 				add(new MemberHandler().showViewMembershipForm());
 				
 			}
@@ -67,12 +66,38 @@ public class ManagerMainForm extends JFrame{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				
-				// TODO: kalau Manage Employee Menu
+				removeInternalFrames();
 				add(new EmployeeHandler().showManageEmployeeForm());
 				
 			}
 			
 		});
+		
+		// Logout Button
+		JButton logoutBtn = new JButton("Log Out");
+		logoutBtn.setBounds(10, 216, 140, 35);
+		add(logoutBtn);
+		logoutBtn.addMouseListener(new MouseAdapter() {
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				removeInternalFrames();
+				dispose();
+				Main.user_id = null;
+				new LoginForm();
+				
+			}
+			
+		});
+		
+	}
+	
+	private void removeInternalFrames() {
+		
+		remove(new BorrowTransactionHandler().showBorrowHistoryForm());
+		remove(new MemberHandler().showViewMembershipForm());
+		remove(new EmployeeHandler().showManageEmployeeForm());
 		
 	}
 	

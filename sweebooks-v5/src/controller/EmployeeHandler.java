@@ -1,5 +1,4 @@
 package controller;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -8,9 +7,9 @@ import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 
 import helper.Validation;
-import main.MySQLAccess;
 import model.Employee;
 import model.User;
+import view.ManageEmployeeForm;
 
 public class EmployeeHandler {
 
@@ -19,7 +18,9 @@ public class EmployeeHandler {
 	}
 	
 	public JInternalFrame showManageEmployeeForm() {
-		return new JInternalFrame();
+		
+		return ManageEmployeeForm.getInstance();
+		
 	}
 	
 	public List<Employee> getAll(){
@@ -45,7 +46,14 @@ public class EmployeeHandler {
 	}
 	
 	public Employee update(HashMap<String, String> inputs) {
-		return new Employee();
+		
+		// Retrieve the attributes
+		String userId = inputs.get("userId");
+		int salary = Integer.parseInt(inputs.get("salary"));
+		String status = inputs.get("Status");
+		
+		return new Employee(userId, salary, status).update();
+		
 	}
 	
 	public Employee createWithPendingStatus(HashMap<String, String> inputs) {
@@ -63,6 +71,8 @@ public class EmployeeHandler {
 				return null;
 				
 			}
+			
+			JOptionPane.showMessageDialog(null, "Current employee's password is: " + password + "\nPlease remember it!");
 			
 			return createEmployeeEntity(inputs);
 			
@@ -90,6 +100,8 @@ public class EmployeeHandler {
 				return null;
 				
 			}
+			
+			JOptionPane.showMessageDialog(null, "Current employee's password is: " + password + "\nPlease remember it!");
 			
 			return createEmployeeEntity(inputs);
 			

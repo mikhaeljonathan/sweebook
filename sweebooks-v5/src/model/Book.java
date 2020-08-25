@@ -65,6 +65,7 @@ public class Book {
 	
 	public Book find(String id) {
 		
+		// Retrieve books by ID from DAO
 		String findBookById = "SELECT * FROM books "
 				+ "WHERE id = '%s'";
 		findBookById = String.format(findBookById, id);
@@ -73,32 +74,24 @@ public class Book {
 			
 			MySQLAccess.rs = MySQLAccess.stmt.executeQuery(findBookById);
 			
-			String id2 = "";
-			String genre_id = "";
-			String title = "";
-			String isbn = "";
-			int quantity = 0;
-			
 			while (MySQLAccess.rs.next()) {
 				
-				id2 = MySQLAccess.rs.getString("id");
-				genre_id = MySQLAccess.rs.getString("title");
-				title = MySQLAccess.rs.getString("genre_id");
-				isbn = MySQLAccess.rs.getString("isbn");
-				quantity = MySQLAccess.rs.getInt("quantity");
+				this.id = MySQLAccess.rs.getString("id");
+				this.genreId = MySQLAccess.rs.getString("genre_id");
+				this.name = MySQLAccess.rs.getString("title");
+				this.isbn = MySQLAccess.rs.getString("isbn");
+				this.quantity = MySQLAccess.rs.getInt("quantity");
 				
 			}
 			
-			this.id = id2;
-			this.genreId = genre_id;
-			this.name = title;
-			this.isbn = isbn;
-			this.quantity = quantity;
+			if (this.id.isEmpty()) return null;
 			
 			return this;
 			
 		} catch (Exception e) {
 			
+			// Fail to retrieve from database
+			JOptionPane.showMessageDialog(null, "Database error");
 			return null;
 			
 		}
@@ -110,7 +103,7 @@ public class Book {
 		// Insert book into DAO
 		String insertToBook = "INSERT INTO books "
 				+ "VALUE('%s', '%s', '%s', %s, %d)";
-		insertToBook = String.format(insertToBook, id, name, genreId, isbn, quantity);
+		insertToBook = String.format(insertToBook, id, genreId, name, isbn, quantity);
 		
 		try {
 			
@@ -142,6 +135,8 @@ public class Book {
 			
 		} catch (Exception e) {
 			
+			// Fail to update to DAO
+			JOptionPane.showMessageDialog(null, "Database error");
 			return null;
 			
 		}
@@ -150,6 +145,7 @@ public class Book {
 	
 	public boolean delete() {
 		
+		// Delete book data in DAO
 		String deleteBook = "DELETE FROM books " + 
 				"WHERE id = '%s'";
 		deleteBook = String.format(deleteBook, id);
@@ -169,10 +165,10 @@ public class Book {
 		
 	}
 	
-	public String getByIsbn(String isbn) {
+	public Book getByIsbn(String isbn) {
 		
-		// Get book id by isbn
-		String retrieveId = "SELECT id FROM books "
+		// Get book id by ISBN from DAO
+		String retrieveId = "SELECT * FROM books "
 				+ "WHERE isbn = '%s'";
 		retrieveId = String.format(retrieveId, isbn);
 		
@@ -180,26 +176,24 @@ public class Book {
 			
 			MySQLAccess.rs = MySQLAccess.stmt.executeQuery(retrieveId);
 			
-			String isbnRetrieved = "";
 			while(MySQLAccess.rs.next()) {
 				
-				isbnRetrieved = MySQLAccess.rs.getString("id");
+				this.id = MySQLAccess.rs.getString("id");
+				this.genreId = MySQLAccess.rs.getString("genre_id");
+				this.name = MySQLAccess.rs.getString("title");
+				this.isbn = MySQLAccess.rs.getString("isbn");
+				this.quantity = Integer.parseInt(MySQLAccess.rs.getString("quantity"));
 				
 			}
 			
-			if (isbnRetrieved.isEmpty()) {
-				
-				return null;
-				
-			} else {
-				
-				return isbnRetrieved;
-				
-			}
+			if (this.id == null) return null;
+			
+			return this;
 			
 		} catch (Exception e) {
 			
-			JOptionPane.showMessageDialog(null, "Database error");
+			// Fail to retrieve from DAO
+			JOptionPane.showMessageDialog(null, "Database errorwkwk");
 			return null;
 			
 		}

@@ -1,5 +1,4 @@
 package controller;
-import java.util.ArrayList;
 import java.util.List;
 
 import model.Role;
@@ -18,9 +17,7 @@ public class RoleHandler {
 	
 	public Role getByName(String name) {
 		
-		Role r = new Role();
-		r.getByName(name);
-		return r;
+		return new Role().getByName(name);
 		
 	}
 

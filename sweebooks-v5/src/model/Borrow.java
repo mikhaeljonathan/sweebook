@@ -1,12 +1,12 @@
 package model;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import javax.swing.JOptionPane;
 
+import helper.SQLGetQuery;
 import main.Main;
 import main.MySQLAccess;
 
@@ -39,26 +39,16 @@ public class Borrow {
 		
 		try {
 			
-			String idRetrieve = "";
-			String memberIdRetrieve = "";
-			String statusRetrieve = "";
-			String borrowTimestampRetrieve = "";
-			
 			MySQLAccess.rs = MySQLAccess.stmt.executeQuery(bookById);
 			
 			while (MySQLAccess.rs.next()) {
 				
-				idRetrieve = MySQLAccess.rs.getString("id");
-				memberIdRetrieve = MySQLAccess.rs.getString("member_id");
-				statusRetrieve = MySQLAccess.rs.getString("status");
-				borrowTimestampRetrieve = MySQLAccess.rs.getString("borrow_timestamp");
+				this.id = MySQLAccess.rs.getString("id");
+				this.memberId = MySQLAccess.rs.getString("member_id");
+				this.status = MySQLAccess.rs.getString("status");
+				this.borrowTimestamp = MySQLAccess.rs.getString("borrow_timestamp");
 				
 			}
-			
-			this.id = idRetrieve;
-			this.memberId = memberIdRetrieve;
-			this.status = statusRetrieve;
-			this.borrowTimestamp = borrowTimestampRetrieve;
 			
 			return this;
 			
@@ -118,11 +108,55 @@ public class Borrow {
 	}
 	
 	public boolean isBookStillBorrowing(String userId, String bookId) {
-		return true;
+		
+		// Retrieve the book title from any borrow items object of the corresponding userID from DAO
+		String isThereAnyData = "SELECT books.title FROM books " + 
+				"INNER JOIN borrow_items " + 
+				"ON borrow_items.book_id = books.id " + 
+				"INNER JOIN borrows " + 
+				"ON borrows.id = borrow_items.borrow_id " + 
+				"INNER JOIN members " + 
+				"ON members.user_id = borrows.member_id " + 
+				"WHERE members.user_id = '%s' AND books.id = '%s' AND borrow_items.return_timestamp = '1990-01-01 12:00:00'";
+		isThereAnyData = String.format(isThereAnyData, userId, bookId);
+		
+		try {
+			
+			MySQLAccess.rs = MySQLAccess.stmt.executeQuery(isThereAnyData);
+			
+			String title = "";
+			
+			while (MySQLAccess.rs.next()) {
+				
+				title = MySQLAccess.rs.getString("books.title");
+				
+			}
+			
+			if (title.isEmpty()) {
+				
+				return false;
+				
+			} else {
+				
+				return true;
+				
+			}
+			
+		} catch (Exception e) {
+			
+			// Fail to retrieve from DAO
+			JOptionPane.showMessageDialog(null, "Database error");
+			return false;
+			
+		}
+		
 	}
 	
 	public int getCountBookStillBorrowing(String userId) {
-		return 0;
+		
+		int cartSize = CartStorage.getInstance().getCart().size();
+		return cartSize + SQLGetQuery.countBooksBorrowedByUser(userId);
+		
 	}
 	
 	public List<Borrow> getPendingStatus(boolean isOnlyCurrentMember){
@@ -157,7 +191,7 @@ public class Borrow {
 			} catch (Exception e) {
 				
 				// Fail to retrieve from DAO
-				JOptionPane.showMessageDialog(null, "Database Error");
+				JOptionPane.showMessageDialog(null, "Database error");
 				return null;
 				
 			}
@@ -186,7 +220,7 @@ public class Borrow {
 			} catch (Exception e) {
 				
 				// Fail to retrieve from DAO
-				JOptionPane.showMessageDialog(null, "Database Error");
+				JOptionPane.showMessageDialog(null, "Database error");
 				return null;
 				
 			}
@@ -215,13 +249,15 @@ public class Borrow {
 				
 			} else { // Specific month and year
 				
+				int month = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getMonthValue();
+				int year = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getYear();
+				
 				retrieveCurrentBorrowList = "SELECT * FROM borrows " + 
 						"INNER JOIN members " + 
 						"ON members.user_id = borrows.member_id " + 
-						"WHERE members.user_id = '%s' AND borrows.status = 'Accepted' AND MONTH(borrows.borrow_timestamp) = %d AND YEAR(borrows.borrow_timestamp) = %d";
-				retrieveCurrentBorrowList = String.format(retrieveCurrentBorrowList, Main.user_id, 
-						date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getMonthValue(), 
-						date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getYear());
+						"WHERE members.user_id = '%s' AND borrows.status = 'Accepted' AND " +
+						"MONTH(borrows.borrow_timestamp) = %d AND YEAR(borrows.borrow_timestamp) = %d";
+				retrieveCurrentBorrowList = String.format(retrieveCurrentBorrowList, Main.user_id, month, year);
 				
 			}
 			

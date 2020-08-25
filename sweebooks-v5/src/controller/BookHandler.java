@@ -1,13 +1,19 @@
 package controller;
+import java.awt.GridLayout;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import javax.swing.JComboBox;
 import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 
-import com.mysql.jdbc.UpdatableResultSet;
-
-import helper.Validation;
+import helper.CheckInput;
 import model.Book;
 import model.Genre;
 import view.ManageBookForm;
@@ -21,13 +27,13 @@ public class BookHandler {
 
 	public JInternalFrame showViewBookForm() {
 		
-		return new ViewBookForm();
+		return ViewBookForm.getInstance();
 		
 	}
 	
 	public JInternalFrame showManageBookForm() {
 		
-		return new ManageBookForm();
+		return ManageBookForm.getInstance();
 		
 	}
 	
@@ -39,24 +45,26 @@ public class BookHandler {
 	
 	public Book getById(String id) {
 		
-		Book b = new Book();
-		return b.find(id);
+		return new Book().find(id);
 		
 	}
 	
 	public Book getByIsbn(String isbn) {
-		return new Book();
+		
+		return new Book().getByIsbn(isbn);
+		
 	}
 	
 	public List<Book> getBookByQuantityMoreThanZero(){
 		
-		Book b = new Book();
-		return b.getBookByQuantityMoreThanZero();
+		return new Book().getBookByQuantityMoreThanZero();
 		
 	}
 	
 	public Book insert(HashMap<String, String> inputs) {
+		
 		return new Book();
+		
 	}
 	
 	public Book update(HashMap<String, String> inputs) {
@@ -66,27 +74,24 @@ public class BookHandler {
 		String name = inputs.get("name");
 		String genreId = inputs.get("genreId");
 		String isbn = inputs.get("isbn");
-		String quantity = inputs.get("quantity");
+		int quantity = Integer.parseInt(inputs.get("quantity"));
 		
-		Book b = new Book(id, name, genreId, isbn, Integer.parseInt(quantity));
-		
-		return b.update();
+		return new Book(id, name, genreId, isbn, quantity).update();
 		
 	}
 	
 	public Book restockBook(String isbn) {
 		
-		if (Validation.validateIsbn(isbn)) {
+		if (CheckInput.validateIsbn(isbn)) {
 			
-			Book b = new Book();
-			String id = b.getByIsbn(isbn);
-			if (id != null) { // ISBN exists in DAO
+			Book b = new Book().getByIsbn(isbn);
+			
+			if (b != null) { // ISBN exists in DAO
 				
-				b = updateBookQuantity(b.find(id));
+				b = updateBookQuantity(b.find(b.getId()));
 				
 			} else { // ISBN doesn't exist in DAO
 				
-				// TODO: nanti show form untuk buat buku baru
 				b = createNewBook(isbn);
 				
 			}
@@ -103,7 +108,7 @@ public class BookHandler {
 	
 	public boolean delete(String id) {
 		
-		return new Book(id, "dummy name", "dummy genre_id", "dummy isbn", 0).delete();
+		return new Book(id, "", "", "", 0).delete();
 		
 	}
 	
@@ -114,26 +119,59 @@ public class BookHandler {
 		String name = b.getName();
 		String genreId = b.getGenreId();
 		String isbn = b.getIsbn();
-		int quantity = b.getQuantity();
+		int quantity = b.getQuantity() + 1;
 		
-		return new Book(id, name, genreId, isbn, quantity + 1).update();
+		return new Book(id, name, genreId, isbn, quantity).update();
 		
 	}
 	
 	private Book createNewBook(String isbn) {
 		
-		// TODO: ada textfield buat nama buku, combobox buat genre, textfield buat quantity
-		String name = "nama buku";
-		String quantity = "1";
-		Genre g = new Genre();
+		JPanel addBookPanel = new JPanel(new GridLayout(0, 1));
 		
-		if (Validation.validateBookInput(name, quantity)) {
+		JTextField nameTextField = new JTextField();
+		addBookPanel.add(new JLabel("Book Name :"));
+		addBookPanel.add(nameTextField);
+		
+		JComboBox<String> genreComboBox = new JComboBox<String>();
+		addBookPanel.add(new JLabel("Genre :"));
+		List<Genre> lg = new GenreHandler().getAll();
+		
+		// For each genre
+		for (Genre genre : lg) 
+		{
+			genreComboBox.addItem(genre.getType());
 			
-			return new Book(UUID.randomUUID().toString(), name, g.getId(), isbn, Integer.parseInt(quantity)).insert();
+		}
+		addBookPanel.add(genreComboBox);
+		
+		JSpinner quantitySpinner = new JSpinner(new SpinnerNumberModel(1, 1, 100, 1));
+		addBookPanel.add(new JLabel("Quantity :"));
+		addBookPanel.add(quantitySpinner);
+		
+		
+		while (true) {
 			
-		} else {
+			int option = JOptionPane.showConfirmDialog(null, addBookPanel, "Add Book Form", JOptionPane.DEFAULT_OPTION);
 			
-			return null;
+			if (option == JOptionPane.YES_OPTION) {
+				
+				String name = nameTextField.getText();
+				String quantity = quantitySpinner.getValue().toString();
+				Genre g = new Genre().getByType(genreComboBox.getSelectedItem().toString());
+				
+				if (CheckInput.validateBookInput(name, quantity)) {
+					
+					return new Book(UUID.randomUUID().toString(), name, g.getId(), isbn, Integer.parseInt(quantity)).insert();
+					
+				}
+				
+			} else {
+				
+				return null;
+				
+			}
+			
 		}
 		
 	}
