@@ -136,6 +136,13 @@ public class BorrowBookForm extends JInternalFrame{
 		
 	}
 	
+	public void destroy() {
+		
+		setVisible(false);
+		instance = null;
+		
+	}
+	
 	public JPanel listBookInfo(Book b) {
 		
 		// Create components

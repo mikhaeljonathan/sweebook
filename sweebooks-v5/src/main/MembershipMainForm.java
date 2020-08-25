@@ -3,6 +3,11 @@ package main;
 import controller.BookHandler;
 import controller.BorrowBookHandler;
 import controller.BorrowTransactionHandler;
+import view.BorrowBookForm;
+import view.ViewBookForm;
+import view.ViewBorrowForm;
+import view.ViewBorrowHistoryForm;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -109,10 +114,10 @@ public class MembershipMainForm extends JFrame{
 	
 	private void removeInternalFrames() {
 		
-		remove(new BorrowBookHandler().showBorrowBookForm());
-		remove(new BookHandler().showViewBookForm());
-		remove(new BorrowTransactionHandler().showBorrowForm());
-		remove(new BorrowTransactionHandler().showBorrowHistoryForm());
+		BorrowBookForm.getInstance().destroy();
+		ViewBookForm.getInstance().destroy();
+		ViewBorrowForm.getInstance().destroy();
+		ViewBorrowHistoryForm.getInstance().destroy();
 		
 	}
 	

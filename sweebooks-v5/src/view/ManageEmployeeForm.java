@@ -178,6 +178,13 @@ public class ManageEmployeeForm extends JInternalFrame{
 		
 	}
 	
+	public void destroy() {
+		
+		setVisible(false);
+		instance = null;
+		
+	}
+	
 	private JPanel employeeListInfo(Employee employee, int counter) {
 		
 		String id = employee.getId();

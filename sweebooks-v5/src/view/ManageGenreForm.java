@@ -101,6 +101,13 @@ public class ManageGenreForm extends JInternalFrame{
 		
 	}
 	
+	public void destroy() {
+		
+		setVisible(false);
+		instance = null;
+		
+	}
+	
 	private void refreshListGenre() {
 		
 		genreListPanel.setVisible(false);

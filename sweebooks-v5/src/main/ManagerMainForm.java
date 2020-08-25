@@ -10,6 +10,9 @@ import javax.swing.JFrame;
 import controller.BorrowTransactionHandler;
 import controller.EmployeeHandler;
 import controller.MemberHandler;
+import view.ManageEmployeeForm;
+import view.ViewBorrowHistoryForm;
+import view.ViewMembershipForm;
 
 public class ManagerMainForm extends JFrame{
 
@@ -95,9 +98,9 @@ public class ManagerMainForm extends JFrame{
 	
 	private void removeInternalFrames() {
 		
-		remove(new BorrowTransactionHandler().showBorrowHistoryForm());
-		remove(new MemberHandler().showViewMembershipForm());
-		remove(new EmployeeHandler().showManageEmployeeForm());
+		ViewBorrowHistoryForm.getInstance().destroy();
+		ViewMembershipForm.getInstance().destroy();
+		ManageEmployeeForm.getInstance().destroy();
 		
 	}
 	

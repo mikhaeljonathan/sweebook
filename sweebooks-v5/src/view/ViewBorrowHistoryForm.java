@@ -157,6 +157,13 @@ public class ViewBorrowHistoryForm extends JInternalFrame{
 		
 	}
 	
+	public void destroy() {
+		
+		setVisible(false);
+		instance = null;
+		
+	}
+	
 	public JPanel getBorrowView(Borrow borrow, int counter) {
 		
 		// Borrow Panel

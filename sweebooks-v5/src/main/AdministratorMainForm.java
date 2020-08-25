@@ -9,6 +9,10 @@ import javax.swing.JFrame;
 import controller.BookHandler;
 import controller.BorrowTransactionHandler;
 import controller.MemberHandler;
+import view.ViewBookForm;
+import view.ViewBorrowForm;
+import view.ViewBorrowHistoryForm;
+import view.ViewMembershipForm;
 
 public class AdministratorMainForm extends JFrame{
 
@@ -110,10 +114,10 @@ public class AdministratorMainForm extends JFrame{
 	
 	private void removeInternalFrames() {
 		
-		remove(new BookHandler().showViewBookForm());
-		remove(new BorrowTransactionHandler().showBorrowForm());
-		remove(new BorrowTransactionHandler().showBorrowHistoryForm());
-		remove(new MemberHandler().showViewMembershipForm());
+		ViewBookForm.getInstance().destroy();
+		ViewBorrowForm.getInstance().destroy();
+		ViewBorrowHistoryForm.getInstance().destroy();
+		ViewMembershipForm.getInstance().destroy();
 		
 	}
 	
