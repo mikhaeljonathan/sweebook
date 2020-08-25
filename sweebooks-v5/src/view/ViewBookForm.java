@@ -58,6 +58,13 @@ public class ViewBookForm extends JInternalFrame{
 		return instance;
 		
 	}
+	
+	public void destroy() {
+		
+		setVisible(false);
+		instance = null;
+		
+	}
 
 	private Component bookPanelForm(Book book) {
 		

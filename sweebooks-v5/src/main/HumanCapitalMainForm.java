@@ -7,6 +7,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 
 import controller.EmployeeHandler;
+import view.ManageEmployeeForm;
 
 public class HumanCapitalMainForm extends JFrame {
 
@@ -59,7 +60,7 @@ public class HumanCapitalMainForm extends JFrame {
 	
 	private void removeInternalFrames() {
 		
-		remove(new EmployeeHandler().showManageEmployeeForm());
+		ManageEmployeeForm.getInstance().destroy();
 		
 	}
 	

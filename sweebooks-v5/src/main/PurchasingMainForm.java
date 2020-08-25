@@ -8,6 +8,9 @@ import javax.swing.JFrame;
 
 import controller.BookHandler;
 import controller.GenreHandler;
+import view.ManageBookForm;
+import view.ManageGenreForm;
+import view.ViewBookForm;
 
 public class PurchasingMainForm extends JFrame{
 
@@ -95,9 +98,9 @@ public class PurchasingMainForm extends JFrame{
 
 	public void removeInternalFrames() {
 		
-		remove(new GenreHandler().showManageGenreForm());
-		remove(new BookHandler().showManageBookForm());
-		remove(new BookHandler().showViewBookForm());
+		ManageGenreForm.getInstance().destroy();
+		ManageBookForm.getInstance().destroy();
+		ViewBookForm.getInstance().destroy();
 		
 	}
 	

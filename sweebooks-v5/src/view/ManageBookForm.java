@@ -148,6 +148,13 @@ public class ManageBookForm extends JInternalFrame{
 		
 	}
 	
+	public void destroy() {
+		
+		setVisible(false);
+		instance = null;
+		
+	}
+	
 	private JPanel bookPanelInfo(Book book) {
 		
 		// Book panel
