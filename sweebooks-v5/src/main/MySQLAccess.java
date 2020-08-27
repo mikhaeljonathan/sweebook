@@ -3,6 +3,8 @@ package main;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 
+import javax.swing.JOptionPane;
+
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 
@@ -32,7 +34,7 @@ public class MySQLAccess {
             
         } catch (Exception e) {
         	
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Connect to MySQL!");
             
         }
     	

@@ -147,8 +147,7 @@ public class BorrowBookForm extends JInternalFrame{
 	public JPanel listBookInfo(Book b) {
 		
 		// Create components
-		JPanel panelBookListInfo = new JPanel();
-		panelBookListInfo.setLayout(new GridLayout(3, 2, 0, 1));
+		JPanel panelBookListInfo = new JPanel(new GridLayout(3, 2, 10, 10));
 		panelBookListInfo.setBorder(BorderFactory.createLineBorder(Color.black, 2));
 		
 		// Set the components
@@ -197,7 +196,7 @@ public class BorrowBookForm extends JInternalFrame{
 		
 		// Create components
 		JPanel listBookInCartInfo = new JPanel();
-		listBookInCartInfo.setLayout(new GridLayout(3, 2, 0, 1));
+		listBookInCartInfo.setLayout(new GridLayout(3, 2, 0, 10));
 		listBookInCartInfo.setBorder(BorderFactory.createLineBorder(Color.black, 2));
 		
 		// Set the components
