@@ -1,18 +1,28 @@
 package main;
 
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Calendar;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 import controller.BookHandler;
 import controller.BorrowTransactionHandler;
 import controller.MemberHandler;
+import helper.SQLGetQuery;
 
 public class AdministratorMainForm extends JFrame{
 
 	private static final long serialVersionUID = 1L;
+	
+	private BookHandler bh;
+	private BorrowTransactionHandler bth;
+	private MemberHandler mh;
+	private JLabel welcomeLabel;
 
 	public AdministratorMainForm() {
 		
@@ -23,6 +33,11 @@ public class AdministratorMainForm extends JFrame{
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
+		setVisible(true);
+		
+		bh = new BookHandler();
+		bth = new BorrowTransactionHandler();
+		mh = new MemberHandler();
 		
 		// View Book Button
 		JButton viewBookBtn = new JButton("View Book");
@@ -34,7 +49,7 @@ public class AdministratorMainForm extends JFrame{
 			public void mouseClicked(MouseEvent e) {
 				
 				removeInternalFrames();
-				add(new BookHandler().showViewBookForm());
+				add(bh.showViewBookForm());
 				
 			}
 			
@@ -50,7 +65,7 @@ public class AdministratorMainForm extends JFrame{
 			public void mouseClicked(MouseEvent e) {
 				
 				removeInternalFrames();
-				add(new BorrowTransactionHandler().showBorrowForm());
+				add(bth.showBorrowForm());
 				
 			}
 		});
@@ -65,7 +80,7 @@ public class AdministratorMainForm extends JFrame{
 			public void mouseClicked(MouseEvent e) {
 				
 				removeInternalFrames();
-				add(new BorrowTransactionHandler().showBorrowHistoryForm());
+				add(bth.showBorrowHistoryForm());
 				
 			}
 			
@@ -81,7 +96,7 @@ public class AdministratorMainForm extends JFrame{
 			public void mouseClicked(MouseEvent e) {
 				
 				removeInternalFrames();
-				add(new MemberHandler().showViewMembershipForm());
+				add(mh.showViewMembershipForm());
 			}
 			
 		});
@@ -104,16 +119,40 @@ public class AdministratorMainForm extends JFrame{
 			
 		});
 		
-		setVisible(true);
 		
+		// Welcome Label
+		Calendar cal = Calendar.getInstance();
+		int hour = cal.get(Calendar.HOUR_OF_DAY);
+		String time = "night";
+		if (hour < 12) {
+			
+			time = "morning";
+			
+		} else if (hour < 18) {
+			
+			time = "afternoon";
+			
+		} else if (hour < 22){
+			
+			time = "evening";
+			
+		}
+		welcomeLabel = new JLabel("<HTML>Good " + time + ", " + SQLGetQuery.getNameFromUserId(Main.user_id) + "!"
+				+ "<br/><br/>You can view books, membership and manage borrows here!");
+		welcomeLabel.setBounds(200, 10, 800, 300);
+		welcomeLabel.setPreferredSize(new Dimension(400, 50));
+		welcomeLabel.setFont(new Font("Times New Roman", Font.BOLD, 30));
+		add(welcomeLabel);
+
 	}
 	
 	private void removeInternalFrames() {
 		
-		remove(new BookHandler().showViewBookForm());
-		remove(new BorrowTransactionHandler().showBorrowForm());
-		remove(new BorrowTransactionHandler().showBorrowHistoryForm());
-		remove(new MemberHandler().showViewMembershipForm());
+		welcomeLabel.setVisible(false);
+		bh.unshowViewBookForm();
+		bth.unshowBorrowForm();
+		bth.unshowBorrowHistoryForm();
+		mh.unshowViewMembershipForm();
 		
 	}
 	

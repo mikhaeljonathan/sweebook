@@ -26,9 +26,9 @@ public class ViewBorrowForm extends JInternalFrame{
 	private static final long serialVersionUID = 1L;
 	private static ViewBorrowForm instance = null;
 	
-	BorrowTransactionHandler bth;
-	JPanel listBorrowPanel;
-	JPanel listBorrowItemTempPanel;
+	private BorrowTransactionHandler bth;
+	private JPanel listBorrowPanel;
+	private JPanel listBorrowItemTempPanel;
 	
 	private ViewBorrowForm() {
 		
@@ -45,7 +45,6 @@ public class ViewBorrowForm extends JInternalFrame{
 		
 		// Retrieve all borrows
 		List<Borrow> lb = bth.getPendingStatus(SQLGetQuery.getRoleFromUserId(Main.user_id).equals("Membership"));
-		System.out.println(lb.size());
 		
 		// ListBorrow Panel
 		listBorrowPanel = new JPanel(new GridLayout(lb.size(), 1, 5, 5));
@@ -80,6 +79,13 @@ public class ViewBorrowForm extends JInternalFrame{
 		}
 		
 		return instance;
+		
+	}
+	
+	public void destroy() {
+		
+		setVisible(false);
+		instance = null;
 		
 	}
 	

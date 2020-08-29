@@ -27,11 +27,11 @@ public class BorrowBookForm extends JInternalFrame{
 	private static final long serialVersionUID = 1L;
 	private static BorrowBookForm instance = null;
 	
-	BorrowBookHandler bbh;
-	JPanel listBookPanel;
-	JPanel listBookInCartPanel;
-	JScrollPane listBookInCartScrollPane;
-	JButton borrowBtn;
+	private BorrowBookHandler bbh;
+	private JPanel listBookPanel;
+	private JPanel listBookInCartPanel;
+	private JScrollPane listBookInCartScrollPane;
+	private JButton borrowBtn;
 	
 	private BorrowBookForm() {
 		
@@ -114,7 +114,7 @@ public class BorrowBookForm extends JInternalFrame{
 				if (bbh.borrowBook()) {
 					
 					JOptionPane.showMessageDialog(null, "Success borrow book(s).");
-					new BorrowBookHandler().removeAllCart();
+					bbh.removeAllCart();
 					unshowCart();
 					refreshListBookPanel();
 					
@@ -136,11 +136,18 @@ public class BorrowBookForm extends JInternalFrame{
 		
 	}
 	
+	public void destroy() {
+		
+		setVisible(false);
+		bbh.removeAllCart();
+		instance = null;
+		
+	}
+	
 	public JPanel listBookInfo(Book b) {
 		
 		// Create components
-		JPanel panelBookListInfo = new JPanel();
-		panelBookListInfo.setLayout(new GridLayout(3, 2, 0, 1));
+		JPanel panelBookListInfo = new JPanel(new GridLayout(3, 2, 10, 10));
 		panelBookListInfo.setBorder(BorderFactory.createLineBorder(Color.black, 2));
 		
 		// Set the components
@@ -189,7 +196,7 @@ public class BorrowBookForm extends JInternalFrame{
 		
 		// Create components
 		JPanel listBookInCartInfo = new JPanel();
-		listBookInCartInfo.setLayout(new GridLayout(3, 2, 0, 1));
+		listBookInCartInfo.setLayout(new GridLayout(3, 2, 0, 10));
 		listBookInCartInfo.setBorder(BorderFactory.createLineBorder(Color.black, 2));
 		
 		// Set the components

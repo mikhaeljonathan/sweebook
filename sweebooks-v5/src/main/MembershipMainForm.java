@@ -3,24 +3,40 @@ package main;
 import controller.BookHandler;
 import controller.BorrowBookHandler;
 import controller.BorrowTransactionHandler;
+import helper.SQLGetQuery;
+
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Calendar;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 public class MembershipMainForm extends JFrame{
 
 	private static final long serialVersionUID = 1L;
+	
+	private BorrowBookHandler bbh;
+	private BookHandler bh;
+	private BorrowTransactionHandler bth;
+	private JLabel welcomeLabel;
 
 	public MembershipMainForm() {
 		
+		// Create UI
 		setTitle("Membership Main Form");
 		setLayout(null);
 		setSize(1000, 500);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setVisible(true);
+		
+		bbh = new BorrowBookHandler();
+		bh = new BookHandler();
+		bth = new BorrowTransactionHandler();
 		
 		// Borrow Book Button
 		JButton borrowBookBtn = new JButton("Borrow Book");
@@ -32,7 +48,7 @@ public class MembershipMainForm extends JFrame{
 			public void mouseClicked(MouseEvent e) {
 				
 				removeInternalFrames();
-				add(new BorrowBookHandler().showBorrowBookForm());
+				add(bbh.showBorrowBookForm());
 			    
 			 }
 			
@@ -48,7 +64,7 @@ public class MembershipMainForm extends JFrame{
 			public void mouseClicked(MouseEvent e) {
 				
 				removeInternalFrames();
-				add(new BookHandler().showViewBookForm());
+				add(bh.showViewBookForm());
 				
 			}
 
@@ -64,7 +80,7 @@ public class MembershipMainForm extends JFrame{
 			public void mouseClicked(MouseEvent e) {
 				
 				removeInternalFrames();
-				add(new BorrowTransactionHandler().showBorrowForm());
+				add(bth.showBorrowForm());
 				
 			}
 			
@@ -80,7 +96,7 @@ public class MembershipMainForm extends JFrame{
 			public void mouseClicked(MouseEvent e) {
 				
 				removeInternalFrames();
-				add(new BorrowTransactionHandler().showBorrowHistoryForm());
+				add(bth.showBorrowHistoryForm());
 				
 			}
 			
@@ -104,14 +120,41 @@ public class MembershipMainForm extends JFrame{
 			
 		});
 		
+		// Welcome Label
+		Calendar cal = Calendar.getInstance();
+		int hour = cal.get(Calendar.HOUR_OF_DAY);
+		String time = "night";
+		if (hour < 12) {
+			
+			time = "morning";
+			
+		} else if (hour < 18) {
+			
+			time = "afternoon";
+			
+		} else if (hour < 22){
+			
+			time = "evening";
+			
+		}
+		welcomeLabel = new JLabel("<HTML>Good " + time + ", " + SQLGetQuery.getNameFromUserId(Main.user_id) + "!"
+				+ "<br/>Welcome to Sweebook Library!"
+				+ "<br/><br/>You can borrow your favorite books here!"
+				+ "<br/>Enjoy!</HTML>");
+		welcomeLabel.setBounds(200, 10, 800, 300);
+		welcomeLabel.setPreferredSize(new Dimension(400, 50));
+		welcomeLabel.setFont(new Font("Times New Roman", Font.BOLD, 30));
+		add(welcomeLabel);
+		
 	}
 	
 	private void removeInternalFrames() {
 		
-		remove(new BorrowBookHandler().showBorrowBookForm());
-		remove(new BookHandler().showViewBookForm());
-		remove(new BorrowTransactionHandler().showBorrowForm());
-		remove(new BorrowTransactionHandler().showBorrowHistoryForm());
+		welcomeLabel.setVisible(false);
+		bbh.unshowBorrowBookForm();
+		bh.unshowViewBookForm();
+		bth.unshowBorrowForm();
+		bth.unshowBorrowHistoryForm();
 		
 	}
 	

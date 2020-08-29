@@ -1,19 +1,29 @@
   
 package main;
 
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Calendar;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 import controller.BorrowTransactionHandler;
 import controller.EmployeeHandler;
 import controller.MemberHandler;
+import helper.SQLGetQuery;
 
 public class ManagerMainForm extends JFrame{
 
 	private static final long serialVersionUID = 1L;
+	
+	private BorrowTransactionHandler bth;
+	private MemberHandler mh;
+	private EmployeeHandler eh;
+	private JLabel welcomeLabel;
 
 	public ManagerMainForm() {
 		
@@ -25,6 +35,10 @@ public class ManagerMainForm extends JFrame{
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setVisible(true);
 		
+		bth = new BorrowTransactionHandler();
+		mh = new MemberHandler();
+		eh = new EmployeeHandler();
+		
 		// Borrow History Button
 		JButton borrowHistoryBtn = new JButton("Borrow History");
 		borrowHistoryBtn.setBounds(10, 11, 140, 35);
@@ -35,7 +49,7 @@ public class ManagerMainForm extends JFrame{
 			public void mouseClicked(MouseEvent e) {
 				
 				removeInternalFrames();
-				add(new BorrowTransactionHandler().showBorrowHistoryForm());
+				add(bth.showBorrowHistoryForm());
 				
 			 }
 			
@@ -51,7 +65,7 @@ public class ManagerMainForm extends JFrame{
 			public void mouseClicked(MouseEvent e) {
 				
 				removeInternalFrames();
-				add(new MemberHandler().showViewMembershipForm());
+				add(mh.showViewMembershipForm());
 				
 			}
 
@@ -67,7 +81,7 @@ public class ManagerMainForm extends JFrame{
 			public void mouseClicked(MouseEvent e) {
 				
 				removeInternalFrames();
-				add(new EmployeeHandler().showManageEmployeeForm());
+				add(eh.showManageEmployeeForm());
 				
 			}
 			
@@ -91,13 +105,39 @@ public class ManagerMainForm extends JFrame{
 			
 		});
 		
+		// Welcome Label
+		Calendar cal = Calendar.getInstance();
+		int hour = cal.get(Calendar.HOUR_OF_DAY);
+		String time = "night";
+		if (hour < 12) {
+			
+			time = "morning";
+			
+		} else if (hour < 18) {
+			
+			time = "afternoon";
+			
+		} else if (hour < 22){
+			
+			time = "evening";
+			
+		}
+		welcomeLabel = new JLabel("<HTML>Good " + time + ", Boss " + SQLGetQuery.getNameFromUserId(Main.user_id) + "!"
+				+ "<br/><br/>You can view borrows, memberships,"
+				+ "<br/>and manage employees here!");
+		welcomeLabel.setBounds(200, 10, 800, 300);
+		welcomeLabel.setPreferredSize(new Dimension(400, 50));
+		welcomeLabel.setFont(new Font("Times New Roman", Font.BOLD, 30));
+		add(welcomeLabel);
+		
 	}
 	
 	private void removeInternalFrames() {
 		
-		remove(new BorrowTransactionHandler().showBorrowHistoryForm());
-		remove(new MemberHandler().showViewMembershipForm());
-		remove(new EmployeeHandler().showManageEmployeeForm());
+		welcomeLabel.setVisible(false);
+		bth.unshowBorrowHistoryForm();
+		mh.unshowViewMembershipForm();
+		eh.unshowManageEmployeeForm();
 		
 	}
 	

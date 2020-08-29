@@ -6,6 +6,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import controller.BorrowBookHandler;
+import controller.UserHandler;
 import main.MySQLAccess;
 import model.Book;
 
@@ -16,6 +17,12 @@ public class Validation {
 	public static long oneDayInMillisecond = 86400000;
 	
 	public static boolean validateLogin(String username, String password) {
+		
+		return (validateUsernameAndPassword(username, password) && validateEmployee(username));
+		
+	}
+	
+	public static boolean validateUsernameAndPassword(String username, String password) {
 		
 		// Check if user name and password match in DAO
 		String validateLogin = "SELECT username FROM users " + 
@@ -36,6 +43,7 @@ public class Validation {
 			
 			if (temp.isEmpty()) {
 				
+				JOptionPane.showMessageDialog(null, "Username and password don't match");
 				return false;
 				
 			} else {
@@ -54,6 +62,52 @@ public class Validation {
 		
 	}
 	
+	public static boolean validateEmployee(String username) {
+		
+		String id = new UserHandler().getByUsername(username).getId();
+		
+		// Check if employee is eligible from DAO
+		String retrieveUserId = "SELECT status FROM employees "
+				+ "WHERE user_id = '%s'";
+		retrieveUserId = String.format(retrieveUserId, id);
+		
+		try {
+			
+			MySQLAccess.rs = MySQLAccess.stmt.executeQuery(retrieveUserId);
+			
+			String status = "";
+			while(MySQLAccess.rs.next()) {
+				
+				status = MySQLAccess.rs.getString("status");
+				
+			}
+			
+			if (status.equals("Pending")) {
+				
+				JOptionPane.showMessageDialog(null, "You haven't have permission to access");
+				return false;
+				
+			}
+			
+			if (status.equals("Fired")) {
+				
+				JOptionPane.showMessageDialog(null, "You have been fired!");
+				return false;
+				
+			}
+			
+			return true;
+			
+		} catch (Exception e) {
+			
+			// Fail to retrieve from DAO
+			JOptionPane.showMessageDialog(null, "Database error");
+			return false;
+			
+		}
+		
+	}
+	
 	public static boolean validateMembership(HashMap<String, String> inputs) {
 		
 		// Retrieve the attributes
@@ -61,6 +115,14 @@ public class Validation {
 		String address = inputs.get("address");
 		String username = inputs.get("username");
 		String password = inputs.get("password");
+		String confirmPassword = inputs.get("confirmPassword");
+		
+		if (!password.equals(confirmPassword)) {
+			
+			JOptionPane.showMessageDialog(null, "Password doesn't match");
+			return false;
+			
+		}
 		
 		// Check the constraint
 		return (CheckInput.validateName(name) &&
@@ -109,7 +171,7 @@ public class Validation {
 		
 	}
 	
-	public static boolean validateEmployee(HashMap<String, String> inputs) {
+	public static boolean validateEmployeeInput(HashMap<String, String> inputs) {
 		
 		// Retrieve the attributes
 		String name = inputs.get("name");
@@ -144,7 +206,7 @@ public class Validation {
 	
 	public static boolean isUsernameExists(String username) {
 		
-		// Check user name exists or not in DAO
+		// Check if user name exists or not in DAO
 		String retrieveUsername = "SELECT username FROM users "
 				+ "WHERE username = '%s'";
 		retrieveUsername = String.format(retrieveUsername, username);
@@ -170,6 +232,44 @@ public class Validation {
 				return false;
 				
 			}
+			
+		} catch (Exception e) {
+			
+			// Fail to retrieve from DAO
+			JOptionPane.showMessageDialog(null, "Database error");
+			return false;
+			
+		}
+		
+	}
+	
+	public static boolean isBookInUnreturnedBorrowItem(String bookId) {
+		
+		// Check if the book is in borrow items and hasn't returned in DAO
+		String retrieveBook = "SELECT books.id FROM books " + 
+				"INNER JOIN borrow_items " + 
+				"ON borrow_items.book_id = books.id " + 
+				"WHERE borrow_items.return_timestamp = '1990-01-01 12:00:00' AND books.id = '%s'";
+		retrieveBook = String.format(retrieveBook, bookId);
+		
+		try {
+			
+			MySQLAccess.rs = MySQLAccess.stmt.executeQuery(retrieveBook);
+			
+			String id = "";
+			while(MySQLAccess.rs.next()) {
+				
+				id = MySQLAccess.rs.getString("books.id");
+				
+			}
+			
+			if (id.isEmpty()) {
+				
+				return false;
+				
+			} 
+			
+			return true;
 			
 		} catch (Exception e) {
 			

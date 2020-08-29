@@ -1,11 +1,20 @@
 package controller;
+import java.awt.GridLayout;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import javax.swing.JComboBox;
 import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 
 import helper.CheckInput;
+import helper.Validation;
 import model.Book;
 import model.Genre;
 import view.ManageBookForm;
@@ -23,9 +32,21 @@ public class BookHandler {
 		
 	}
 	
+	public void unshowViewBookForm() {
+		
+		ViewBookForm.getInstance().destroy();
+		
+	}
+	
 	public JInternalFrame showManageBookForm() {
 		
 		return ManageBookForm.getInstance();
+		
+	}
+	
+	public void unshowManageBookForm() {
+		
+		ManageBookForm.getInstance().destroy();
 		
 	}
 	
@@ -42,7 +63,9 @@ public class BookHandler {
 	}
 	
 	public Book getByIsbn(String isbn) {
-		return new Book();
+		
+		return new Book().getByIsbn(isbn);
+		
 	}
 	
 	public List<Book> getBookByQuantityMoreThanZero(){
@@ -52,7 +75,9 @@ public class BookHandler {
 	}
 	
 	public Book insert(HashMap<String, String> inputs) {
+		
 		return new Book();
+		
 	}
 	
 	public Book update(HashMap<String, String> inputs) {
@@ -72,16 +97,14 @@ public class BookHandler {
 		
 		if (CheckInput.validateIsbn(isbn)) {
 			
-			Book b = new Book();
-			String id = b.getByIsbn(isbn);
+			Book b = new Book().getByIsbn(isbn);
 			
-			if (id != null) { // ISBN exists in DAO
+			if (b != null) { // ISBN exists in DAO
 				
-				b = updateBookQuantity(b.find(id));
+				b = updateBookQuantity(b.find(b.getId()));
 				
 			} else { // ISBN doesn't exist in DAO
 				
-				// TODO: nanti show form untuk buat buku baru
 				b = createNewBook(isbn);
 				
 			}
@@ -98,7 +121,17 @@ public class BookHandler {
 	
 	public boolean delete(String id) {
 		
-		return new Book(id, "dummy name", "dummy genre_id", "dummy isbn", 0).delete();
+		if (!Validation.isBookInUnreturnedBorrowItem(id)) {
+			
+			return new Book(id, "", "", "", 0).delete();
+			
+		} else {
+			
+			JOptionPane.showMessageDialog(null, "The book is still in the borrow list and hasn't returned yet");
+			return false;
+			
+		}
+		
 		
 	}
 	
@@ -117,19 +150,51 @@ public class BookHandler {
 	
 	private Book createNewBook(String isbn) {
 		
-		// TODO: ada textfield buat nama buku, combobox buat genre, textfield buat quantity
+		JPanel addBookPanel = new JPanel(new GridLayout(0, 1));
 		
-		String name = "nama buku";
-		String quantity = "1";
-		Genre g = new Genre();
+		JTextField nameTextField = new JTextField();
+		addBookPanel.add(new JLabel("Book Name :"));
+		addBookPanel.add(nameTextField);
 		
-		if (CheckInput.validateBookInput(name, quantity)) {
+		JComboBox<String> genreComboBox = new JComboBox<String>();
+		addBookPanel.add(new JLabel("Genre :"));
+		List<Genre> lg = new GenreHandler().getAll();
+		
+		// For each genre
+		for (Genre genre : lg) 
+		{
+			genreComboBox.addItem(genre.getType());
 			
-			return new Book(UUID.randomUUID().toString(), name, g.getId(), isbn, Integer.parseInt(quantity)).insert();
+		}
+		addBookPanel.add(genreComboBox);
+		
+		JSpinner quantitySpinner = new JSpinner(new SpinnerNumberModel(1, 1, 100, 1));
+		addBookPanel.add(new JLabel("Quantity :"));
+		addBookPanel.add(quantitySpinner);
+		
+		
+		while (true) {
 			
-		} else {
+			int option = JOptionPane.showConfirmDialog(null, addBookPanel, "Add Book Form", JOptionPane.DEFAULT_OPTION);
 			
-			return null;
+			if (option == JOptionPane.YES_OPTION) {
+				
+				String name = nameTextField.getText();
+				String quantity = quantitySpinner.getValue().toString();
+				Genre g = new Genre().getByType(genreComboBox.getSelectedItem().toString());
+				
+				if (CheckInput.validateBookInput(name, quantity)) {
+					
+					return new Book(UUID.randomUUID().toString(), name, g.getId(), isbn, Integer.parseInt(quantity)).insert();
+					
+				}
+				
+			} else {
+				
+				return null;
+				
+			}
+			
 		}
 		
 	}

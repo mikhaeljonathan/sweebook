@@ -33,7 +33,7 @@ public class ViewBookForm extends JInternalFrame{
 		setLocation(170, 10);
 		setResizable(false);
 	
-		//Main Panel
+		// Main Panel
 		JPanel mainPanel = new JPanel(new GridLayout(lb.size(), 0, 0, 10));
 		JScrollPane mainSp = new JScrollPane(mainPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		add(mainSp);
@@ -56,6 +56,13 @@ public class ViewBookForm extends JInternalFrame{
 		}
 		
 		return instance;
+		
+	}
+	
+	public void destroy() {
+		
+		setVisible(false);
+		instance = null;
 		
 	}
 

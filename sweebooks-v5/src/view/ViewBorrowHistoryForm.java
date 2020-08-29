@@ -33,15 +33,15 @@ public class ViewBorrowHistoryForm extends JInternalFrame{
 	private static final long serialVersionUID = 1L;
 	private static ViewBorrowHistoryForm instance = null;
 	
-	BorrowTransactionHandler bth;
-	JPanel listBorrowItemTempPanel;
-	JPanel listBorrowPanel;
+	private BorrowTransactionHandler bth;
+	private JPanel listBorrowItemTempPanel;
+	private JPanel listBorrowPanel;
 	private int month = 0;
 	private int year = 0;
 	
 	private ViewBorrowHistoryForm () {
 		
-		//Create UI
+		// Create UI
 		setTitle("Borrow History");
 		setSize(800,400);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -86,7 +86,7 @@ public class ViewBorrowHistoryForm extends JInternalFrame{
 		JComboBox<String> cbYear = new JComboBox<>(new String[] {
 				"-"
 		});
-		for(int i = 2001; i <= 2999; i++) {
+		for(int i = 2001; i <= 2020; i++) {
 			
 			cbYear.addItem(Integer.toString(i));
 			
@@ -98,7 +98,7 @@ public class ViewBorrowHistoryForm extends JInternalFrame{
 				
 				if (e.getStateChange() == ItemEvent.SELECTED) {
 					
-					year = cbYear.getSelectedIndex() + 2000;
+					year = cbYear.getSelectedIndex();
 					refreshAll(month, year);
 					
 				}
@@ -157,6 +157,13 @@ public class ViewBorrowHistoryForm extends JInternalFrame{
 		
 	}
 	
+	public void destroy() {
+		
+		setVisible(false);
+		instance = null;
+		
+	}
+	
 	public JPanel getBorrowView(Borrow borrow, int counter) {
 		
 		// Borrow Panel
@@ -186,8 +193,8 @@ public class ViewBorrowHistoryForm extends JInternalFrame{
 		
 		// BorrowTimestamp Label 
 		String timeStamp = borrow.getBorrowTimestamp();
-		timeStamp = timeStamp.substring(0, timeStamp.length() - 2);
-		JLabel lblBorrowTimestamp = new JLabel("Borrow time: " + timeStamp);
+		timeStamp = timeStamp.substring(0, timeStamp.length() - 11);
+		JLabel lblBorrowTimestamp = new JLabel("Borrow date: " + timeStamp);
 		
 		// Details Button 
 		JButton detailsBtn = new JButton("Details");
@@ -295,7 +302,7 @@ public class ViewBorrowHistoryForm extends JInternalFrame{
 		Date date = null;
 		
 		String sDate = "01/%02d/%d";
-		sDate = String.format(sDate, month, year);
+		sDate = String.format(sDate, month, year + 2000);
 		
 		if (month != 0 || year != 0) {
 			

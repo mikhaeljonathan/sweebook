@@ -19,6 +19,8 @@ import javax.swing.JTextField;
 
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -36,6 +38,8 @@ public class ManageEmployeeForm extends JInternalFrame{
 	private JTextField nameTextField;
 	private JTextField usernameTextField;
 	private JTextField salaryTextField;
+	private JComboBox<String> genderComboBox;
+	private JComboBox<String> roleComboBox;
 
 	private ManageEmployeeForm() {
 		
@@ -47,6 +51,21 @@ public class ManageEmployeeForm extends JInternalFrame{
 		setLocation(160, 10);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setVisible(true);
+		
+		KeyAdapter keyAdapter = new KeyAdapter() {
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+				
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					
+					addEmployee();
+					
+				}
+				
+			}
+			
+		};
 		
 		eh = new EmployeeHandler();
 		
@@ -98,30 +117,33 @@ public class ManageEmployeeForm extends JInternalFrame{
 		addEmployeePanel.add(nameLabel);
 		
 		nameTextField = new JTextField();
+		nameTextField.addKeyListener(keyAdapter);
 		addEmployeePanel.add(nameTextField);
 		
 		JLabel usernameLabel = new JLabel("Username");
 		addEmployeePanel.add(usernameLabel);
 		
 		usernameTextField = new JTextField();
+		usernameTextField.addKeyListener(keyAdapter);
 		addEmployeePanel.add(usernameTextField);
 		
 		JLabel genderLabel = new JLabel("Gender");
 		addEmployeePanel.add(genderLabel);
 		String[] genders = {"Male", "Female"};
-		JComboBox<String> genderComboBox = new JComboBox<String>(genders);
+		genderComboBox = new JComboBox<String>(genders);
 		addEmployeePanel.add(genderComboBox);
 		
 		JLabel salaryLabel = new JLabel("Salary");
 		addEmployeePanel.add(salaryLabel);
 		
 		salaryTextField = new JTextField();
+		salaryTextField.addKeyListener(keyAdapter);
 		addEmployeePanel.add(salaryTextField);
 		
 		JLabel roleLabel = new JLabel("Role");
 		addEmployeePanel.add(roleLabel);
-		String[] roles = {"Purchasing", "Admin", "Human Capital"};
-		JComboBox<String> roleComboBox = new JComboBox<String>(roles);
+		String[] roles = {"Purchasing", "Administrator", "Human Capital"};
+		roleComboBox = new JComboBox<String>(roles);
 		addEmployeePanel.add(roleComboBox);
 		
 		JButton addButton = new JButton("Add New Employee");
@@ -132,40 +154,12 @@ public class ManageEmployeeForm extends JInternalFrame{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				
-				HashMap<String, String> inputs = new HashMap<String, String>();
-				
-				inputs.put("name", nameTextField.getText());
-				inputs.put("username", usernameTextField.getText());
-				inputs.put("gender", (String) genderComboBox.getSelectedItem());
-				inputs.put("roleId", SQLGetQuery.getRoleIdFromRoleName((String) roleComboBox.getSelectedItem()));
-				inputs.put("salary", salaryTextField.getText());
-				
-				if (SQLGetQuery.getRoleFromUserId(Main.user_id).equals("Manager")) {
-					
-					if (eh.createWithActiveStatus(inputs) != null) {
-						
-						JOptionPane.showMessageDialog(null, "Employee successfully created");
-						refreshEmployeeList();
-						refreshInputPanel();
-						
-					}
-					
-				} else {
-					
-					if (eh.createWithPendingStatus(inputs) != null) {
-						
-						JOptionPane.showMessageDialog(null, "Employee successfully created\n"
-								+ "It needs an approval from manager to be an active employee");
-						refreshEmployeeList();
-						refreshInputPanel();
-						
-					}
-					
-				}
+				addEmployee();
 				
 			}
 		
 		});
+		
 	}
 	
 	public static ManageEmployeeForm getInstance() {
@@ -175,6 +169,13 @@ public class ManageEmployeeForm extends JInternalFrame{
 		}
 		
 		return instance;
+		
+	}
+	
+	public void destroy() {
+		
+		setVisible(false);
+		instance = null;
 		
 	}
 	
@@ -222,7 +223,7 @@ public class ManageEmployeeForm extends JInternalFrame{
 		
 		if (SQLGetQuery.getRoleFromUserId(Main.user_id).equals("Manager")) {
 			
-			if (status.equals("Active")) fireButton.setVisible(true);
+			if (status.equals("Active") && !employee.getId().equals(Main.user_id)) fireButton.setVisible(true);
 			if (status.equals("Pending")) acceptButton.setVisible(true);
 			
 		}
@@ -273,6 +274,41 @@ public class ManageEmployeeForm extends JInternalFrame{
 		});
 		
 		return employeeInfo;
+		
+	}
+	
+	private void addEmployee() {
+		
+		HashMap<String, String> inputs = new HashMap<String, String>();
+		
+		inputs.put("name", nameTextField.getText());
+		inputs.put("username", usernameTextField.getText());
+		inputs.put("gender", (String) genderComboBox.getSelectedItem());
+		inputs.put("roleId", SQLGetQuery.getRoleIdFromRoleName((String) roleComboBox.getSelectedItem()));
+		inputs.put("salary", salaryTextField.getText());
+		
+		if (SQLGetQuery.getRoleFromUserId(Main.user_id).equals("Manager")) {
+			
+			if (eh.createWithActiveStatus(inputs) != null) {
+				
+				JOptionPane.showMessageDialog(null, "Employee successfully created");
+				refreshEmployeeList();
+				refreshInputPanel();
+				
+			}
+			
+		} else {
+			
+			if (eh.createWithPendingStatus(inputs) != null) {
+				
+				JOptionPane.showMessageDialog(null, "Employee successfully created\n"
+						+ "It needs an approval from manager to be an active employee");
+				refreshEmployeeList();
+				refreshInputPanel();
+				
+			}
+			
+		}
 		
 	}
 	

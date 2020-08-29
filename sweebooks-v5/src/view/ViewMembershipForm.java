@@ -76,5 +76,12 @@ public class ViewMembershipForm extends JInternalFrame{
 		return instance;
 		
 	}
+	
+	public void destroy() {
+		
+		setVisible(false);
+		instance = null;
+		
+	}
 
 }

@@ -14,7 +14,7 @@ public class UserHandler {
 		String id = inputs.get("id");
 		String roleId = inputs.get("roleId");
 		String name = inputs.get("name");
-		String username = inputs.get("username");
+		String username = inputs.get("username").toLowerCase();
 		String password = inputs.get("password");
 		String gender = inputs.get("gender");
 		
