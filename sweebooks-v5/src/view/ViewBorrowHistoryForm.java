@@ -98,7 +98,7 @@ public class ViewBorrowHistoryForm extends JInternalFrame{
 				
 				if (e.getStateChange() == ItemEvent.SELECTED) {
 					
-					year = cbYear.getSelectedIndex() + 2000;
+					year = cbYear.getSelectedIndex();
 					refreshAll(month, year);
 					
 				}
@@ -302,7 +302,7 @@ public class ViewBorrowHistoryForm extends JInternalFrame{
 		Date date = null;
 		
 		String sDate = "01/%02d/%d";
-		sDate = String.format(sDate, month, year);
+		sDate = String.format(sDate, month, year + 2000);
 		
 		if (month != 0 || year != 0) {
 			
