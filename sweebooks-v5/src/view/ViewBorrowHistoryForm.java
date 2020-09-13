@@ -249,7 +249,7 @@ public class ViewBorrowHistoryForm extends JInternalFrame{
 			// ReturnTimestamp Label
 			String returnTime = borrowItem.getReturnTimestamp();
 			returnTime = returnTime.substring(0, returnTime.length() - 2);
-			if (!new BorrowItem().isBookAlreadyReturn(borrowItem.getId(), borrowItem.getBookId())) {
+			if (!new BorrowTransactionHandler().isBookAlreadyReturn(borrowItem.getId(), borrowItem.getBookId())) {
 				
 				returnTime = "Hasn't returned";
 				
@@ -261,7 +261,7 @@ public class ViewBorrowHistoryForm extends JInternalFrame{
 			returnBtn.setVisible(false);
 			if (SQLGetQuery.getRoleFromUserId(Main.user_id).equals("Membership")) {
 				
-				if (!new BorrowItem().isBookAlreadyReturn(borrowItem.getId(), borrowItem.getBookId())) 
+				if (!new BorrowTransactionHandler().isBookAlreadyReturn(borrowItem.getId(), borrowItem.getBookId())) 
 					returnBtn.setVisible(true);
 				
 			}
