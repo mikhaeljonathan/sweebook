@@ -47,7 +47,7 @@ public class BorrowBookHandler {
 	
 	public List<Book> getAvailableBook(){
 		
-		return new BookHandler().getBookByQuantityMoreThanZero();
+		return new Book().getBookByQuantityMoreThanZero();
 		
 	}
 	

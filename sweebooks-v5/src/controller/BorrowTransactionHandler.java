@@ -92,6 +92,12 @@ public class BorrowTransactionHandler {
 		
 	}
 	
+	public boolean isBookAlreadyReturn(String id, String bookId) {
+		
+		return new BorrowItem().isBookAlreadyReturn(id, bookId);
+		
+	}
+	
 	public BorrowItem returnBook(HashMap<String, String> inputs) {
 		
 		String id = inputs.get("id");
